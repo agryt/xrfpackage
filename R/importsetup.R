@@ -1,4 +1,4 @@
-# importing the Excel file containing detection limits, crystal drift, molar weights, and calibration constants
+#' importing the Excel file containing detection limits, crystal drift, molar weights, and calibration constants
 
 importsetup <- function(setuppath) {
   setupfile.df <- readxl::read_excel(setuppath)

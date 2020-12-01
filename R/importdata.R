@@ -1,4 +1,4 @@
-# importing the raw data from the XRF machine
+#' importing the raw data from the XRF machine (.txt file)
 
 importdata <- function(datapath){
 

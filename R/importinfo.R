@@ -1,4 +1,4 @@
-# importing the Excel file with information about the samples
+#' importing the Excel file with information about the samples
 
 importinfo <- function(infopath) {
 

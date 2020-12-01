@@ -1,4 +1,4 @@
-# converting the data from kcal to µM
+#' converting XRF data from kcal to µM
 
 #' @param datapath name of your .txt file with raw data from the XRF machine
 #' @param infopath name of your Excel file with necessary information about the samples
@@ -16,15 +16,6 @@
 convertxrf <- function(projectpath, setuppath, year, first_element, last_element) {
 
   filter_area <- 9.078935
-
-  # import data file (from importxrf)
-  datafile.df <- importdata(datapath = datapath)
-
-  # import info file (from importxrf)
-  infofile.df <- importinfo(infopath = infopath)
-
-  # joining them into one dataframe (from importxrf)
-  projectfile.df <- dplyr::inner_join(datafile.df, infofile.df, by = "Sample")
 
   # making the dataframe longer
   pivotproject.df <- projectpath %>%
@@ -66,5 +57,11 @@ convertxrf <- function(projectpath, setuppath, year, first_element, last_element
 
   # joining detection limit dataframe with the project file
   project.detectionlim.df <- dplyr::left_join(calculations.df, detectionlimits.df, by = c("Filter_type", "Element"))
+
+  # removing the columns we don't need anymore
+  project.df <- project.detectionlim.df %>%
+    dplyr::select(.data$Sample : .data$Element, .data$Value, .data$Detection_limit)
+
+  return(project.df)
 
 }

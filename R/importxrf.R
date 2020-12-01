@@ -1,4 +1,4 @@
-# import data file and info file and combining them to one dataframe
+#' importing data file and info file, and combining them to one dataframe
 
 #' @param datapath name of your .txt file with raw data from the XRF machine
 #' @param infopath name of your Excel file with necessary information about the samples
