@@ -1,12 +1,9 @@
-# import and check infopath
-#' @importFrom readxl read_excel
-#' @importFrom assertr verify has_all_names
-
+# importing the Excel file with information about the samples
 
 importinfo <- function(infopath) {
 
-  infofile.df <- read_excel(infopath) %>%
-  verify(has_all_names("Filter_box_nr", "Filter_type", "Filter_size", "Filter_blank"))
+  infofile.df <- readxl::read_excel(infopath) %>%
+  assertr::verify(assertr::has_all_names("Filter_box_nr", "Filter_type", "Filter_size", "Filter_blank"))
 
   return(infofile.df)
 

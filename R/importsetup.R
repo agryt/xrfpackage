@@ -1,11 +1,9 @@
-# importing and modifying the setuppath
-#' @importFrom readxl read_excel
-#' @importFrom tidyr pivot_longer
+# importing the Excel file containing detection limits, crystal drift, molar weights, and calibration constants
 
 importsetup <- function(setuppath) {
-  setupfile.df <- read_excel(setuppath)
+  setupfile.df <- readxl::read_excel(setuppath)
   setupfile.df <- setupfile.df %>%
-    pivot_longer(.data$PC : .data$GFF,
+    tidyr::pivot_longer(.data$PC : .data$GFF,
                  names_to = "Filter_type",
                  values_to = "Cal_const")
 
