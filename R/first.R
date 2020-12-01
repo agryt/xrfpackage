@@ -1,7 +1,7 @@
-  # import and modify datapath
-  #' @importFrom readr read_delim locale
-  #' @importFrom dplyr select ends_with starts_with rename_all
-  #' @importFrom stringr str_remove
+# import and modify datapath
+#' @importFrom readr read_delim locale
+#' @importFrom dplyr select ends_with starts_with rename_all
+#' @importFrom stringr str_remove
 
 
 importdata <- function(datapath){
@@ -13,6 +13,7 @@ importdata <- function(datapath){
     select(-c("S", "P")) %>%
     select(starts_with("X")) %>%
     rename_all(str_remove, pattern = " .*")
+
   return(datafile.df)
 
 }
