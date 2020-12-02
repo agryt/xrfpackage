@@ -3,7 +3,7 @@
 #' @param datapath The name of your .txt file with raw data from the XRF machine.
 #'
 #' @importFrom readr read_delim locale
-#' @importFrom dplyr select ends_with starts_with rename_all
+#' @importFrom dplyr select contains rename_all
 #' @importFrom stringr str_remove
 #' @importFrom magrittr %>%
 #'
@@ -13,10 +13,7 @@ importdata <- function(datapath){
 
   datafile.df <- readr::read_delim(datapath, delim = "\t", locale = readr::locale(decimal_mark = ","))
   datafile.df <- datafile.df %>%
-    dplyr::select(-dplyr::ends_with("(PPM)")) %>%
-    dplyr::select(-dplyr::ends_with("(%)")) %>%
-    dplyr::select(-c("S", "P")) %>%
-    dplyr::select(dplyr::starts_with("X")) %>%
+    dplyr::select(c(Sample, Date, dplyr::contains("Int"))) %>%
     dplyr::rename_all(stringr::str_remove, pattern = " .*")
 
   return(datafile.df)
@@ -60,6 +57,7 @@ importsetup <- function(setuppath) {
   setupfile.df <- setupfile.df %>%
     tidyr::pivot_longer(.data$PC : .data$GFF,
                         names_to = "Filter_type",
-                        values_to = "Cal_const")
+                        values_to = "Cal_const") %>%
+    dplyr::relocate(Filter_type)
 
 }
