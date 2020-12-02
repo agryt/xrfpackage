@@ -49,6 +49,7 @@ importinfo <- function(infopath) {
 #' @importFrom tidyr pivot_longer
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
+#' @importFrom dplyr relocate
 #'
 #' @export
 

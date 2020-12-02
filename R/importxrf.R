@@ -24,13 +24,13 @@ importxrf <- function(datapath, infopath) {
 
   # assigning warning messages
   if(nrow(notinprojectfile.df) > 0) {
-    warning("WARNING! There are samples that do not match between your raw data file and information file. See the dataframe named notinprojectfile.df to identify them.")
+    warning("WARNING! There are samples that do not match between your raw data file and information file.")
   }
   if(ncol(projectfile.df) < 3) {
     warning("WARNING! Your data was not imported correctly. Check that you have saved the files as correct file types. Note that your raw data .txt file must use comma as a decimal mark and tabs to separate columns.")
   }
 
+  write.csv(projectfile.df, file = "projectdata.csv")
   return(projectfile.df)
-  return(notinprojectfile.df)
 
 }
