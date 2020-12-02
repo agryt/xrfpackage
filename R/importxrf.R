@@ -1,15 +1,11 @@
-#' importing data file and info file, and combining them to one dataframe
-
-#' @param datapath name of your .txt file with raw data from the XRF machine
-#' @param infopath name of your Excel file with necessary information about the samples
-
-#' @importFrom readr read_delim locale
-#' @importFrom dplyr select ends_with starts_with rename_all inner_join anti_join %>%
-#' @importFrom stringr str_remove
-#' @importFrom readxl read_excel
-#' @importFrom assertr verify has_all_names
-#' @importFrom tidyr pivot_longer
-#' @importFrom rlang .data
+#' Importing and joining data file and info file
+#' @description This function imports your files using specific utility functions from this package,  and combines them into one dataframe. You will also get a dataframe showing any samples that did    not match between your datasets (the raw data and the information file).
+#'
+#' @inheritParams imports
+#'
+#' @importFrom dplyr inner_join anti_join
+#'
+#' @export
 
 
 importxrf <- function(datapath, infopath) {
@@ -36,4 +32,5 @@ importxrf <- function(datapath, infopath) {
 
   return(projectfile.df)
   return(notinprojectfile.df)
+
 }

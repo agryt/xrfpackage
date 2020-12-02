@@ -1,4 +1,13 @@
-#' importing the raw data from the XRF machine (.txt file)
+#' Importing the raw data from the XRF machine (.txt file)
+#'
+#' @param datapath The name of your .txt file with raw data from the XRF machine.
+#'
+#' @importFrom readr read_delim locale
+#' @importFrom dplyr select ends_with starts_with rename_all
+#' @importFrom stringr str_remove
+#' @importFrom magrittr %>%
+#'
+#' @export
 
 importdata <- function(datapath){
 
@@ -15,7 +24,15 @@ importdata <- function(datapath){
 }
 
 
-#' importing the Excel file with information about the samples
+#' Importing the Excel file with information about the samples
+#'
+#' @param infopath The name of your Excel file with necessary information about the samples.
+#'
+#' @importFrom readxl read_excel
+#' @importFrom assertr verify has_all_names
+#' @importFrom magrittr %>%
+#'
+#' @export
 
 importinfo <- function(infopath) {
 
@@ -27,7 +44,16 @@ importinfo <- function(infopath) {
 }
 
 
-#' importing the Excel file containing detection limits, crystal drift, molar weights, and calibration constants
+#' Importing the Excel file containing detection limits, crystal drift, molar weights, and calibration constants
+#'
+#' @param setuppath The name of the file containing detection limits, crystal drift, molar weights,   and calibration constants.
+#'
+#' @importFrom readxl read_excel
+#' @importFrom tidyr pivot_longer
+#' @importFrom rlang .data
+#' @importFrom magrittr %>%
+#'
+#' @export
 
 importsetup <- function(setuppath) {
   setupfile.df <- readxl::read_excel(setuppath)
