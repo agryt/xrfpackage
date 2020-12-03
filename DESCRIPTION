@@ -1,5 +1,5 @@
-Package: xrfpackage
-Title: Converting XRF Data from kcps to µM
+Package: xrfr
+Title: Converting XRF Data from Kilo-counts per Second to Micromolar
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Anna",

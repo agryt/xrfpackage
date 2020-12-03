@@ -1,6 +1,6 @@
 #' Converting XRF data from kcal to micromolar
 #'
-#' @description This function takes your generated project dataframe created with "importxrf()" and the file containing information from the XRF machine, and converts your raw data from kcal to µM.
+#' @description This function takes your generated project dataframe created with "importxrf()" and the file containing information from the XRF machine, and converts your raw data from kcal to micromolar.
 #'
 #' @return The function creates a dataframe in the long format with the new columns "Concentration" and "Detection_limit" showing the calculated concentration and the respective detection limit.
 #'
@@ -17,7 +17,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' df <- convertxrf(setuppath = "/inst/extdata/xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
+#' df <- convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
 #' }
 #'
 #' @export

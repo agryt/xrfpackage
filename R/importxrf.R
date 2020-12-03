@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' importxrf(datapath = "/inst/extdata/xrf_rawdata.txt", infopath = "/inst/extdata/xrf_projectinfo.xlsx")
+#' importxrf(datapath = "xrf_rawdata.txt", infopath = "xrf_projectinfo.xlsx")
 #' # this generates a dataframe that shows up in your environment
 #' }
 #'
