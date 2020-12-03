@@ -10,4 +10,3 @@ project.df <- convertxrf(projectpath = "projectdata.csv", setuppath = "xrf_setup
 
 
 
-# IT WORKS!!

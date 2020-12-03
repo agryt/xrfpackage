@@ -30,7 +30,6 @@ importxrf <- function(datapath, infopath) {
     warning("WARNING! Your data was not imported correctly. Check that you have saved the files as correct file types. Note that your raw data .txt file must use comma as a decimal mark and tabs to separate columns.")
   }
 
-  write.csv(projectfile.df, file = "projectdata.csv")
   return(projectfile.df)
 
 }

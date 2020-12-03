@@ -20,7 +20,7 @@ convertxrf <- function(projectpath, setuppath, year, first_element, last_element
 
   filter_area <- 9.078935
 
-  projectfile.df <- read.csv(projectpath)
+  projectfile.df <- as.data.frame(projectfile.df)
 
   # making the dataframe longer
   pivotproject.df <- projectfile.df %>%
