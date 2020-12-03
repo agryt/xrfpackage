@@ -7,15 +7,29 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This package was created for use at the University of Bergen to convert data from an X-ray fluorescence machine from kilo-counts per second to micromolar. It requires that your files are constructed in a very specific way, as explained in this vignette. 
+This package was created for use at the University of Bergen to convert data from an X-ray fluorescence machine from kilo-counts per second to micromolar. It requires that your files are constructed in a very specific way, as explained in this vignette, so is meant to be used with instructions. 
 
 The functions included in this package are:
 
 * `importxrf()`: This function joins the raw data file with the file containing project information like where each sample was taken and how much water was filtered. The output of this function is a dataframe. 
 * `convertxrf()`: This function takes the dataframe created by `importxrf()` and the file containing information like crystal drift and detection limits for each element. The output of this function is a long dataframe where the counts from the machine have been converted from kcps to µM. 
-* `importdata()`: This is a function that is used inside the `importxrf()` function to import your raw data file.
-* `importinfo()`: This is a function that is used inside the `importxrf()` function to import your project information file. 
-* `importsetup()`: This is a function that is used inside the `convertxrf()` function to import your file containing information like crystal drift and detection limits. 
+* `importdata()`: This is a function that is used inside the `importxrf()` function to import your raw data file. *You will not need to use this yourself unless there is an error with `importxrf()` and you are looking for the cause of the error.*
+* `importinfo()`: This is a function that is used inside the `importxrf()` function to import your project information file. *You will not need to use this yourself unless there is an error with `importxrf()` and you are looking for the cause of the error.*
+* `importsetup()`: This is a function that is used inside the `convertxrf()` function to import your file containing information like crystal drift and detection limits. *You will not need to use this yourself unless there is an error with `convertxrf()` and you are looking for the cause of the error.*
 
 ## The files
 
+There are three files you need for your analysis: a file with **raw data** from the XRF machine. You also need a file with **information about the samples and project**, like which station the samples are from, whether they are blank samples, and the volume of the filtrated water. Lastly, you need a file containing **information about the machine, filters and elements**, like crystal drift and calibrated constants. 
+
+### The raw data file
+
+This file is created by the XRF machine when you export your data from it. You should not edit this file unless there are errors in the sample names. This file is a .txt file using comma (,) as a decimal mark and tabs to separate columns. It will contain a column named **"Sample"**, a column named **"Date"**, and several columns with results from the machine's analysis. 
+
+### The project information file
+
+This file should contain all relevant information that you wish to include about your data that is not from the XRF machine. It must be saved as an Excel file (.xlsx or .xls). There are several columns that must be included for the functions in this package to work:
+
+* **"Sample"**: The name of your sample. Must be the same as in the raw data file. Any samples that do not match exactly will not be included in the created file. 
+* **"Filter_type"**: The type of filter used when filtering. Can be PC, ANO, or GFF. This column must be filled out even if the same filter type was used on all samples because R needs to know which detection limits and calibrated constants to use. 
+* **"Filter_size"**: The pore size of the filter used. This column can be left empty if the size was the same in all filters, but the column must exist. 
+* **"Filter_box_nr"**: Let's R know which box the filter came from so it knows which blank samples to apply when finding the net count in this sample. 
