@@ -16,10 +16,13 @@ widen <- function() {
 
   project.df <- as.data.frame(project.df)
 
-  wideproject.df <- project.df %>%
-    dplyr::select(-.data$Detection_limit) %>%
-    tidyr::pivot_wider(names_from = "Element", values_from = "Concentration")
+# DOESN'T WORK:
+  projectwide.df <- project.df %>%
+    dplyr::select(-(.data$Detection_limit)) %>%
+    group_by(Treatment) %>%
+    tidyr::pivot_wider(names_from = Element, values_from = Concentration, values_fn = list(Concentration = mean))
 
-  return(wideproject.df)
+  return(projectwide.df)
 
 }
+

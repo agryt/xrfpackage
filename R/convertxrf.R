@@ -31,7 +31,7 @@ convertxrf <- function(projectpath, setuppath, year, first_element, last_element
 
   # making the dataframe longer
   pivotproject.df <- projectfile.df %>%
-    tidyr::pivot_longer(first_element:last_element,
+    tidyr::pivot_longer(first_element : last_element,
                  names_to = "Element",
                  values_to = "Count")
 
@@ -56,7 +56,7 @@ convertxrf <- function(projectpath, setuppath, year, first_element, last_element
 
   # making a dataframe showing the detection limits of each element
   detectionlimits.df <- setupfile.df %>%
-    dplyr::select(.data$DL_PC:.data$DL_GFF, .data$Element) %>%
+    dplyr::select(.data$DL_PC : .data$DL_GFF, .data$Element) %>%
     tidyr::pivot_longer(.data$DL_PC : .data$DL_GFF,
                         names_to = "Filter_type",
                         values_to = "Detection_limit") %>%
