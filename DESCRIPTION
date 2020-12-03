@@ -15,4 +15,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 URL: https://github.com/agryt/xrfpackage
 Imports: dplyr (>= 1.0.2), readr (>= 1.4.0), stringr (>= 1.4.0), assertr (>= 2.7), tidyr (>= 1.1.2), rlang (>= 0.4.8), readxl (>= 1.3.1), magrittr (>= 1.5)
-
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

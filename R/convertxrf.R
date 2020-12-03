@@ -2,7 +2,7 @@
 #'
 #' @description This function takes your generated project dataframe created with "importxrf()" and the file containing information from the XRF machine, and converts your raw data from kcal to micromolar.
 #'
-#' @return The function creates a dataframe in the long format with the new columns "Concentration" and "Detection_limit" showing the calculated concentration and the respective detection limit.
+#' @return description The function creates a dataframe in the long format with the new columns "Concentration" and "Detection_limit" showing the calculated concentration and the respective detection limit.
 #'
 #' @param setuppath The name of the file containing detection limits, crystal drift, molar weights, and calibration constants.
 #' @param year The year the drift was measured closest to when your samples were analysed.

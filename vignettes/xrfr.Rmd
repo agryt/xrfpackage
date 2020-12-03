@@ -1,0 +1,21 @@
+---
+title: "Using the xrfr package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using the xrfr package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This package was created for use at the University of Bergen to convert data from an X-ray fluorescence machine from kilo-counts per second to micromolar. It requires that your files are constructed in a very specific way, as explained in this vignette. 
+
+The functions included in this package are:
+
+* `importxrf()`: This function joins the raw data file with the file containing project information like where each sample was taken and how much water was filtered. The output of this function is a dataframe. 
+* `convertxrf()`: This function takes the dataframe created by `importxrf()` and the file containing information like crystal drift and detection limits for each element. The output of this function is a long dataframe where the counts from the machine have been converted from kcps to µM. 
+* `importdata()`: This is a function that is used inside the `importxrf()` function to import your raw data file.
+* `importinfo()`: This is a function that is used inside the `importxrf()` function to import your project information file. 
+* `importsetup()`: This is a function that is used inside the `convertxrf()` function to import your file containing information like crystal drift and detection limits. 
+
+## The files
+
