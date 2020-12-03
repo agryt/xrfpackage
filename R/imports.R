@@ -43,7 +43,7 @@ importinfo <- function(infopath) {
 
 #' Importing the Excel file containing detection limits, crystal drift, molar weights, and calibration constants
 #'
-#' @param setuppath The name of the file containing detection limits, crystal drift, molar weights,   and calibration constants.
+#' @param setuppath The name of the file containing detection limits, crystal drift, molar weights, and calibration constants.
 #'
 #' @importFrom readxl read_excel
 #' @importFrom tidyr pivot_longer

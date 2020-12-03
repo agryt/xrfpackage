@@ -1,9 +1,19 @@
 #' Importing and joining data file and info file
+#'
 #' @description This function imports your files using specific utility functions from this package,  and combines them into one dataframe. You will also get a dataframe showing any samples that did    not match between your datasets (the raw data and the information file).
 #'
-#' @inheritParams imports
+#' @return description The function creates a dataframe where your raw data and project information has been merged.
+#'
+#' @param datapath The name of your .txt file with raw data from the XRF machine.
+#' @param infopath The name of your Excel file with necessary information about the samples.
 #'
 #' @importFrom dplyr inner_join anti_join
+#'
+#' @examples
+#' \dontrun{
+#' importxrf(datapath = "/inst/extdata/xrf_rawdata.txt", infopath = "/inst/extdata/xrf_projectinfo.xlsx")
+#' # this generates a dataframe that shows up in your environment
+#' }
 #'
 #' @export
 
