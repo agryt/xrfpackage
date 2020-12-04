@@ -1,5 +1,5 @@
 ---
-title: "Using the xrfr package"
+title: "Using the xrfr Package"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using the xrfr package}
@@ -33,3 +33,30 @@ This file should contain all relevant information that you wish to include about
 * **"Filter_type"**: The type of filter used when filtering. Can be PC, ANO, or GFF. This column must be filled out even if the same filter type was used on all samples because R needs to know which detection limits and calibrated constants to use. 
 * **"Filter_size"**: The pore size of the filter used. This column can be left empty if the size was the same in all filters, but the column must exist. 
 * **"Filter_box_nr"**: Let's R know which box the filter came from so it knows which blank samples to apply when finding the net count in this sample. 
+* **Filter_blank**: In this column you will need to write "blank" for all your blank samples.
+* **Volume**: The volume of water that was filtered. 
+
+You may include as many more columns as you want, for example dates, depth, or station, but these columns all need to be present in your project information file. 
+
+### The "setup" file
+
+This file must contain all the relevant information related to the XRF machine, filters, and elements. It must be saved as an Excel file (.xlsx or .xls). This is a file that will not change between experiments unless the crystal drift has been measured again. The "setup" file must contain these columns:
+
+* **Element**: All the elements measured by the machine. 
+* **MolarW**: The molar weight of each element. 
+* **CC_PC**, **CC_ANO**, and **CC_GFF**: The calibrated constant for each element for each of the three filter types. Must be in this order. *If you do not use for example GFF filters in your experiment it is not necessary to include this here, but since this file should be used for all experiments it is good to keep them all in one place.*
+* **DL_PC**, **DL_ANO**, and **DL_GFF**: The detection limit of each element for each of the three filter types. Must be in this order. *Again, you do not need to include those you do not need, but it is a good idea.*
+* **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, so this is used during the calculations. 
+
+## importxrf()
+
+This function will import and rearrange your files with raw data and project information and then join them into one dataframe. 
+
+Here is a possible input:
+
+```{r importxrf, eval = FALSE}
+
+importxrf(datapath = "xrf_rawdata.txt", infopath = "xrf_projectinfo.xlsx")
+
+```
+
