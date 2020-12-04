@@ -95,3 +95,4 @@ convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_element = "C", las
 
 ```
 
+This code will give a long dataframe, and you can see the beginning of it here [LINK]
