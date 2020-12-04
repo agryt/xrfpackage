@@ -1,8 +1,10 @@
 ---
 title: "Using the xrfr Package"
 output: rmarkdown::html_vignette
+author: Anna Grytaas
+date: "`r Sys.Date()`"
 vignette: >
-  %\VignetteIndexEntry{Using the xrfr package}
+  %\VignetteIndexEntry{Using the xrfr Package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -50,13 +52,46 @@ This file must contain all the relevant information related to the XRF machine, 
 
 ## importxrf()
 
-This function will import and rearrange your files with raw data and project information and then join them into one dataframe. 
+This function will import and rearrange your files with raw data and project information and then join them into one dataframe. To use this function there are two arguments you must define:
+
+* **datapath**: This is the name of your raw data file from the XRF machine. The file must be a .txt file. 
+* **infopath**: This is the name of your project information file. The file must be an Excel file, either .xlsx or .xls. 
 
 Here is a possible input:
 
 ```{r importxrf, eval = FALSE}
 
 importxrf(datapath = "xrf_rawdata.txt", infopath = "xrf_projectinfo.xlsx")
+
+```
+
+This code will give a dataframe that looks something like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_midway.csv) (link to a whole data file showing some real samples - the "extdata" directory there also contains the raw files used in this explanation). The table shows the first rows and columns of the linked data file:
+
+|Sample|Date.x|C|N|O|Na|Mg|Al|Si|P|S|Cl|...|
+|:----|:------|:-|:-|:-|:-|:-|:-|:-|:-|:-|:-|:-|
+|COM001|04.12.2019 10:16:35|58.0957|0.438|2.9889|0.4874|1.796|32.3646|5.6097|0.3945|1.0494|1.0383|...|
+|COM002|04.12.2019 10:28:50|54.2361|0.4313|3.3708|1.1547|4.3948|37.2398|17.5392|0.5557|1.538|1.8231|...|
+|COM003|04.12.2019 10:41:07|59.0261|0.4458|2.8878|0.4234|1.2589|33.6267|2.6512|0.3778|0.9904|1.2301|...|
+|...|...|...|...|...|...|...|...|...|...|...|...|
+
+Specifically, this function extracts the necessary columns from the raw data file ("Sample", "Date", and those with "(Int)" in the column name), then joins this file and the project information file in a single dataframe by their shared column "Sample". 
+
+This dataframe will further be used in the function `convertxrf()`, where the values are converted from kcps to µM. 
+
+## convertxrf()
+
+Once you have your dataframe, you go on to perform the actual calculations to convert your values from kcps to µM, ending up with another dataframe. For this function to work you will need to define several arguments:
+
+* **setuppath**: This is the name of your "setup" file. It must be an Excel file, either .xlsx or .xls. 
+* **year**: This is the year in which the crystal drift was measured closest to when your samples were measured. 
+* **first_element**: This is the name of the first column in your dataframe that was created with the function `importxrf()` that is an element. For example, in the example above, there are the columns "Sample" and "Date.x" first, then the column named "C", so this is what we include in the function. 
+* **last_element**: This is the name of the last column in your dataframe that is an element. In our example, this was the column "As". 
+
+Here is a possible input:
+
+```{r convertxrf, eval = FALSE}
+
+convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
 
 ```
 
