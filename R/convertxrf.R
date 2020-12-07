@@ -27,6 +27,7 @@ convertxrf <- function(setuppath, year, first_element, last_element) {
 
   filter_area <- 9.078935
 
+  # BIG WEAKNESS THAT DATAFRAME M U S T BE CALLED "PROJECTFILE.DF"! FIND A WAY AROUND THIS
   projectfile.df <- as.data.frame(projectfile.df)
 
   # making the dataframe longer
