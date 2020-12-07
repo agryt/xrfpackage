@@ -4,23 +4,26 @@
 #'
 #' @return description The function creates a dataframe that is a wider version of the one created with convertxrf().
 #'
+#' @param projectpath The file created by convertxrf().
+#'
 #' @importFrom dplyr select
 #' @importFrom tidyr pivot_wider
 #' @importFrom magrittr %>%
+#' @importFrom readr read_csv
 #'
 #' @examples
 #'
 #' @export
 
-widen <- function() {
+widen <- function(projectpath) {
 
-  project.df <- as.data.frame(project.df)
+  project.df <- readr::read_csv(file = projectpath)
 
-# DOESN'T WORK:
   projectwide.df <- project.df %>%
-    dplyr::select(-(.data$Detection_limit)) %>%
-    group_by(Treatment) %>%
-    tidyr::pivot_wider(names_from = Element, values_from = Concentration, values_fn = list(Concentration = mean))
+    dplyr::select(-c(1, Detection_limit)) %>%
+    tidyr::pivot_wider(names_from = Element, values_from = Concentration)
+
+  projectwide.df <- as.data.frame(projectwide.df)
 
   return(projectwide.df)
 
