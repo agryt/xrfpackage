@@ -8,7 +8,15 @@ widen(projectpath = "project_long.csv")
 
 
 
-project2.df <- read_csv("project_long.csv")
+projectfile.df <- importxrf(datapath = "2ANS&2AEN_merged.txt", infopath = "Infofile_forR.xlsx")
+
+project1.df <- convertxrf(projectpath = "projectfile.df", setuppath = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
+
+
+
+
+
+
 
 projectwide.df <- project2.df %>%
   dplyr::select(-Detection_limit, -1) %>%

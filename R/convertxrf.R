@@ -23,7 +23,7 @@
 #' @export
 
 
-convertxrf <- function(projectpath, setuppath, year, first_element, last_element) {
+convertxrf <- function(setuppath, year, first_element, last_element) {
 
   filter_area <- 9.078935
 
