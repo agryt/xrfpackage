@@ -46,7 +46,7 @@ This file must contain all the relevant information related to the XRF machine, 
 
 * **Element**: All the elements measured by the machine. 
 * **MolarW**: The molar weight of each element. 
-* **CC_PC**, **CC_ANO**, and **CC_GFF**: The calibrated constant for each element for each of the three filter types. Must be in this order. *If you do not use for example GFF filters in your experiment it is not necessary to include this here, but since this file should be used for all experiments it is good to keep them all in one place.*
+* **PC**, **ANO**, and **GFF**: The calibrated constant for each element for each of the three filter types. Must be in this order. *If you do not use for example GFF filters in your experiment it is not necessary to include this here, but since this file should be used for all experiments it is good to keep them all in one place.*
 * **DL_PC**, **DL_ANO**, and **DL_GFF**: The detection limit of each element for each of the three filter types. Must be in this order. *Again, you do not need to include those you do not need, but it is a good idea.*
 * **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, so this is used during the calculations. 
 
@@ -72,7 +72,7 @@ This code will give a dataframe that looks something like [this](https://github.
 |COM001|04.12.2019 10:16:35|58.0957|0.438|2.9889|0.4874|1.796|32.3646|5.6097|0.3945|1.0494|1.0383|...|
 |COM002|04.12.2019 10:28:50|54.2361|0.4313|3.3708|1.1547|4.3948|37.2398|17.5392|0.5557|1.538|1.8231|...|
 |COM003|04.12.2019 10:41:07|59.0261|0.4458|2.8878|0.4234|1.2589|33.6267|2.6512|0.3778|0.9904|1.2301|...|
-|...|...|...|...|...|...|...|...|...|...|...|...|
+|...|...|...|...|...|...|...|...|...|...|...|...|...|
 
 Specifically, this function extracts the necessary columns from the raw data file ("Sample", "Date", and those with "(Int)" in the column name), then joins this file and the project information file in a single dataframe by their shared column "Sample". 
 
@@ -95,4 +95,13 @@ convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_element = "C", las
 
 ```
 
-This code will give a long dataframe, and you can see the beginning of it here [LINK]
+This code will give a long dataframe, and you can see the first 96 rows [here](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_calculated_sliced.csv). The table below shows the first few rows of this file:
+
+|Sample|Date.x|Filter_type|...|Day|Treatment|Element|Concentration|Detection_limit|
+|:----|:-----|:----------|:---|:-----|:-----|:--|:--------|:------|:------------|:--------|
+|COM001|04.12.2019 10:16:35|PC|...|0|K1|C|-4.19727307987776|1.22193802149026|
+|COM001|04.12.2019 10:16:35|PC|...|0|K1|N|0.292013243234358|0.312338639119395|
+|COM001|04.12.2019 10:16:35|PC|...|0|K1|O|0.328051062623146|0.0322146560280234|
+|...|...|...|...|...|...|...|...|...|
+
+Once you have this dataframe you should save it. This is the file that you will use when performing any statistical analysis on the data or making plots. 

@@ -10,7 +10,7 @@
 #' @param last_element The name of the last column containing kcps values in the generated project  dataframe.
 #'
 #' @importFrom tidyr pivot_longer
-#' @importFrom dplyr filter group_by summarise left_join mutate select
+#' @importFrom dplyr filter group_by summarise left_join mutate select distinct
 #' @importFrom stringr str_remove
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
@@ -67,6 +67,7 @@ convertxrf <- function(projectpath, setuppath, year, first_element, last_element
 
   # removing the columns we don't need anymore
   project.df <- project.detectionlim.df %>%
+    dplyr::distinct() %>%
     dplyr::select(.data$Sample : .data$Element, .data$Concentration, .data$Detection_limit)
 
   return(project.df)
