@@ -120,7 +120,7 @@ widen_means <- function(projectpath, first_factor, second_factor, first_element,
 #'
 #' @description This function will widen your data and exclude concentrations below the detection limits like widen_above(), and will also calculate the means based on your two factors like widen_means().
 #'
-#' @return
+#' @return description The function returns a dataframe that shows the mean concentrations calculated from the concentrations above the detection limits for each element based on one or two factors.
 #'
 #' #' @param projectpath The CSV file created with convertxrf().
 #' @param first_factor The name of the column that shows the first or only factor you want to calculate means based on, for example depth.
@@ -144,6 +144,7 @@ widen_means_above <- function(projectpath, first_factor, second_factor, first_el
 
   projectabove.df <- project.df %>%
     dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
+    dplyr::filter(!.data$Filter_blank %in% "blank") %>%
     dplyr::select(-.data$Detection_limit) %>%
     tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration, id_cols = .data$Sample)
 
