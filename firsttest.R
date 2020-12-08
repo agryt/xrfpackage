@@ -9,6 +9,8 @@ wideabove.df <- widen_above(projectpath = "project_long.csv")
 
 widemeans.df <- widen_means(projectpath = "project_long.csv", first_factor = "Day", second_factor = "Treatment", first_element = "C", last_element = "As")
 
+widemeansabove.df <- widen_means_above(projectpath = "project_long.csv", first_factor = "Day", second_factor = "Treatment", first_element = "C", last_element = "As")
+
 
 
 

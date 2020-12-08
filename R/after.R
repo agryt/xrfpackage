@@ -6,6 +6,7 @@
 #'
 #' @param projectpath The CSV file created with convertxrf().
 #'
+#' @importFrom readr read_csv
 #' @importFrom dplyr select filter
 #' @importFrom tidyr pivot_wider
 #' @importFrom magrittr %>%
@@ -37,6 +38,7 @@ widen <- function(projectpath) {
 #'
 #' @param projectpath The CSV file created with convertxrf().
 #'
+#' @importFrom readr read_csv
 #' @importFrom dplyr filter select
 #' @importFrom tidyr pivot_wider
 #' @importFrom magrittr %>%
@@ -64,11 +66,12 @@ widen_above <- function(projectpath) {
 #' @return description The function creates a dataframe where the columns available are your two factors (for example location and depth) and each element.
 #'
 #' @param projectpath The CSV file created with convertxrf().
-#' @param first_factor
-#' @param second_factor
-#' @param first_element
-#' @param last_element
+#' @param first_factor The name of the column that shows the first or only factor you want to calculate means based on, for example depth.
+#' @param second_factor The name of the column that shows a potential second factor you want to calculate means based on, for example location.
+#' @param first_element The name of the first column containing concentration values in the generated project dataframe.
+#' @param last_element The name of the last column containing concentration values in the generated project  dataframe.
 #'
+#' @importFrom readr read_csv
 #' @importFrom dplyr filter select group_by summarise_if
 #' @importFrom tidyr pivot_wider
 #' @importFrom rlang is_missing
@@ -104,6 +107,56 @@ widen_means <- function(projectpath, first_factor, second_factor, first_element,
       tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration)
 
     projectaverage.df <- projectwide.df %>%
+      dplyr::group_by(.data[[first_factor]], .data[[second_factor]]) %>%
+      dplyr::summarise_if(is.numeric, mean) %>%
+      dplyr::select(.data[[first_factor]], .data[[second_factor]], .data[[first_element]] : .data[[last_element]])
+
+  }
+
+}
+
+
+#' Widening the dataframe, filtering out concentrations below detection limit, and calculating the means based on two factors
+#'
+#' @description This function will widen your data and exclude concentrations below the detection limits like widen_above(), and will also calculate the means based on your two factors like widen_means().
+#'
+#' @return
+#'
+#' #' @param projectpath The CSV file created with convertxrf().
+#' @param first_factor The name of the column that shows the first or only factor you want to calculate means based on, for example depth.
+#' @param second_factor The name of the column that shows a potential second factor you want to calculate means based on, for example location.
+#' @param first_element The name of the first column containing concentration values in the generated project dataframe.
+#' @param last_element The name of the last column containing concentration values in the generated project  dataframe.
+#'
+#' @importFrom readr read_csv
+#' @importFrom dplyr filter select group_by summarise_if
+#' @importFrom tidyr pivot_wider
+#' @importFrom rlang is_missing
+#' @importFrom magrittr %>%
+#'
+#' @examples
+#'
+#' @export
+
+widen_means_above <- function(projectpath, first_factor, second_factor, first_element, last_element) {
+
+  project.df <- readr::read_csv(file = projectpath)
+
+  projectabove.df <- project.df %>%
+    dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
+    dplyr::select(-.data$Detection_limit) %>%
+    tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration, id_cols = .data$Sample)
+
+  if(rlang::is_missing(.data[[second_facor]])) {
+
+    projectaverage.df <- projectabove.df %>%
+      dplyr::group_by(.data[[first_factor]]) %>%
+      dplyr::summarise_if(is.numeric, mean) %>%
+      dplyr::select(.data[[first_factor]], .data[[first_element]] : .data[[last_element]])
+
+  } else {
+
+    projectaverage.df <- projectabove.df %>%
       dplyr::group_by(.data[[first_factor]], .data[[second_factor]]) %>%
       dplyr::summarise_if(is.numeric, mean) %>%
       dplyr::select(.data[[first_factor]], .data[[second_factor]], .data[[first_element]] : .data[[last_element]])
