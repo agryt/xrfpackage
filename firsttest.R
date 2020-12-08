@@ -3,7 +3,9 @@ projectfile.df <- importxrf(datapath = "xrf_rawdata.txt", infopath = "xrf_projec
 
 project.df <- convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
 
-widen(projectpath = "project_long.csv")
+wide.df <- widen(projectpath = "project_long.csv")
+
+wideabove.df <- widen_above(projectpath = "project_long.csv")
 
 
 
@@ -17,12 +19,13 @@ project1.df <- convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_ele
 
 
 
-
-projectwide.df <- project2.df %>%
-  dplyr::select(-Detection_limit, -1) %>%
-  tidyr::pivot_wider(names_from = Element, values_from = Concentration)
-
 projecmeans.df <- projectwide.df %>%
   dplyr::group_by(Treatment, Day) %>%
   dplyr::summarise_if(is.numeric, mean) %>%
   dplyr::select(Day, Treatment, C:As)
+
+
+averagesaug2.df <- project.aug.df %>%
+  filter(Value > Detection_lim) %>%
+  select(-Detection_lim) %>%
+  pivot_wider(names_from = Element, values_from = Value)
