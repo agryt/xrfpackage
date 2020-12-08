@@ -7,6 +7,8 @@ wide.df <- widen(projectpath = "project_long.csv")
 
 wideabove.df <- widen_above(projectpath = "project_long.csv")
 
+widemeans.df <- widen_means(projectpath = "project_long.csv", first_factor = "Day", second_factor = "Treatment", first_element = "C", last_element = "As")
+
 
 
 
@@ -16,16 +18,3 @@ project1.df <- convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_ele
 
 
 
-
-
-
-projecmeans.df <- projectwide.df %>%
-  dplyr::group_by(Treatment, Day) %>%
-  dplyr::summarise_if(is.numeric, mean) %>%
-  dplyr::select(Day, Treatment, C:As)
-
-
-averagesaug2.df <- project.aug.df %>%
-  filter(Value > Detection_lim) %>%
-  select(-Detection_lim) %>%
-  pivot_wider(names_from = Element, values_from = Value)

@@ -20,9 +20,9 @@ widen <- function(projectpath) {
   project.df <- readr::read_csv(file = projectpath)
 
   projectwide.df <- project.df %>%
-    dplyr::filter(!Filter_blank %in% "blank") %>%
-    dplyr::select(-c(1, Detection_limit)) %>%
-    tidyr::pivot_wider(names_from = Element, values_from = Concentration)
+    dplyr::filter(!.data$Filter_blank %in% "blank") %>%
+    dplyr::select(-c(1, .data$Detection_limit)) %>%
+    tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration)
 
   return(projectwide.df)
 
@@ -50,9 +50,64 @@ widen_above <- function(projectpath) {
   project.df <- readr::read_csv(file = projectpath)
 
   projectabove.df <- project.df %>%
-    dplyr::filter(Concentration > Detection_limit) %>%
-    dplyr::select(-Detection_limit) %>%
-    tidyr::pivot_wider(names_from = Element, values_from = Concentration, id_cols = Sample)
+    dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
+    dplyr::select(-.data$Detection_limit) %>%
+    tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration, id_cols = .data$Sample)
 
 }
 
+
+#' Widening the dataframe and calculating the means based on two factors
+#'
+#' @description This function will widen your data like widen() but also calculate the mean concentrations based on two factors, for example location and depth.
+#'
+#' @return description The function creates a dataframe where the columns available are your two factors (for example location and depth) and each element.
+#'
+#' @param projectpath The CSV file created with convertxrf().
+#' @param first_factor
+#' @param second_factor
+#' @param first_element
+#' @param last_element
+#'
+#' @importFrom dplyr filter select group_by summarise_if
+#' @importFrom tidyr pivot_wider
+#' @importFrom rlang is_missing
+#' @importFrom magrittr %>%
+#'
+#' @examples
+#'
+#' @export
+
+widen_means <- function(projectpath, first_factor, second_factor, first_element, last_element) {
+
+  if(rlang::is_missing(.data[[second_facor]])) {
+
+    project.df <- readr::read_csv(file = projectpath)
+
+    projectwide.df <- project.df %>%
+      dplyr::filter(!.data$Filter_blank %in% "blank") %>%
+      dplyr::select(-c(1, .data$Detection_limit)) %>%
+      tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration)
+
+    projectaverage.df <- projectwide.df %>%
+      dplyr::group_by(.data[[first_factor]]) %>%
+      dplyr::summarise_if(is.numeric, mean) %>%
+      dplyr::select(.data[[first_factor]], .data[[first_element]] : .data[[last_element]])
+
+  } else {
+
+    project.df <- readr::read_csv(file = projectpath)
+
+    projectwide.df <- project.df %>%
+      dplyr::filter(!.data$Filter_blank %in% "blank") %>%
+      dplyr::select(-c(1, .data$Detection_limit)) %>%
+      tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration)
+
+    projectaverage.df <- projectwide.df %>%
+      dplyr::group_by(.data[[first_factor]], .data[[second_factor]]) %>%
+      dplyr::summarise_if(is.numeric, mean) %>%
+      dplyr::select(.data[[first_factor]], .data[[second_factor]], .data[[first_element]] : .data[[last_element]])
+
+  }
+
+}
