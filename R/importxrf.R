@@ -2,6 +2,8 @@
 #'
 #' @description This function imports your files using specific utility functions from this package,  and combines them into one dataframe. You will also get a dataframe showing any samples that did    not match between your datasets (the raw data and the information file).
 #'
+#' See vignette("xrfr") for more information.
+#'
 #' @return description The function creates a dataframe where your raw data and project information has been merged.
 #'
 #' @param datapath The name of your .txt file with raw data from the XRF machine.
@@ -11,9 +13,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' importxrf(datapath = "xrf_rawdata.txt", infopath = "xrf_projectinfo.xlsx")
-#' # this generates a dataframe that shows up in your environment
+#' df <- importxrf(datapath = "xrf_rawdata.txt", infopath = "xrf_projectinfo.xlsx")
 #' }
+#'
+#' system.file("extdata", "xrf_rawdata.txt", package = "xrfr")
+#' system.file("extdata", "xrf_projectinfo.xlsx", package = "xrfr")
+#' df <- importxrf(datapath = "xrf_rawdata.txt", infopath = "xrf_projectinfo.xlsx")
+#'
 #'
 #' @export
 

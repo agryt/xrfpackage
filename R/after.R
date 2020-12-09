@@ -2,6 +2,8 @@
 #'
 #' @description This function will widen the dataframe and thus return the data to where each element is in a column.
 #'
+#' See vignette("xrfr") for more information.
+#'
 #' @return description The function creates a dataframe that is a wider version of the one created with convertxrf().
 #'
 #' @param projectpath The CSV file created with convertxrf().
@@ -34,6 +36,8 @@ widen <- function(projectpath) {
 #'
 #' @description This function will both widen the dataframe so each element has its own column, and remove concentrations that are below the detection limits.
 #'
+#' See vignette("xrfr") for more information.
+#'
 #' @return description The function creates a dataframe that is a wider version of the one created with convertxrf(), and where values below the detection limits are removed.
 #'
 #' @param projectpath The CSV file created with convertxrf().
@@ -62,6 +66,8 @@ widen_above <- function(projectpath) {
 #' Widening the dataframe and calculating the means based on two factors
 #'
 #' @description This function will widen your data like widen() but also calculate the mean concentrations based on two factors, for example location and depth.
+#'
+#' See vignette("xrfr") for more information.
 #'
 #' @return description The function creates a dataframe where the columns available are your two factors (for example location and depth) and each element.
 #'
@@ -120,6 +126,8 @@ widen_means <- function(projectpath, first_factor, second_factor, first_element,
 #'
 #' @description This function will widen your data and exclude concentrations below the detection limits like widen_above(), and will also calculate the means based on your two factors like widen_means().
 #'
+#' See vignette("xrfr") for more information.
+#'
 #' @return description The function returns a dataframe that shows the mean concentrations calculated from the concentrations above the detection limits for each element based on one or two factors.
 #'
 #' #' @param projectpath The CSV file created with convertxrf().
@@ -137,6 +145,8 @@ widen_means <- function(projectpath, first_factor, second_factor, first_element,
 #' @examples
 #'
 #' @export
+
+# CODE DOES NOT WORK YET
 
 widen_means_above <- function(projectpath, first_factor, second_factor, first_element, last_element) {
 

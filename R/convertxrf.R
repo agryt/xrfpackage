@@ -2,6 +2,8 @@
 #'
 #' @description This function takes your generated project dataframe created with "importxrf()" and the file containing information from the XRF machine, and converts your raw data from kcal to micromolar.
 #'
+#' See vignette("xrfr") for more information.
+#'
 #' @return description The function creates a dataframe in the long format with the new columns "Concentration" and "Detection_limit" showing the calculated concentration and the respective detection limit.
 #'
 #' @param setuppath The name of the file containing detection limits, crystal drift, molar weights, and calibration constants.
@@ -19,6 +21,12 @@
 #' \dontrun{
 #' df <- convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
 #' }
+#'
+#' system.file("extdata", "xrf_rawdata.txt", package = "xrfr")
+#' system.file("extdata", "xrf_projectinfo.xlsx", package = "xrfr")
+#' system.file("extdata", "xrf_setup.xlsx", package = "xrfr")
+#' df0 <- importxrf(datapath = "xrf_rawdata.txt", infopath = "xrf_projectinfo.xlsx")
+#' df <- convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
 #'
 #' @export
 

@@ -28,7 +28,7 @@ There are three files you need for your analysis: a file with **raw data** from 
 
 ### The raw data file
 
-This file is created by the XRF machine when you export your data from it. You should not edit this file unless there are errors in the sample names. This file is a .txt file using comma (,) as a decimal mark and tabs to separate columns. It will contain a column named **"Sample"**, a column named **"Date"**, and several columns with results from the machine's analysis. 
+This file is created by the XRF machine when you export your data from it. You should not edit this file unless there are errors in the sample names. This file is a .txt file using comma (,) as a decimal mark and tabs to separate columns. It will contain a column named **"Sample"**, a column named **"Date"**, and several columns with results from the machine's analysis. The ones we are interested in in this case are those with "(Int)" behind the element. 
 
 ### The project information file
 
@@ -49,8 +49,8 @@ This file must contain all the relevant information related to the XRF machine, 
 
 * **Element**: All the elements measured by the machine. 
 * **MolarW**: The molar weight of each element. 
-* **PC**, **ANO**, and **GFF**: The calibrated constant for each element for each of the three filter types. Must be in this order. *If you do not use for example GFF filters in your experiment it is not necessary to include this here, but since this file should be used for all experiments it is good to keep them all in one place.*
-* **DL_PC**, **DL_ANO**, and **DL_GFF**: The detection limit of each element for each of the three filter types. Must be in this order. *Again, you do not need to include those you do not need, but it is a good idea.*
+* **PC**, **ANO**, and **GFF**: The calibrated constant for each element for each of the three filter types. Must be in this order. 
+* **DL_PC**, **DL_ANO**, and **DL_GFF**: The detection limit of each element for each of the three filter types. Must be in this order. 
 * **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, so this is used during the calculations. 
 
 ## The project file
@@ -72,7 +72,7 @@ Here is a possible input:
 
 ```{r importxrf, eval = FALSE}
 
-importxrf(datapath = "xrf_rawdata.txt", infopath = "xrf_projectinfo.xlsx")
+df <- importxrf(datapath = "xrf_rawdata.txt", infopath = "xrf_projectinfo.xlsx")
 
 ```
 
@@ -102,14 +102,14 @@ Here is a possible input:
 
 ```{r convertxrf, eval = FALSE}
 
-convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
+df <- convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
 
 ```
 
 This code will give a long dataframe, and you can see the first 96 rows [here](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_calculated_sliced.csv). The table below shows the first few rows of this file:
 
 |Sample|Date.x|Filter_type|...|Day|Treatment|Element|Concentration|Detection_limit|
-|:----|:-----|:----------|:---|:-----|:-----|:--|:--------|:------|:------------|:--------|
+|:----|:-----|:----------|:---|:--|:--------|:------|:------------|:--------------|
 |COM001|04.12.2019 10:16:35|PC|...|0|K1|C|-4.19727307987776|1.22193802149026|
 |COM001|04.12.2019 10:16:35|PC|...|0|K1|N|0.292013243234358|0.312338639119395|
 |COM001|04.12.2019 10:16:35|PC|...|0|K1|O|0.328051062623146|0.0322146560280234|
@@ -119,4 +119,23 @@ Once you have this dataframe you need to save it. This is done by using the `wri
 
 ### widen()
 
+The file created using `convertxrf()` is good for further work in R/Rstudio, but if you want to look at your data it is not ideal. This function will show your data as is, only excluding columns you don't need and turning the dataframe from a long to a wide format. For this function to work you will need to define this argument:
 
+* **projectpath**: This is the name of your "project file", the one you saved after having used `convertxrf()`. This must be a CSV file. 
+
+A possible input could be this:
+
+```{r widen, eval = FALSE}
+
+df <- widen(projectpath = "project_longform.csv")
+
+```
+
+Running this code will give you a dataframe that looks something like this (LINK):
+
+|Sample|...|Day|Treatment|C|N|O|Na|Mg|...|
+|:----|:---|:--|:-------|:-|:-|:-|:-|:-|:-|
+|COM001|...|0|K1|-4.19727308|0.29201324|0.32805106|-0.05557942|0.0353942597|...|
+|COM002|...|0|K2|-21.69354177|0.14490883|0.90309406|-0.01586340|0.1147511764|...|
+|COM003|...|0|K3|0.02039932|0.46326913|0.17582051|-0.05938854|0.0189933824|...|
+|...|...|...|...|...|...|...|...|...|...|...|
