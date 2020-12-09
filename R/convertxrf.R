@@ -6,7 +6,8 @@
 #'
 #' @return description The function creates a dataframe in the long format with the new columns "Concentration" and "Detection_limit" showing the calculated concentration and the respective detection limit.
 #'
-#' @param setuppath The name of the file containing detection limits, crystal drift, molar weights, and calibration constants.
+#' @param imported.data
+#' @param setup The name of the file containing detection limits, crystal drift, molar weights, and calibration constants.
 #' @param year The year the drift was measured closest to when your samples were analysed.
 #' @param first_element The name of the first column containing kcps values in the generated project dataframe.
 #' @param last_element The name of the last column containing kcps values in the generated project  dataframe.
@@ -19,24 +20,24 @@
 #'
 #' @examples
 #' \dontrun{
-#' df <- convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
+#' df <- convertxrf(imported.data = projectfile.df, setup = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
 #' }
 #'
 #' system.file("extdata", "xrf_rawdata.txt", package = "xrfr")
 #' system.file("extdata", "xrf_projectinfo.xlsx", package = "xrfr")
 #' system.file("extdata", "xrf_setup.xlsx", package = "xrfr")
-#' df0 <- importxrf(datapath = "xrf_rawdata.txt", infopath = "xrf_projectinfo.xlsx")
-#' df <- convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
+#' df0 <- importxrf(raw.data = "xrf_rawdata.txt", project.info = "xrf_projectinfo.xlsx")
+#' df <- convertxrf(imported.data = df0, setup = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
 #'
 #' @export
 
 
-convertxrf <- function(setuppath, year, first_element, last_element) {
+convertxrf <- function(imported.data, setup, year, first_element, last_element) {
 
   filter_area <- 9.078935
 
   # BIG WEAKNESS THAT DATAFRAME M U S T BE CALLED "PROJECTFILE.DF"! FIND A WAY AROUND THIS
-  projectfile.df <- as.data.frame(projectfile.df)
+  projectfile.df <- as.data.frame(imported.data)
 
   # making the dataframe longer
   pivotproject.df <- projectfile.df %>%
@@ -55,7 +56,7 @@ convertxrf <- function(setuppath, year, first_element, last_element) {
     dplyr::mutate(Net_count = .data$Count - .data$mean_blank)
 
   # joining setup file with the project file
-  setupfile.df <- importsetup(setuppath = setuppath)
+  setupfile.df <- importsetup(setup = setup)
 
   joined.df <- dplyr::left_join(adjusted.for.blanks.df, setupfile.df, by = c("Filter_type", "Element"))
 

@@ -6,7 +6,7 @@
 #'
 #' @return description The function creates a dataframe that is a wider version of the one created with convertxrf().
 #'
-#' @param projectpath The CSV file created with convertxrf().
+#' @param project.data The name of the dataframe created with convertxrf().
 #'
 #' @importFrom readr read_csv
 #' @importFrom dplyr select filter
@@ -18,13 +18,13 @@
 #'
 #' @export
 
-widen <- function(projectpath) {
+widen <- function(project.data) {
 
-  project.df <- readr::read_csv(file = projectpath)
+  project.df <- as.data.frame(project.data)
 
   projectwide.df <- project.df %>%
     dplyr::filter(!.data$Filter_blank %in% "blank") %>%
-    dplyr::select(-c(1, .data$Detection_limit)) %>%
+    dplyr::select(-.data$Detection_limit) %>%
     tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration)
 
   return(projectwide.df)
@@ -40,7 +40,7 @@ widen <- function(projectpath) {
 #'
 #' @return description The function creates a dataframe that is a wider version of the one created with convertxrf(), and where values below the detection limits are removed.
 #'
-#' @param projectpath The CSV file created with convertxrf().
+#' @param project.data The name of the dataframe created with convertxrf().
 #'
 #' @importFrom readr read_csv
 #' @importFrom dplyr filter select
@@ -51,9 +51,9 @@ widen <- function(projectpath) {
 #'
 #' @export
 
-widen_above <- function(projectpath) {
+widen_above <- function(project.data) {
 
-  project.df <- readr::read_csv(file = projectpath)
+  project.df <- as.data.frame(project.data)
 
   projectabove.df <- project.df %>%
     dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
@@ -71,7 +71,7 @@ widen_above <- function(projectpath) {
 #'
 #' @return description The function creates a dataframe where the columns available are your two factors (for example location and depth) and each element.
 #'
-#' @param projectpath The CSV file created with convertxrf().
+#' @param project.data The name of the dataframe created with convertxrf().
 #' @param first_factor The name of the column that shows the first or only factor you want to calculate means based on, for example depth.
 #' @param second_factor The name of the column that shows a potential second factor you want to calculate means based on, for example location.
 #' @param first_element The name of the first column containing concentration values in the generated project dataframe.
@@ -87,15 +87,15 @@ widen_above <- function(projectpath) {
 #'
 #' @export
 
-widen_means <- function(projectpath, first_factor, second_factor, first_element, last_element) {
+widen_means <- function(project.data, first_factor, second_factor, first_element, last_element) {
 
   if(rlang::is_missing(.data[[second_facor]])) {
 
-    project.df <- readr::read_csv(file = projectpath)
+    project.df <- as.data.frame(project.data)
 
     projectwide.df <- project.df %>%
       dplyr::filter(!.data$Filter_blank %in% "blank") %>%
-      dplyr::select(-c(1, .data$Detection_limit)) %>%
+      dplyr::select(-.data$Detection_limit) %>%
       tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration)
 
     projectaverage.df <- projectwide.df %>%
@@ -105,11 +105,11 @@ widen_means <- function(projectpath, first_factor, second_factor, first_element,
 
   } else {
 
-    project.df <- readr::read_csv(file = projectpath)
+    project.df <- as.data.frame(project.data)
 
     projectwide.df <- project.df %>%
       dplyr::filter(!.data$Filter_blank %in% "blank") %>%
-      dplyr::select(-c(1, .data$Detection_limit)) %>%
+      dplyr::select(-.data$Detection_limit) %>%
       tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration)
 
     projectaverage.df <- projectwide.df %>%
@@ -130,7 +130,7 @@ widen_means <- function(projectpath, first_factor, second_factor, first_element,
 #'
 #' @return description The function returns a dataframe that shows the mean concentrations calculated from the concentrations above the detection limits for each element based on one or two factors.
 #'
-#' #' @param projectpath The CSV file created with convertxrf().
+#' #' @param project.data The name of the dataframe created with convertxrf().
 #' @param first_factor The name of the column that shows the first or only factor you want to calculate means based on, for example depth.
 #' @param second_factor The name of the column that shows a potential second factor you want to calculate means based on, for example location.
 #' @param first_element The name of the first column containing concentration values in the generated project dataframe.
@@ -148,9 +148,9 @@ widen_means <- function(projectpath, first_factor, second_factor, first_element,
 
 # CODE DOES NOT WORK YET
 
-widen_means_above <- function(projectpath, first_factor, second_factor, first_element, last_element) {
+widen_means_above <- function(project.data, first_factor, second_factor, first_element, last_element) {
 
-  project.df <- readr::read_csv(file = projectpath)
+  project.df <- as.data.frame(project.data)
 
   projectabove.df <- project.df %>%
     dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
