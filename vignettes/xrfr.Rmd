@@ -13,14 +13,14 @@ This package was created for use at the University of Bergen to convert data fro
 
 The functions included in this package are:
 
-* **`importxrf()`**: This function joins the raw data file with the file containing project information like where each sample was taken and how much water was filtered. The output of this function is a dataframe. 
-* **`convertxrf()`**: This function takes the dataframe created by `importxrf()` and the file containing information like crystal drift and detection limits for each element. The output of this function is a long dataframe where the counts from the machine have been converted from kcps to µM. 
-* **`widen()`**: This function takes the CSV file from when you save the dataframe created with `convertxrf()` and makes it wider, so each element has its own column. 
-* **`widen_above()`**: This function both widens your data like `widen()` does, but also excludes any concentrations that are below the detection limits. 
-* **`widen_means()`**: This function both widens your data like `widen()` does, but also calculates mean concentration based on one or two factors. 
-* **`importdata()`**: This is a function that is used inside the `importxrf()` function to import your raw data file. *You will not need to use this yourself unless there is an error with* `importxrf()` *and you are looking for the cause of the error.*
-* **`importinfo()`**: This is a function that is used inside the `importxrf()` function to import your project information file. *You will not need to use this yourself unless there is an error with* `importxrf()` *and you are looking for the cause of the error.*
-* **`importsetup()`**: This is a function that is used inside the `convertxrf()` function to import your file containing information like crystal drift and detection limits. *You will not need to use this yourself unless there is an error with* `convertxrf()` *and you are looking for the cause of the error.*
+* `importxrf()`: This function joins the raw data file with the file containing project information like where each sample was taken and how much water was filtered. The output of this function is a dataframe. 
+* `convertxrf()`: This function takes the dataframe created by `importxrf()` and the file containing information like crystal drift and detection limits for each element. The output of this function is a long dataframe where the counts from the machine have been converted from kcps to µM. 
+* `widen()`: This function takes the CSV file from when you save the dataframe created with `convertxrf()` and makes it wider, so each element has its own column. 
+* `widen_above()`: This function both widens your data like `widen()` does, but also excludes any concentrations that are below the detection limits. 
+* `widen_means()`: This function both widens your data like `widen()` does, but also calculates mean concentration based on one or two factors. 
+* `importdata()`: This is a function that is used inside the `importxrf()` function to import your raw data file. *You will not need to use this yourself unless there is an error with* `importxrf()` *and you are looking for the cause of the error.*
+* `importinfo()`: This is a function that is used inside the `importxrf()` function to import your project information file. *You will not need to use this yourself unless there is an error with* `importxrf()` *and you are looking for the cause of the error.*
+* `importsetup()`: This is a function that is used inside the `convertxrf()` function to import your file containing information like crystal drift and detection limits. *You will not need to use this yourself unless there is an error with* `convertxrf()` *and you are looking for the cause of the error.*
 
 ## The files
 
@@ -53,10 +53,6 @@ This file must contain all the relevant information related to the XRF machine, 
 * **DL_PC**, **DL_ANO**, and **DL_GFF**: The detection limit of each element for each of the three filter types. Must be in this order. 
 * **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, so this is used during the calculations. 
 
-## The project file
-
-This is a file that is generated once you have performed the functions `importxrf()` and `convertxrf()` and saved the dataframe (by using `write_csv()`, a function in the readr package). It must be a CSV file. This file will be used for further analysis and/or to create graphics using R/Rstudio etc. 
-
 ## The functions in the xrfr package
 
 This section explains what each function does, and which arguments you need to define to make it work. The examples given show real data from an experiment at UiB. The raw files are available [here](https://github.com/agryt/xrfr/tree/master/inst/extdata). 
@@ -65,14 +61,14 @@ This section explains what each function does, and which arguments you need to d
 
 This function will import and rearrange your files with raw data and project information and then join them into one dataframe. To use this function there are two arguments you must define:
 
-* **datapath**: This is the name of your raw data file from the XRF machine. The file must be a .txt file. 
-* **infopath**: This is the name of your project information file. The file must be an Excel file, either .xlsx or .xls. 
+* **raw.data**: This is the name of your raw data file from the XRF machine. The file must be a .txt file. 
+* **project.info**: This is the name of your project information file. The file must be an Excel file, either .xlsx or .xls. 
 
 Here is a possible input:
 
 ```{r importxrf, eval = FALSE}
 
-df <- importxrf(datapath = "xrf_rawdata.txt", infopath = "xrf_projectinfo.xlsx")
+imported.df <- importxrf(raw.data = "xrf_rawdata.txt", project.info = "xrf_projectinfo.xlsx")
 
 ```
 
@@ -93,7 +89,8 @@ This dataframe will further be used in the function `convertxrf()`, where the va
 
 Once you have your dataframe, you go on to perform the actual calculations to convert your values from kcps to µM, ending up with another dataframe. For this function to work you will need to define several arguments:
 
-* **setuppath**: This is the name of your "setup" file. It must be an Excel file, either .xlsx or .xls. 
+* **imported.data**: The name of the dataframe created after using `importxrf()`. 
+* **setup**: This is the name of your "setup" file. It must be an Excel file, either .xlsx or .xls. 
 * **year**: This is the year in which the crystal drift was measured closest to when your samples were measured. 
 * **first_element**: This is the name of the first column in your dataframe that was created with the function `importxrf()` that is an element. For example, in the example above, there are the columns "Sample" and "Date.x" first, then the column named "C", so this is what we include in the function. 
 * **last_element**: This is the name of the last column in your dataframe that is an element. In our example, this was the column "As". 
@@ -102,11 +99,11 @@ Here is a possible input:
 
 ```{r convertxrf, eval = FALSE}
 
-df <- convertxrf(setuppath = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
+data.df <- convertxrf(project.data = imported.df, setup = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
 
 ```
 
-This code will give a long dataframe, and you can see the first 96 rows [here](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_calculated_sliced.csv). The table below shows the first few rows of this file:
+This code will give a long dataframe - you can see the first 96 rows [here](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_calculated_sliced.csv). The table below shows the first few rows of this file:
 
 |Sample|Date.x|Filter_type|...|Day|Treatment|Element|Concentration|Detection_limit|
 |:----|:-----|:----------|:---|:--|:--------|:------|:------------|:--------------|
@@ -115,19 +112,19 @@ This code will give a long dataframe, and you can see the first 96 rows [here](h
 |COM001|04.12.2019 10:16:35|PC|...|0|K1|O|0.328051062623146|0.0322146560280234|
 |...|...|...|...|...|...|...|...|...|
 
-Once you have this dataframe you need to save it. This is done by using the `write_csv()` function from the readr package (part of tidyverse). This is the file that you will use when performing any statistical analysis on the data or making plots. It is also necessary to save it if you with to use any of the functions in the xrfr package that further treats your dataset. 
+The dataframe created here is a good idea to save, as this is the file you will likely use to perform statistical analyses, make plots, etc. You can save it as a CSV file by using the `write_csv()` function from the readr package (part of tidyverse). 
 
 ### widen()
 
-The file created using `convertxrf()` is good for further work in R/Rstudio, but if you want to look at your data it is not ideal. This function will show your data as is, only excluding columns you don't need and turning the dataframe from a long to a wide format. For this function to work you will need to define this argument:
+The file created using `convertxrf()` is good for further work in R/Rstudio, but if you want to look at your data it is not ideal. The `widen()` function will show your data as is, only excluding the blanks and detection limits, and turning the dataframe from a long to a wide format. For this function to work you will need to define this argument:
 
-* **projectpath**: This is the name of your "project file", the one you saved after having used `convertxrf()`. This must be a CSV file. 
+* **project.data**: This is the name of the dataframe created using `convertxrf()`. 
 
 A possible input could be this:
 
 ```{r widen, eval = FALSE}
 
-df <- widen(projectpath = "project_longform.csv")
+df <- widen(project.data = data.df)
 
 ```
 

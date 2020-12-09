@@ -8,11 +8,9 @@
 #'
 #' @param project.data The name of the dataframe created with convertxrf().
 #'
-#' @importFrom readr read_csv
 #' @importFrom dplyr select filter
 #' @importFrom tidyr pivot_wider
 #' @importFrom magrittr %>%
-#' @importFrom readr read_csv
 #'
 #' @examples
 #'
@@ -42,7 +40,6 @@ widen <- function(project.data) {
 #'
 #' @param project.data The name of the dataframe created with convertxrf().
 #'
-#' @importFrom readr read_csv
 #' @importFrom dplyr filter select
 #' @importFrom tidyr pivot_wider
 #' @importFrom magrittr %>%
@@ -77,7 +74,6 @@ widen_above <- function(project.data) {
 #' @param first_element The name of the first column containing concentration values in the generated project dataframe.
 #' @param last_element The name of the last column containing concentration values in the generated project  dataframe.
 #'
-#' @importFrom readr read_csv
 #' @importFrom dplyr filter select group_by summarise_if
 #' @importFrom tidyr pivot_wider
 #' @importFrom rlang is_missing
@@ -136,7 +132,6 @@ widen_means <- function(project.data, first_factor, second_factor, first_element
 #' @param first_element The name of the first column containing concentration values in the generated project dataframe.
 #' @param last_element The name of the last column containing concentration values in the generated project  dataframe.
 #'
-#' @importFrom readr read_csv
 #' @importFrom dplyr filter select group_by summarise_if
 #' @importFrom tidyr pivot_wider
 #' @importFrom rlang is_missing
