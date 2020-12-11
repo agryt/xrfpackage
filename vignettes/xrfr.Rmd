@@ -136,3 +136,38 @@ Running this code will give you a dataframe that looks something like this (LINK
 |COM002|...|0|K2|-21.69354177|0.14490883|0.90309406|-0.01586340|0.1147511764|...|
 |COM003|...|0|K3|0.02039932|0.46326913|0.17582051|-0.05938854|0.0189933824|...|
 |...|...|...|...|...|...|...|...|...|...|...|
+
+This dataframe is a lot easier to read with human eyes than the long format. 
+
+### widen_above()
+
+In addition to widening your data, you may wish to exclude the values that are below the detection limits. This can be done with the `widen_above()` function. It will give you the same dataframe as the `widen()` function, only with "NA" or "NULL" written in the cells where the concentration was lower than the detection limit. You will need to define this argument:
+
+* **project.data**: This is the name of the dataframe created using `convertxrf()`. 
+
+Here is a possible input for this function:
+
+```{r widen_above, eval = FALSE}
+
+df <- widen_above(project.data = data.df)
+
+```
+
+The output of this code will be a dataframe that looks like this (LINK):
+
+|Sample|O|Mg|Si|P|S|...|N|Na|...|
+|:----|:-|:-|:-|:-|:-|:-|:-|:-|:-|
+|COM001|0.32805106|0.035394260|0.214839894|0.057113603|0.008732699|...|NA|NA|...|
+|COM002|0.90309406|0.114751176|0.719814744|0.086571942|0.017652209|...|NA|NA|...|
+|COM003|0.17582051|0.018993382|0.089606809|0.054061778|0.007655639|...|0.4632691|NA|...|
+|...|...|...|...|...|...|...|...|...|...|
+
+### widen_means()
+
+you may also wish to calculate the mean concentrations based on different factors such as depth, location, treatment, etc. The `widen_means()` function does this, based on one or two factors that you must define. To use this function you must define these arguments:
+
+* **project.data**: This is the name of the dataframe created using `convertxrf()`.
+* **first_factor**: This is the name of the column that shows the first or only factor you want to calculate means based on, for example depth. 
+* **second_factor**: *Defining this argument is optional.* This is the name of the column that shows the second factor you want to calculate means based on, for example location.
+* **first_element**: This is the name of the first column containing concentration values in the project dataframe created using `convertxrf()`.
+* **last_element**: This is the name of the last column containing concentration values in the project dataframe created using `convertxrf()`.

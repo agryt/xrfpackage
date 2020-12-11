@@ -54,6 +54,7 @@ widen_above <- function(project.data) {
 
   projectabove.df <- project.df %>%
     dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
+    dplyr::filter(!.data$Filter_blank %in% "blank") %>%
     dplyr::select(-.data$Detection_limit) %>%
     tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration, id_cols = .data$Sample)
 
@@ -126,7 +127,7 @@ widen_means <- function(project.data, first_factor, second_factor, first_element
 #'
 #' @return description The function returns a dataframe that shows the mean concentrations calculated from the concentrations above the detection limits for each element based on one or two factors.
 #'
-#' #' @param project.data The name of the dataframe created with convertxrf().
+#' #' @param project.data
 #' @param first_factor The name of the column that shows the first or only factor you want to calculate means based on, for example depth.
 #' @param second_factor The name of the column that shows a potential second factor you want to calculate means based on, for example location.
 #' @param first_element The name of the first column containing concentration values in the generated project dataframe.
@@ -147,25 +148,32 @@ widen_means_above <- function(project.data, first_factor, second_factor, first_e
 
   project.df <- as.data.frame(project.data)
 
-  projectabove.df <- project.df %>%
-    dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
-    dplyr::filter(!.data$Filter_blank %in% "blank") %>%
-    dplyr::select(-.data$Detection_limit) %>%
-    tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration, id_cols = .data$Sample)
+  if(rlang::is_missing(.data[[second_factor]])) {
 
-  if(rlang::is_missing(.data[[second_facor]])) {
+    projectabove.df <- project.df %>%
+      dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
+      dplyr::filter(!.data$Filter_blank %in% "blank") %>%
+      dplyr::select(-.data$Detection_limit) %>%
+      tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration, id_cols = c(.data$Sample, .data[[first_factor]]))
 
-    projectaverage.df <- projectabove.df %>%
+    projectaverageabove.df <- projectabove.df %>%
       dplyr::group_by(.data[[first_factor]]) %>%
       dplyr::summarise_if(is.numeric, mean) %>%
       dplyr::select(.data[[first_factor]], .data[[first_element]] : .data[[last_element]])
 
   } else {
 
-    projectaverage.df <- projectabove.df %>%
+    projectabove.df <- project.df %>%
+      dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
+      dplyr::filter(!.data$Filter_blank %in% "blank") %>%
+      dplyr::select(-.data$Detection_limit) %>%
+      tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration, id_cols = c(.data$Sample, .data[[first_factor]], .data[[second_factor]]))
+
+    projectaverageabove.df <- projectabove.df %>%
       dplyr::group_by(.data[[first_factor]], .data[[second_factor]]) %>%
       dplyr::summarise_if(is.numeric, mean) %>%
       dplyr::select(.data[[first_factor]], .data[[second_factor]], .data[[first_element]] : .data[[last_element]])
+
 
   }
 

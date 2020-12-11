@@ -9,5 +9,5 @@ wideabove.df <- widen_above(project.data = project.df)
 
 widemeans.df <- widen_means(project.data = project.df, first_factor = "Day", second_factor = "Treatment", first_element = "C", last_element = "As")
 
-widemeansabove.df <- widen_means_above(projectpath = "project_long.csv", first_factor = "Day", second_factor = "Treatment", first_element = "C", last_element = "As")
+widemeansabove.df <- widen_means_above(project.data = project.df, first_factor = "Day", second_factor = "Treatment", first_element = "C", last_element = "As")
 
