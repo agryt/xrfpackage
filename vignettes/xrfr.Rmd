@@ -164,10 +164,22 @@ The output of this code will be a dataframe that looks like this (LINK):
 
 ### widen_means()
 
-you may also wish to calculate the mean concentrations based on different factors such as depth, location, treatment, etc. The `widen_means()` function does this, based on one or two factors that you must define. To use this function you must define these arguments:
+You may also wish to calculate the mean concentrations based on different factors such as depth, location, treatment, etc. The `widen_means()` function does this, based on one or two factors that you must define. To use this function you must define these arguments:
 
 * **project.data**: This is the name of the dataframe created using `convertxrf()`.
 * **first_factor**: This is the name of the column that shows the first or only factor you want to calculate means based on, for example depth. 
 * **second_factor**: *Defining this argument is optional.* This is the name of the column that shows the second factor you want to calculate means based on, for example location.
 * **first_element**: This is the name of the first column containing concentration values in the project dataframe created using `convertxrf()`.
 * **last_element**: This is the name of the last column containing concentration values in the project dataframe created using `convertxrf()`.
+
+A possible input:
+
+```{r widen_means, eval = FALSE}
+
+df <- widen_means(project.data = data.df, first_factor = "Treatment", second_factor = "Day", first_element = "C", last_element = "As")
+
+```
+
+The output of this code will be a dataframe showing the factor(s) chosen and the mean concentration for each element, like this (LINK): 
+
+
