@@ -15,3 +15,5 @@ widemeansabove.df <- widen_means_above(project.data = project.df, first_factor =
 
 a <- importdata(raw.data = system.file("/tests/testthat", "testdata_rawdata.txt", package = "xrfr"))
 b <- importinfo(project.info = system.file("/tests/testthat", "testdata_infofile.xlsx", package = "xrfr"))
+
+c <- importxrf(raw.data = system.file("/tests/testthat", "testdata_rawdata.txt", package = "xrfr"), project.info = system.file("/tests/testthat", "testdata_infofile.xlsx", package = "xrfr"))

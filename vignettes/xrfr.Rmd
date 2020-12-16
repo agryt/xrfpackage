@@ -182,4 +182,9 @@ df <- widen_means(project.data = data.df, first_factor = "Treatment", second_fac
 
 The output of this code will be a dataframe showing the factor(s) chosen and the mean concentration for each element, like this (LINK): 
 
-
+|Day|Treatment|C|N|O|Na|Mg|Al|...|
+|:-|:--------|:-|:-|:-|:-|:-|:-|:-|
+|0|K1|-0.7737613|0.25055436|-1.587303e-01|-0.07999250|0.10809891|-2.2312739|...|
+|0|K2|-9.4292147|0.16635012|5.019141e-05|-0.01811514|0.19980153|-0.6574871|...|
+|0|K3|1.2544674|0.34920146|-2.354479e-01|-0.05398931|0.11028071|-1.9058621|...|
+|...|...|...|...|...|...|...|...|...|
