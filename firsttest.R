@@ -11,3 +11,7 @@ widemeans.df <- widen_means(project.data = project.df, first_factor = "Day", sec
 
 widemeansabove.df <- widen_means_above(project.data = project.df, first_factor = "Day", second_factor = "Treatment", first_element = "C", last_element = "As")
 
+
+
+a <- importdata(raw.data = system.file("/tests/testthat", "testdata_rawdata.txt", package = "xrfr"))
+b <- importinfo(project.info = system.file("/tests/testthat", "testdata_infofile.xlsx", package = "xrfr"))
