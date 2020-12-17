@@ -6,14 +6,14 @@
 #'
 #' @return description The function creates a dataframe in the long format with the new columns "Concentration" and "Detection_limit" showing the calculated concentration and the respective detection limit.
 #'
-#' @param imported.data
-#' @param setup The name of the file containing detection limits, crystal drift, molar weights, and calibration constants.
+#' @param imported.data The name of the dataframe created with importxrf()
+#' @param setup The name of the dataframe containing detection limits, crystal drift, molar weights, and calibration constants.
 #' @param year The year the drift was measured closest to when your samples were analysed.
 #' @param first_element The name of the first column containing kcps values in the generated project dataframe.
 #' @param last_element The name of the last column containing kcps values in the generated project  dataframe.
 #'
 #' @importFrom tidyr pivot_longer
-#' @importFrom dplyr filter group_by summarise left_join mutate select distinct
+#' @importFrom dplyr filter group_by summarise left_join mutate select distinct relocate
 #' @importFrom stringr str_remove
 #' @importFrom rlang .data
 #' @importFrom magrittr %>%
@@ -36,7 +36,6 @@ convertxrf <- function(imported.data, setup, year, first_element, last_element) 
 
   filter_area <- 9.078935
 
-  # BIG WEAKNESS THAT DATAFRAME M U S T BE CALLED "PROJECTFILE.DF"! FIND A WAY AROUND THIS
   projectfile.df <- as.data.frame(imported.data)
 
   # making the dataframe longer
@@ -56,7 +55,12 @@ convertxrf <- function(imported.data, setup, year, first_element, last_element) 
     dplyr::mutate(Net_count = .data$Count - .data$mean_blank)
 
   # joining setup file with the project file
-  setupfile.df <- importsetup(setup = setup)
+  setupfile.df <- as.data.frame(setup)
+  setupfile.df <- setupfile.df %>%
+    tidyr::pivot_longer(.data$PC : .data$GFF,
+                        names_to = "Filter_type",
+                        values_to = "Cal_const") %>%
+    dplyr::relocate(Filter_type)
 
   joined.df <- dplyr::left_join(adjusted.for.blanks.df, setupfile.df, by = c("Filter_type", "Element"))
 

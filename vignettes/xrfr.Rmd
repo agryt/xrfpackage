@@ -18,9 +18,6 @@ The functions included in this package are:
 * `widen()`: This function takes the CSV file from when you save the dataframe created with `convertxrf()` and makes it wider, so each element has its own column. 
 * `widen_above()`: This function both widens your data like `widen()` does, but also excludes any concentrations that are below the detection limits. 
 * `widen_means()`: This function both widens your data like `widen()` does, but also calculates mean concentration based on one or two factors. 
-* `importdata()`: This is a function that is used inside the `importxrf()` function to import your raw data file. *You will not need to use this yourself unless there is an error with* `importxrf()` *and you are looking for the cause of the error.*
-* `importinfo()`: This is a function that is used inside the `importxrf()` function to import your project information file. *You will not need to use this yourself unless there is an error with* `importxrf()` *and you are looking for the cause of the error.*
-* `importsetup()`: This is a function that is used inside the `convertxrf()` function to import your file containing information like crystal drift and detection limits. *You will not need to use this yourself unless there is an error with* `convertxrf()` *and you are looking for the cause of the error.*
 
 ## The files
 
@@ -28,11 +25,11 @@ There are three files you need for your analysis: a file with **raw data** from 
 
 ### The raw data file
 
-This file is created by the XRF machine when you export your data from it. You should not edit this file unless there are errors in the sample names. This file is a .txt file using comma (,) as a decimal mark and tabs to separate columns. It will contain a column named **"Sample"**, a column named **"Date"**, and several columns with results from the machine's analysis. The ones we are interested in in this case are those with "(Int)" behind the element. 
+This file is created by the XRF machine when you export your data from it. You should not edit this file unless there are errors in the sample names. This file will be a .txt file using comma (,) as a decimal mark and tabs to separate columns. It will contain a column named **"Sample"**, a column named **"Date"**, and several columns with results from the machine's analysis. The ones we are interested in in this case are those with "(Int)" behind the element. 
 
 ### The project information file
 
-This file should contain all relevant information that you wish to include about your data that is not from the XRF machine. It must be saved as an Excel file (.xlsx or .xls). There are several columns that must be included for the functions in this package to work:
+This file should contain all relevant information that you wish to include about your data that is not from the XRF machine. There are several columns that must be included for the functions in this package to work:
 
 * **"Sample"**: The name of your sample. Must be the same as in the raw data file. Any samples that do not match exactly will not be included in the created file. 
 * **"Filter_type"**: The type of filter used when filtering. Can be PC, ANO, or GFF. This column must be filled out even if the same filter type was used on all samples because R needs to know which detection limits and calibrated constants to use. 
@@ -41,17 +38,21 @@ This file should contain all relevant information that you wish to include about
 * **Filter_blank**: In this column you will need to write "blank" for all your blank samples.
 * **Volume**: The volume of water that was filtered. 
 
-You may include as many more columns as you want, for example dates, depth, or station, but these columns all need to be present in your project information file. 
+You may include as many more columns as you want, for example dates, depth, or location, but these columns all need to be present in your project information file. 
 
 ### The "setup" file
 
-This file must contain all the relevant information related to the XRF machine, filters, and elements. It must be saved as an Excel file (.xlsx or .xls). This is a file that will not change between experiments unless the crystal drift has been measured again. The "setup" file must contain these columns:
+This file must contain all the relevant information related to the XRF machine, filters, and elements. This is a file that will not change between experiments unless the crystal drift has been measured again. The "setup" file must contain these columns:
 
 * **Element**: All the elements measured by the machine. 
 * **MolarW**: The molar weight of each element. 
 * **PC**, **ANO**, and **GFF**: The calibrated constant for each element for each of the three filter types. Must be in this order. 
 * **DL_PC**, **DL_ANO**, and **DL_GFF**: The detection limit of each element for each of the three filter types. Must be in this order. 
 * **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, so this is used during the calculations. 
+
+### Importing your files
+
+All these files must be imported to RStudio as dataframes before you can use the xrfr package. Your raw data file will be a .txt file, which can be imported using the `read_delim()` function. This code should work: `read_delim("name_of_your_file.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))`. How you import your other files depends on which format they are saved as. For Excel files, use the readxl package and the function `read_excel()`. For CSV files use either `read_csv()` (comma as separator and . as decimal point) or `read_csv2()` (tab as separator and , as decimal point) from the readr package. 
 
 ## The functions in the xrfr package
 
@@ -61,14 +62,17 @@ This section explains what each function does, and which arguments you need to d
 
 This function will import and rearrange your files with raw data and project information and then join them into one dataframe. To use this function there are two arguments you must define:
 
-* **raw.data**: This is the name of your raw data file from the XRF machine. The file must be a .txt file. 
-* **project.info**: This is the name of your project information file. The file must be an Excel file, either .xlsx or .xls. 
+* **raw.data**: This is the name of your dataframe with raw data from the XRF machine. 
+* **project.info**: This is the name of your dataframe with the project information. 
 
 Here is a possible input:
 
 ```{r importxrf, eval = FALSE}
 
-imported.df <- importxrf(raw.data = "xrf_rawdata.txt", project.info = "xrf_projectinfo.xlsx")
+rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
+projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
+
+imported.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
 
 ```
 
@@ -90,7 +94,7 @@ This dataframe will further be used in the function `convertxrf()`, where the va
 Once you have your dataframe, you go on to perform the actual calculations to convert your values from kcps to µM, ending up with another dataframe. For this function to work you will need to define several arguments:
 
 * **imported.data**: The name of the dataframe created after using `importxrf()`. 
-* **setup**: This is the name of your "setup" file. It must be an Excel file, either .xlsx or .xls. 
+* **setup**: This is the name of your dataframe with the "setup" information. 
 * **year**: This is the year in which the crystal drift was measured closest to when your samples were measured. 
 * **first_element**: This is the name of the first column in your dataframe that was created with the function `importxrf()` that is an element. For example, in the example above, there are the columns "Sample" and "Date.x" first, then the column named "C", so this is what we include in the function. 
 * **last_element**: This is the name of the last column in your dataframe that is an element. In our example, this was the column "As". 
@@ -99,7 +103,9 @@ Here is a possible input:
 
 ```{r convertxrf, eval = FALSE}
 
-data.df <- convertxrf(project.data = imported.df, setup = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
+setup.df <- read_excel("xrf_setup.xlsx")
+
+data.df <- convertxrf(project.data = imported.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
 
 ```
 

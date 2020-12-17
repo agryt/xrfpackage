@@ -11,17 +11,17 @@ This R package was created to convert elemental composition x-ray fluorescence (
 
 First, you have to make sure to have the right files, and that these are all in the same folder on your computer. There are three files you need for your analysis: 
 
-* A file with **raw data** from the XRF machine
-* A file with **information about the samples and project**, like which location the samples are from, whether they are blank samples, and the volume of the filtrated water
-* A file containing **information about the machine, filters and elements**, like crystal drift and calibrated constants
+* A file with **raw data** from the XRF machine.
+* A file with **information about the samples and project**, like which location the samples are from, whether they are blank samples, and the volume of the filtrated water.
+* A file containing **information about the machine, filters and elements**, like crystal drift and calibrated constants.
 
 ### The raw data file
 
-This file is created by the XRF machine when you export your data from it. You should not edit this file unless there are errors in the sample names. This file is a .txt file using comma (,) as a decimal mark and tabs to separate columns. It will contain a column named **"Sample"**, a column named **"Date"**, and several columns with results from the machine's analysis. The ones we are interested in in this case are those with "(Int)" behind the element. 
+This file is created by the XRF machine when you export your data from it. You should not edit this file unless there are errors in the sample names. This file will be a .txt file using comma (,) as a decimal mark and tabs to separate columns. It will contain a column named **"Sample"**, a column named **"Date"**, and several columns with results from the machine's analysis. The ones we are interested in in this case are those with "(Int)" behind the element. 
 
 ### The project information file
 
-This file should contain all relevant information that you wish to include about your data that is not from the XRF machine. It must be saved as an Excel file (.xlsx or .xls). There are several columns that must be included for the functions in this package to work:
+This file should contain all relevant information that you wish to include about your data that is not from the XRF machine. There are several columns that must be included for the functions in this package to work:
 
 * **"Sample"**: The name of your sample. Must be the same as in the raw data file. Any samples that do not match exactly will not be included in the created file. 
 * **"Filter_type"**: The type of filter used when filtering. Can be PC, ANO, or GFF. This column must be filled out even if the same filter type was used on all samples because R needs to know which detection limits and calibrated constants to use. 
@@ -34,7 +34,7 @@ You may include as many more columns as you want, for example dates, depth, or s
 
 ### The "setup" file
 
-This file must contain all the relevant information related to the XRF machine, filters, and elements. It must be saved as an Excel file (.xlsx or .xls). This is a file that will not change between experiments unless the crystal drift has been measured again. The "setup" file must contain these columns:
+This file must contain all the relevant information related to the XRF machine, filters, and elements. This is a file that will not change between experiments unless the crystal drift has been measured again. The "setup" file must contain these columns:
 
 * **Element**: All the elements measured by the machine. 
 * **MolarW**: The molar weight of each element. 
@@ -65,3 +65,30 @@ R packages are extensions to R that can be installed. There are many packages av
 - To run a line of code from your R Script you press ctrl + enter (on Windows or Linux) or cmd + enter (on Mac). You can also press run at the top right in the toolbar. 
 - Using pipe operators make your code more readable and tidier. They are written as `%>%`. The pipe operator is a part of the **magrittr** package, but are also used in the **dplyr** package that you will likely be using (by running `library(dplyr)` or `library(tidyverse)`). On Windows or Linux you can use ctrl + shift + M as a shortcut for the pipe, and on Mac this is cmd + shift + M. `y %>% x` = `x(y)`. 
 - Use # at the beginning of a line to create a comment. Comments are ignored by R when running the code. This way you can write comments explaining what a function does etc. 
+
+## Using the xrfr package
+
+### Installing
+
+If it is your first time using it, you need to install the package before you can use it. To do this, you must use the function `install_github()` from the **remotes** package. This package is a part of the **devtools** group of packages. If you do not already have this installed, you need to install either the **devtools** group of packages or only the **remotes** package first, by using the `install.packages()` function (`install.packages("remotes")` or `install.packages("devtools")`). To install the xrfr package you then run the code `install_github("agryt/xrfr")`. 
+
+### Preparing your data
+
+Before starting the analysis, make sure that your files are properly formatted with the right column names and matching sample names. Your code will not work and you may get warning messages if they are not. 
+
+Before you can use the **xrfr** functions, you must import your data to RStudio. How this is done depends on which format your files are saved in. Your raw data file is created as a .txt file by the XRF computer, so this is likely how yours will be saved. If so, using the code `read_delim("your_raw_data.txt", delim = "\t", locale = locale(decimal_mark = ","))` should work, as long as the **readr** package (or the whole **tidyverse** package) is loaded using the `library()` function. Excel files can be imported using the `read_excel()` function from the **readxl** package, and CSV files can be imported using the `read_csv()` or `read_csv2()` functions from the **readr** package depending on which type of CSV file it is. If you are using other file formats, you can use your search engine to find out how to import them, as it is likely possible to do so. 
+
+Here is an example of how to import the files:
+
+```{r data import, eval = FALSE}
+
+library(tidyverse) # includes readr, which is needed here
+library(readxl)
+
+rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
+projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
+setup.df <- read_excel("xrf_setup.xlsx")
+
+```
+
+
