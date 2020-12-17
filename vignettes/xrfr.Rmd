@@ -24,7 +24,7 @@ The functions included in this package are:
 
 ## The files
 
-There are three files you need for your analysis: a file with **raw data** from the XRF machine. You also need a file with **information about the samples and project**, like which station the samples are from, whether they are blank samples, and the volume of the filtrated water. Lastly, you need a file containing **information about the machine, filters and elements**, like crystal drift and calibrated constants. 
+There are three files you need for your analysis: a file with **raw data** from the XRF machine. You also need a file with **information about the samples and project**, like which location the samples are from, whether they are blank samples, and the volume of the filtrated water. Lastly, you need a file containing **information about the machine, filters and elements**, like crystal drift and calibrated constants. 
 
 ### The raw data file
 
@@ -128,7 +128,7 @@ df <- widen(project.data = data.df)
 
 ```
 
-Running this code will give you a dataframe that looks something like this (LINK):
+Running this code will give you a dataframe that looks something like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_wide.csv):
 
 |Sample|...|Day|Treatment|C|N|O|Na|Mg|...|
 |:----|:---|:--|:-------|:-|:-|:-|:-|:-|:-|
@@ -153,7 +153,7 @@ df <- widen_above(project.data = data.df)
 
 ```
 
-The output of this code will be a dataframe that looks like this (LINK):
+The output of this code will be a dataframe that looks like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_wide_abovedetlim.csv):
 
 |Sample|O|Mg|Si|P|S|...|N|Na|...|
 |:----|:-|:-|:-|:-|:-|:-|:-|:-|:-|
@@ -180,7 +180,7 @@ df <- widen_means(project.data = data.df, first_factor = "Treatment", second_fac
 
 ```
 
-The output of this code will be a dataframe showing the factor(s) chosen and the mean concentration for each element, like this (LINK): 
+The output of this code will be a dataframe showing the factor(s) chosen and the mean concentration for each element, like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_wide_means.csv): 
 
 |Day|Treatment|C|N|O|Na|Mg|Al|...|
 |:-|:--------|:-|:-|:-|:-|:-|:-|:-|

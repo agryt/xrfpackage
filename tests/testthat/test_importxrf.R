@@ -22,4 +22,12 @@ test_that("output", {
 
   expect_s3_class(a, "data.frame")
   expect_identical(dim(a), dim(b))
+  expect_named(a, c("Sample", "Date", "C", "N", "O", "Na", "Mg", "Filter_type", "Filter_size", "Filter_box_nr", "Filter_blank", "Volume", "Location", "Depth"), ignore.order = TRUE, ignore.case = TRUE)
+  expect_equal(nrow(a), 10)
+  expect_equal(ncol(a), 14)
+})
+
+
+test_that("warning message", {
+
 })
