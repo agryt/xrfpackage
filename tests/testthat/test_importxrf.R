@@ -1,7 +1,4 @@
-context("importxrf")
-
 library(xrfr)
-
 
 test_that("output is correct", {
   a <- data.frame(Sample = c("A1", "A2", "A3", "A4"),
@@ -35,7 +32,7 @@ test_that("output is correct", {
 })
 
 
-test_that("warning messages work", {
+test_that("warnings and errors work", {
   a <- data.frame(Sample = c("A1", "A2", "A3", "A4"),
                   Date = "01.01.2020",
                   C.Int = c(2.38, 3.28, 2.13, 1.75),
@@ -54,6 +51,6 @@ test_that("warning messages work", {
                   Filter_blank = c(NA, NA, NA, "blank"),
                   Volume = 1000)
 
-  expect_error(importxrf(raw.data = a, project.info = b))
+  expect_warning(importxrf(raw.data = a, project.info = b))
   expect_error(importxrf(raw.data = a, project.info = c))
 })

@@ -48,7 +48,7 @@ importxrf <- function(raw.data, project.info) {
 
   # assigning warning messages
   if(nrow(notinprojectfile.df) > 0) {
-    stop("WARNING! There are samples that do not match between your raw data file and information file.")
+    warning("WARNING! There are samples that do not match between your raw data file and information file.")
   }
 
   return(projectfile.df)
