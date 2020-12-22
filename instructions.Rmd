@@ -122,4 +122,4 @@ write_csv(data.df, file = "my_data.csv")
 
 ```
 
-Note that `write_csv()` is a function from the package **readr**, so you must have that or the entire **tidyverse** loaded to use it. The data frame will then be saved as a CSV file named "my_data.csv" in your directory. If you wish to save in a different format, that is entirely possible (use your search engine to figure out how!).
+Note that `write_csv()` is a function from the package **readr**, so you must have that or the entire **tidyverse** installed and loaded to use it. The data frame will then be saved as a CSV file named "my_data.csv" in your directory. If you wish to save in a different format, that is entirely possible (use your search engine to figure out how!).
