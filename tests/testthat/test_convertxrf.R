@@ -39,6 +39,3 @@ test_that("output is correct", {
   expect_equal(names(ab), names(c))
 })
 
-test_that("code stops running when supposed to", {
-
-})

@@ -82,7 +82,7 @@ Here is an example of how to import the files:
 
 ```{r data import, eval = FALSE}
 
-library(tidyverse) # includes readr, which is needed here
+library(tidyverse) # tidyverse includes readr, which is needed here
 library(readxl)
 
 rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
@@ -91,4 +91,35 @@ setup.df <- read_excel("xrf_setup.xlsx")
 
 ```
 
+This will make the three data frames appear in your environment. At this point it is a good idea to open them (by clicking on them in the environment or running the code `view("name_of_dataframe")`) and checking that they were imported correctly. If not, you will need to fix the code used to "read" your file. 
 
+### Using the main functions
+
+There are two main functions in the xrfr package: `importxrf()` and `convertxrf()`. You will need to use both to perform the calculations from kcps to µM. `importxrf()` takes your data frames, changes them to the format needed, and combines them into one data frame. This data frame will then be used further in the `convertxrf()` function, where the actual calculations are performed, and the necessary data from the "setup" file is included. `convertxrf()` also makes your dataset longer, as this is a more readable format for R for further analysis. 
+
+Here is an example of how to use these functions:
+
+```{r main functions, eval = FALSE}
+
+library(xrfr)
+
+imported.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+data.df <- convertxrf(imported.data = imported.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+
+```
+
+You will need to run these functions one at a time, as there is information in the data frame created with `importxrf()` that is needed to run `convertxrf()` properly. The result of each function will be a new data frame. 
+
+To run `importxrf()` you only need to define the arguments "raw.data", which is the name of the data frame containing your raw data from the XRF-machine, and "project.info", the name of the data frame containing information about all your samples. 
+
+To run `convertxrf()` you will need to let R know the name of the data frame created with `importxrf()` ("imported.data"), the name of the data frame containing the "setup" data ("setup"), and the year in which the crystal drift was measured closest to when your samples were taken ("year"). You will also need to define the arguments "first_element" and "last_element". These are the names of the first and last columns in the data frame created with `importxrf()` that contain data in kcps. This can change, but will likely be "C" for "first_element" and "As" for "last_element". 
+
+The output of these two functions is a long data frame containing new columns showing the concentration and detection limit of each element for each sample. You will likely want to save this data frame as a file, as this is the file you will use when doing for example statistical analysis or creating graphics. Saving a data frame can be done like this:
+
+```{r saving data frame, eval = FALSE}
+
+write_csv(data.df, file = "my_data.csv")
+
+```
+
+Note that `write_csv()` is a function from the package **readr**, so you must have that or the entire **tidyverse** loaded to use it. The data frame will then be saved as a CSV file named "my_data.csv" in your directory. If you wish to save in a different format, that is entirely possible (use your search engine to figure out how!).
