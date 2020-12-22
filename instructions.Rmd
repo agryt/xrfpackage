@@ -1,11 +1,15 @@
 ---
-title: "Instructions on How to Use the xrfr Package"
+title: "How to Use the xrfr Package"
 output: html_document
 author: Anna Grytaas
 date: "`r Sys.Date()`"
 ---
 
 This R package was created to convert elemental composition x-ray fluorescence (XRF) data of filtrated water samples from kcps to µM. 
+
+For source code, vignette, and more information, please visit https://github.com/agryt/xrfr.
+
+**Problems?** Issues can be reported at https://github.com/agryt/xrfr/issues. Questions can be sent to grytaasanna@gmail.com. 
 
 ## The files
 
@@ -17,16 +21,16 @@ First, you have to make sure to have the right files, and that these are all in 
 
 ### The raw data file
 
-This file is created by the XRF machine when you export your data from it. You should not edit this file unless there are errors in the sample names. This file will be a .txt file using comma (,) as a decimal mark and tabs to separate columns. It will contain a column named **"Sample"**, a column named **"Date"**, and several columns with results from the machine's analysis. The ones we are interested in in this case are those with "(Int)" behind the element. 
+This file is created by the XRF machine when you export your data from it. You should not edit this file unless there are errors in the sample names. This file will be a .txt file using comma (,) as a decimal mark and tabs to separate columns. It will contain a column named "**Sample**", a column named "**Date**", and several columns with results from the machine's analysis. The ones we are interested in in this case are those with "(Int)" behind the element. 
 
 ### The project information file
 
 This file should contain all relevant information that you wish to include about your data that is not from the XRF machine. There are several columns that must be included for the functions in this package to work:
 
-* **"Sample"**: The name of your sample. Must be the same as in the raw data file. Any samples that do not match exactly will not be included in the created file. 
-* **"Filter_type"**: The type of filter used when filtering. Can be PC, ANO, or GFF. This column must be filled out even if the same filter type was used on all samples because R needs to know which detection limits and calibrated constants to use. 
-* **"Filter_size"**: The pore size of the filter used. This column can be left empty if the size was the same in all filters, but the column must exist. 
-* **"Filter_box_nr"**: Let's R know which box the filter came from so it knows which blank samples to apply when finding the net count in this sample. 
+* **Sample**: The name of your sample. Must be the same as in the raw data file. Any samples that do not match exactly will not be included in the created file. 
+* **Filter_type**: The type of filter used when filtering. Can be PC, ANO, or GFF. This column must be filled out even if the same filter type was used on all samples because R needs to know which detection limits and calibrated constants to use. 
+* **Filter_size**: The pore size of the filter used. This column can be left empty if the size was the same in all filters, but the column must exist. 
+* **Filter_box_nr**: Lets R know which box the filter came from so it knows which blank samples to apply when finding the net count in this sample. 
 * **Filter_blank**: In this column you will need to write "blank" for all your blank samples.
 * **Volume**: The volume of water that was filtered. 
 
@@ -43,8 +47,6 @@ This file must contain all the relevant information related to the XRF machine, 
 * **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, so this is used during the calculations. 
 
 ## New to R/RStudio?
-
-*You can skip this part if you are familiar with R/RStudio and R packages.*
 
 Both R and Rstudio can be downloaded to your computer for free from the internet. R is available at https://cran.r-project.org/ and Rstudio at https://rstudio.com/products/rstudio/download/. R is a language and environment used for statistical computing and graphics, while RStudio is an integrated development environment for R. This means that RStudio uses the R language and environment, but also gives you the possibility to keep and come back to your code, easy access to for example dataframes and plots, etc. 
 
@@ -68,9 +70,11 @@ R packages are extensions to R that can be installed. There are many packages av
 
 ## Using the xrfr package
 
-### Installing
+### Installing the package
 
-If it is your first time using it, you need to install the package before you can use it. To do this, you must use the function `install_github()` from the **remotes** package. This package is a part of the **devtools** group of packages. If you do not already have this installed, you need to install either the **devtools** group of packages or only the **remotes** package first, by using the `install.packages()` function (`install.packages("remotes")` or `install.packages("devtools")`). To install the xrfr package you then run the code `install_github("agryt/xrfr")`. 
+If it is your first time using it, you need to install the package before you can use it. To do this, you must use the function `install_github()` from the **remotes** package. This package is a part of the **devtools** group of packages. If you do not already have this installed, you need to install either the **devtools** group of packages or only the **remotes** package first, by using the `install.packages()` function (`install.packages("remotes")` or `install.packages("devtools")`). To install the xrfr package you then load the package (`library(remotes)` or `library(devtools)`) and run the code `install_github("agryt/xrfr")`. 
+
+**Please see the xrfr vignette for more information about each function and its arguments!** (`vignette("xrfr")`)
 
 ### Preparing your data
 
@@ -95,13 +99,19 @@ This will make the three data frames appear in your environment. At this point i
 
 ### Using the main functions
 
+First, of course, you must load the package:
+
+```{r loading xrfr, eval = FALSE}
+
+library(xrfr)
+
+```
+
 There are two main functions in the xrfr package: `importxrf()` and `convertxrf()`. You will need to use both to perform the calculations from kcps to µM. `importxrf()` takes your data frames, changes them to the format needed, and combines them into one data frame. This data frame will then be used further in the `convertxrf()` function, where the actual calculations are performed, and the necessary data from the "setup" file is included. `convertxrf()` also makes your dataset longer, as this is a more readable format for R for further analysis. 
 
 Here is an example of how to use these functions:
 
 ```{r main functions, eval = FALSE}
-
-library(xrfr)
 
 imported.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
 data.df <- convertxrf(imported.data = imported.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
@@ -114,7 +124,7 @@ To run `importxrf()` you only need to define the arguments "raw.data", which is 
 
 To run `convertxrf()` you will need to let R know the name of the data frame created with `importxrf()` ("imported.data"), the name of the data frame containing the "setup" data ("setup"), and the year in which the crystal drift was measured closest to when your samples were taken ("year"). You will also need to define the arguments "first_element" and "last_element". These are the names of the first and last columns in the data frame created with `importxrf()` that contain data in kcps. This can change, but will likely be "C" for "first_element" and "As" for "last_element". 
 
-The output of these two functions is a long data frame containing new columns showing the concentration and detection limit of each element for each sample. You will likely want to save this data frame as a file, as this is the file you will use when doing for example statistical analysis or creating graphics. Saving a data frame can be done like this:
+The output of these two functions is a long data frame containing new columns showing the concentration and detection limit of each element for each sample. You will likely want to save this data frame as a file, as this is the file you will use when for example doing statistical analysis or creating graphics. Saving a data frame can be done like this:
 
 ```{r saving data frame, eval = FALSE}
 
@@ -123,3 +133,139 @@ write_csv(data.df, file = "my_data.csv")
 ```
 
 Note that `write_csv()` is a function from the package **readr**, so you must have that or the entire **tidyverse** installed and loaded to use it. The data frame will then be saved as a CSV file named "my_data.csv" in your directory. If you wish to save in a different format, that is entirely possible (use your search engine to figure out how!).
+
+### Using the "after" functions
+
+After you have your data file with your newly calculated concentrations, you may wish to not only continue working on your data, but also look at your data yourself. This is hard to do when the data is in this format, so you will likely want to widen the data so each element has its own column. 
+
+You can widen your data using the `widen()` function, which also excludes blank samples and unnecessary columns:
+
+```{r widen, eval = FALSE}
+
+wide.project.df <- widen(project.data = data.df)
+
+```
+
+You may also wish to not only widen your data, but also calculate means or only see the concentrations that are above the detection limits. This can be done through the `widen_means()` and `widen_above()` functions, respectively. 
+
+To calculate means you will need to specify the factor(s) you wish to calculate the means based on, for example you may use location or treatment as factors. You can have either one or two factors. The `widen_means()` function will also remove the blank samples and unnecessary columns. The code shows examples both with and without a second factor:
+
+```{r widen_means, eval = FALSE}
+
+means.project.df <- widen_means(project.data = data.df, first_factor = "Location")
+
+means.project2.df <- widen_means(project.data = data.df, first_factor = "Location", second_factor = "Depth")
+
+```
+
+When excluding the concentrations below the detection limits, the blank samples and unnecessary columns are also removed:
+
+```{r widen_above, eval = FALSE}
+
+above.project.df <- widen_above(project.data = data.df)
+
+```
+
+You can also use the function `widen_means_above()` to both calculate means and exclude those concentrations that are under the detection limits. Note that this function calculates means first, *then* excludes concentrations below the detection limits. 
+
+```{r widen_means_above, eval = FALSE}
+
+means.above.project.df <- widen_means_above(project.data = data.df, first_factor = "Location", second_factor = "Depth")
+
+```
+
+## Further work with your files
+
+These "after" functions were made to avoid writing several lines of code for functions that you will likely use regularly, but there are many more ways to transform your data, or even further analyse it or create graphics. If you wish to further handle or manipulate your data, I suggest looking into the packages of the **tidyverse**, particularly **dplyr** and **tidyr** and their functions. For making graphics, **ggplot2** (also a part of **tidyverse**) is extremely useful. If you wish to perform statistical analyses and are wondering how to move forward, UiB's key to univariate statistics (https://folk.uib.no/nzlkj/statkey/) has some examples of R code for simple statistical analyses, though this is quite old. As long as you know which type of analysis you want to perform, you should be able to find relevant packages and/or examples easily by searching for it. 
+
+Good luck with your data analyses!
+
+## Raw code
+
+In case your **xrfr** functions do not work, you can try using the raw code, inserting your own file names, data frame names, and column names where needed. Where you need to enter your own names are indicated with names in uppercase letters. 
+
+```{r source code, eval = FALSE}
+
+library(tidyverse)
+library(readxl)
+
+YOURDATAFILE.df <- read_delim("RAW_DATA_FILE.txt", delim = "\t", locale = locale(decimal_mark = ","))
+YOURINFOFILE.df <- read_excel("INFORMATION_FILE.xlsx")
+YOURSETUPFILE.df <- read_excel("SETUP_FILE.xlsx")
+
+# importxrf
+datafile.df <- YOURDATAFILE.df %>%
+    select(c(Sample, Date, contains("Int"))) %>%
+    rename_all(str_remove, pattern = " .*")
+projectfile.df <- inner_join(datafile.df, YOURINFOFILE.df, by = "Sample")
+notinprojectfile.df <- anti_join(datafile.df, YOURINFOFILE.df, by = "Sample") # should have 0 rows if all samples match between your files
+
+# convertxrf
+filter_area <- 9.078935
+pivotproject.df <- projectfile.df %>%
+    pivot_longer(FIRSTELEMENT : LASTELEMENT,
+                 names_to = "Element",
+                 values_to = "Count")
+mean.blanks.df <- pivotproject.df %>%
+    filter(Filter_blank == "blank") %>%
+    group_by(Filter_type, Filter_size, Filter_box_nr, Element) %>%
+    summarise(mean_blank = mean(Count))
+adjusted.for.blanks.df <- left_join(pivotproject.df, mean.blanks.df, by = c("Filter_type", "Filter_size", "Filter_box_nr", "Element")) %>%
+    mutate(Net_count = Count - mean_blank)
+setupfile.df <- YOURSETUPFILE.df %>%
+    pivot_longer(PC : GFF,
+                 names_to = "Filter_type",
+                 values_to = "Cal_const") %>%
+    relocate(Filter_type)
+joined.df <- left_join(adjusted.for.blanks.df, setupfile.df, by = c("Filter_type", "Element"))
+calculations.df <- joined.df %>%
+    mutate(Concentration = ((Net_count * Cal_const) * filter_area * (1000 / Volume) * 1000 * (Drift_2008 / Drift_YOURYEAR)) / MolarW)
+detectionlimits.df <- setupfile.df %>%
+    select(DL_PC : DL_GFF, Element) %>%
+    pivot_longer(DL_PC : DL_GFF,
+                 names_to = "Filter_type",
+                 values_to = "Detection_limit") %>%
+    mutate(Filter_type = str_remove(Filter_type, "DL_"))
+project.detectionlim.df <- left_join(calculations.df, detectionlimits.df, by = c("Filter_type", "Element"))
+project.df <- project.detectionlim.df %>%
+    distinct() %>%
+    select(Sample : Element, Concentration, Detection_limit)
+
+# widen
+projectwide.df <- project.df %>%
+    filter(!Filter_blank %in% "blank") %>%
+    select(-Detection_limit) %>%
+    pivot_wider(names_from = Element, values_from = Concentration)
+
+# widen_above
+projectabove.df <- project.df %>%
+    filter(Concentration > Detection_limit) %>%
+    filter(!Filter_blank %in% "blank") %>%
+    select(-Detection_limit) %>%
+    pivot_wider(names_from = Element, values_from = Concentration, id_cols = Sample)
+
+# widen_means
+# if you only have one factor, simply remove "SECONDFACTOR" wherever applicable
+projectaverageabove.df <- project.df %>%
+      filter(!Filter_blank %in% "blank") %>%
+      group_by(FIRSTFACTOR, SECONDFACTOR, Element) %>%
+      summarise_if(is.numeric, mean) %>%
+      select(-Detection_limit) %>%
+      select(FIRSTFACTOR, SECONDFACTOR, Volume, Element, Concentration) %>%
+      pivot_wider(names_from = Element,
+                  values_from = Concentration)
+
+# widen_means_above
+# if you only have one factor, simply remove "SECONDFACTOR" wherever applicable
+projectaverageabove.df <- project.df %>%
+      filter(!Filter_blank %in% "blank") %>%
+      group_by(FIRSTFACTOR, SECONDFACTOR, Element) %>%
+      summarise_if(is.numeric, mean) %>%
+      filter(Concentration > Detection_limit) %>%
+      select(-Detection_limit) %>%
+      select(FIRSTFACTOR, SECONDFACTOR, Volume, Element, Concentration) %>%
+      pivot_wider(names_from = Element,
+                  values_from = Concentration)
+
+```
+

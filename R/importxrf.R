@@ -29,14 +29,12 @@
 importxrf <- function(raw.data, project.info) {
 
   # import data file
-  # datafile.df <- importdata(raw.data = raw.data)
   datafile.df <- as.data.frame(raw.data)
   datafile.df <- datafile.df %>%
     dplyr::select(c(Sample, Date, dplyr::contains("Int"))) %>%
     dplyr::rename_all(stringr::str_remove, pattern = " .*")
 
   # import info file
-  # infofile.df <- importinfo(project.info = project.info)
   infofile.df <- as.data.frame(project.info)
 
 
