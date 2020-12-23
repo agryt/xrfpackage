@@ -1,12 +1,12 @@
 #' Converting XRF data from kcal to micromolar
 #'
-#' @description This function takes your generated project dataframe created with "importxrf()" and the file containing information from the XRF machine, and converts your raw data from kcal to micromolar.
+#' @description This function takes your generated project dataframe created with readxrf() and the file containing information from the XRF machine, and converts your raw data from kcal to micromolar.
 #'
 #' See vignette("xrfr") for more information.
 #'
 #' @return description The function creates a dataframe in the long format with the new columns "Concentration" and "Detection_limit" showing the calculated concentration and the respective detection limit.
 #'
-#' @param imported.data The name of the dataframe created with importxrf()
+#' @param imported.data The name of the dataframe created with readxrf()
 #' @param setup The name of the dataframe containing detection limits, crystal drift, molar weights, and calibration constants.
 #' @param year The year the drift was measured closest to when your samples were analysed.
 #' @param first_element The name of the first column containing kcps values in the generated project dataframe.
@@ -24,7 +24,7 @@
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 #' setup.df <- readxl::read_excel("xrf_setup.xlsx")
 #'
-#' projectfile.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+#' projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
 #'
 #' project.df <- convertxrf(imported.data = projectfile.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
 #' }

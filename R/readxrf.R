@@ -1,6 +1,6 @@
-#' Importing and joining data file and info file
+#' Reading and joining data file and info file
 #'
-#' @description This function imports your files using specific utility functions from this package, and combines them into one dataframe. You will also get a dataframe showing any samples that did not match between your datasets (the raw data and the information file).
+#' @description This function reads your two dataframes and combines them into one. It will warn you if there are any samples that do not match between your datasets (the raw data and the information file).
 #'
 #' See vignette("xrfr") for more information.
 #'
@@ -18,13 +18,13 @@
 #' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 #'
-#' projectfile.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+#' projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
 #' }
 #'
 #' @export
 
 
-importxrf <- function(raw.data, project.info) {
+readxrf <- function(raw.data, project.info) {
 
   # import data file
   datafile.df <- as.data.frame(raw.data)
