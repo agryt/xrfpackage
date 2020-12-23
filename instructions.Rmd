@@ -5,11 +5,9 @@ author: Anna Grytaas
 date: "`r Sys.Date()`"
 ---
 
-This R package was created to convert elemental composition x-ray fluorescence (XRF) data of filtrated water samples from kcps to µM. 
+This R package was created to convert elemental composition x-ray fluorescence (XRF) data of filtrated water samples from kcps to µM. For source code, vignette, and more information, please visit https://github.com/agryt/xrfr.
 
-For source code, vignette, and more information, please visit https://github.com/agryt/xrfr.
-
-**Problems?** Issues can be reported at https://github.com/agryt/xrfr/issues. Questions can be sent to grytaasanna@gmail.com. 
+**Problems?** Issues can be reported at https://github.com/agryt/xrfr/issues and questions can be sent to grytaasanna@gmail.com. 
 
 ## The files
 
@@ -36,9 +34,9 @@ This file should contain all relevant information that you wish to include about
 
 You may include as many more columns as you want, for example dates, depth, location or treatment, but these columns all need to be present in your project information file. 
 
-### The "setup" file
+### The base information file
 
-This file must contain all the relevant information related to the XRF machine, filters, and elements. This is a file that will not change between experiments except when a new measurement of the crystal drift is added. The "setup" file must contain these columns:
+This file must contain all the relevant information related to the XRF machine, filters, and elements. This is a file that will not change between experiments except when a new measurement of the crystal drift is added. The base info file must contain these columns:
 
 * **Element**: All the elements measured by the machine. 
 * **MolarW**: The molar weight of each element. 
@@ -91,7 +89,7 @@ library(readxl)
 
 rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
 projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
-setup.df <- read_excel("xrf_setup.xlsx")
+baseinfo.df <- read_excel("xrf_setup.xlsx")
 
 ```
 
@@ -107,14 +105,14 @@ library(xrfr)
 
 ```
 
-There are two main functions in the xrfr package: `readxrf()` and `convertxrf()`. You will need to use both to perform the calculations from kcps to µM. `readxrf()` takes your data frames, changes them to the format needed, and combines them into one data frame. This data frame will then be used further in the `convertxrf()` function, where the actual calculations are performed, and the necessary data from the "setup" file is included. `convertxrf()` also makes your dataset longer, as this is a more readable format for R for further analysis. 
+There are two main functions in the xrfr package: `readxrf()` and `convertxrf()`. You will need to use both to perform the calculations from kcps to µM. `readxrf()` takes your data frames, changes them to the format needed, and combines them into one data frame. This data frame will then be used further in the `convertxrf()` function, where the actual calculations are performed, and the necessary data from the base info file is included. `convertxrf()` also makes your dataset longer, as this is a more readable format for R for further analysis. 
 
 Here is an example of how to use these functions:
 
 ```{r main functions, eval = FALSE}
 
 imported.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
-data.df <- convertxrf(imported.data = imported.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+data.df <- convertxrf(imported.data = imported.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 
 ```
 
@@ -122,7 +120,7 @@ You will need to run these functions one at a time, as there is information in t
 
 To run `readxrf()` you only need to define the arguments "raw.data", which is the name of the data frame containing your raw data from the XRF-machine, and "project.info", the name of the data frame containing information about all your samples. 
 
-To run `convertxrf()` you will need to let R know the name of the data frame created with `readxrf()` ("imported.data"), the name of the data frame containing the "setup" data ("setup"), and the year in which the crystal drift was measured closest to when your samples were taken ("year"). You will also need to define the arguments "first_element" and "last_element". These are the names of the first and last columns in the data frame created with `readxrf()` that contain data in kcps. This can change, but will likely be "C" for "first_element" and "As" for "last_element". 
+To run `convertxrf()` you will need to let R know the name of the data frame created with `readxrf()` ("imported.data"), the name of the data frame containing the base information data ("base.info"), and the year in which the crystal drift was measured closest to when your samples were taken ("year"). You will also need to define the arguments "first_element" and "last_element". These are the names of the first and last columns in the data frame created with `readxrf()` that contain data in kcps. This can change, but will likely be "C" for "first_element" and "As" for "last_element". 
 
 The output of these two functions is a long data frame containing new columns showing the concentration and detection limit of each element for each sample. You will likely want to save this data frame as a file, as this is the file you will use when for example doing statistical analysis or creating graphics. Saving a data frame can be done like this:
 
@@ -190,8 +188,8 @@ library(tidyverse)
 library(readxl)
 
 YOURDATAFILE.df <- read_delim("RAW_DATA_FILE.txt", delim = "\t", locale = locale(decimal_mark = ","))
-YOURINFOFILE.df <- read_excel("INFORMATION_FILE.xlsx")
-YOURSETUPFILE.df <- read_excel("SETUP_FILE.xlsx")
+YOURPROJECTINFOFILE.df <- read_excel("PROJECT_INFO_FILE.xlsx")
+YOURBASEINFOFILE.df <- read_excel("BASE_INFO_FILE.xlsx")
 
 # readxrf
 datafile.df <- YOURDATAFILE.df %>%
@@ -212,15 +210,15 @@ mean.blanks.df <- pivotproject.df %>%
     summarise(mean_blank = mean(Count))
 adjusted.for.blanks.df <- left_join(pivotproject.df, mean.blanks.df, by = c("Filter_type", "Filter_size", "Filter_box_nr", "Element")) %>%
     mutate(Net_count = Count - mean_blank)
-setupfile.df <- YOURSETUPFILE.df %>%
+basefile.df <- YOURBASEINFOFILE.df %>%
     pivot_longer(PC : GFF,
                  names_to = "Filter_type",
                  values_to = "Cal_const") %>%
     relocate(Filter_type)
-joined.df <- left_join(adjusted.for.blanks.df, setupfile.df, by = c("Filter_type", "Element"))
+joined.df <- left_join(adjusted.for.blanks.df, basefile.df, by = c("Filter_type", "Element"))
 calculations.df <- joined.df %>%
     mutate(Concentration = ((Net_count * Cal_const) * filter_area * (1000 / Volume) * 1000 * (Drift_2008 / Drift_YOURYEAR)) / MolarW)
-detectionlimits.df <- setupfile.df %>%
+detectionlimits.df <- basefile.df %>%
     select(DL_PC : DL_GFF, Element) %>%
     pivot_longer(DL_PC : DL_GFF,
                  names_to = "Filter_type",

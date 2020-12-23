@@ -1,10 +1,10 @@
 rawdata.df <- read_delim(system.file("extdata", "xrf_rawdata.txt", package = "xrfr"), delim = "\t", locale = readr::locale(decimal_mark = ","))
 projectinfo.df <- read_excel(system.file("extdata", "xrf_projectinfo.xlsx", package = "xrfr"))
-setup.df <- read_excel(system.file("extdata", "xrf_setup.xlsx", package = "xrfr"))
+baseinfo.df <- read_excel(system.file("extdata", "xrf_setup.xlsx", package = "xrfr"))
 
 projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
 
-project.df <- convertxrf(imported.data = projectfile.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 
 
 

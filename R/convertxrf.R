@@ -7,7 +7,7 @@
 #' @return description The function creates a dataframe in the long format with the new columns "Concentration" and "Detection_limit" showing the calculated concentration and the respective detection limit.
 #'
 #' @param imported.data The name of the dataframe created with readxrf()
-#' @param setup The name of the dataframe containing detection limits, crystal drift, molar weights, and calibration constants.
+#' @param base.info The name of the dataframe containing detection limits, crystal drift, molar weights, and calibration constants.
 #' @param year The year the drift was measured closest to when your samples were analysed.
 #' @param first_element The name of the first column containing kcps values in the generated project dataframe.
 #' @param last_element The name of the last column containing kcps values in the generated project  dataframe.
@@ -22,17 +22,17 @@
 #' \dontrun{
 #' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
-#' setup.df <- readxl::read_excel("xrf_setup.xlsx")
+#' baseinfo.df <- readxl::read_excel("xrf_setup.xlsx")
 #'
 #' projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
 #'
-#' project.df <- convertxrf(imported.data = projectfile.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+#' project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 #' }
 #'
 #' @export
 
 
-convertxrf <- function(imported.data, setup, year, first_element, last_element) {
+convertxrf <- function(imported.data, base.info, year, first_element, last_element) {
 
   filter_area <- 9.078935
 
@@ -54,22 +54,22 @@ convertxrf <- function(imported.data, setup, year, first_element, last_element) 
   adjusted.for.blanks.df <- dplyr::left_join(pivotproject.df, mean.blanks.df, by = c("Filter_type", "Filter_size", "Filter_box_nr", "Element")) %>%
     dplyr::mutate(Net_count = .data$Count - .data$mean_blank)
 
-  # joining setup file with the project file
-  setupfile.df <- as.data.frame(setup)
-  setupfile.df <- setupfile.df %>%
+  # joining base info file with the project file
+  basefile.df <- as.data.frame(base.info)
+  basefile.df <- basefile.df %>%
     tidyr::pivot_longer(.data$PC : .data$GFF,
                         names_to = "Filter_type",
                         values_to = "Cal_const") %>%
     dplyr::relocate(Filter_type)
 
-  joined.df <- dplyr::left_join(adjusted.for.blanks.df, setupfile.df, by = c("Filter_type", "Element"))
+  joined.df <- dplyr::left_join(adjusted.for.blanks.df, basefile.df, by = c("Filter_type", "Element"))
 
   # performing the calculation to convert from kcps to µM
   calculations.df <- joined.df %>%
     dplyr::mutate(Concentration = ((.data$Net_count * .data$Cal_const) * filter_area * (1000 / .data$Volume) * 1000 * (.data$Drift_2008 / .data[[paste0("Drift_", year)]])) / .data$MolarW)
 
   # making a dataframe showing the detection limits of each element
-  detectionlimits.df <- setupfile.df %>%
+  detectionlimits.df <- basefile.df %>%
     dplyr::select(.data$DL_PC : .data$DL_GFF, .data$Element) %>%
     tidyr::pivot_longer(.data$DL_PC : .data$DL_GFF,
                         names_to = "Filter_type",

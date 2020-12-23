@@ -16,10 +16,10 @@
 #' \dontrun{
 #' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
-#' setup.df <- read_excel("xrf_setup.xlsx")
+#' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
 #' projectfile.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
-#' project.df <- convertxrf(imported.data = projectfile.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+#' project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 #'
 #' wideproject.df <- widen(project.data = project.df)
 #' }
@@ -58,10 +58,10 @@ widen <- function(project.data) {
 #' \dontrun{
 #' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
-#' setup.df <- read_excel("xrf_setup.xlsx")
+#' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
 #' projectfile.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
-#' project.df <- convertxrf(imported.data = projectfile.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+#' project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 #'
 #' abovedetlim.df <- widen_above(project.data = project.df)
 #' }
@@ -102,10 +102,10 @@ widen_above <- function(project.data) {
 #' \dontrun{
 #' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
-#' setup.df <- read_excel("xrf_setup.xlsx")
+#' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
 #' projectfile.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
-#' project.df <- convertxrf(imported.data = projectfile.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+#' project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 #'
 #' means.df <- widen_means(project.data = project.df, first_factor = "Treatment", second_factor = "Day")
 #' }
@@ -164,10 +164,10 @@ widen_means <- function(project.data, first_factor, second_factor) {
 #' \dontrun{
 #' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
-#' setup.df <- read_excel("xrf_setup.xlsx")
+#' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
 #' projectfile.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
-#' project.df <- convertxrf(imported.data = projectfile.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+#' project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 #'
 #' meansabovedetlim.df <- widen_means_above(project.data = project.df, first_factor = "Treatment", second_factor = "Day")
 #' }

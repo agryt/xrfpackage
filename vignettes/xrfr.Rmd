@@ -41,9 +41,9 @@ This file should contain all relevant information that you wish to include about
 
 You may include as many more columns as you want, for example dates, depth, or location, but these columns all need to be present in your project information file. 
 
-### The "setup" file
+### The base information file
 
-This file must contain all the relevant information related to the XRF machine, filters, and elements. This is a file that will not change between experiments unless the crystal drift has been measured again. The "setup" file must contain these columns:
+This file must contain all the relevant information related to the XRF machine, filters, and elements. This is a file that will not change between experiments unless the crystal drift has been measured again. The base info file must contain these columns:
 
 * **Element**: All the elements measured by the machine. 
 * **MolarW**: The molar weight of each element. 
@@ -95,7 +95,7 @@ This data frame will further be used in the function `convertxrf()`, where the v
 Once you have your data frame created with `readxrf()`, you go on to perform the actual calculations to convert your values from kcps to µM, ending up with another data frame. For this function to work you will need to define several arguments:
 
 * **imported.data**: The name of the data frame created after using `readxrf()`. 
-* **setup**: This is the name of your data frame with the "setup" information. 
+* **base.info**: This is the name of your data frame with the base information from the machine etc. 
 * **year**: This is the year in which the crystal drift was measured closest to when your samples were measured. 
 * **first_element**: This is the name of the first column in your data frame that was created with the function `readxrf()` that is an element. For example, in the example above, there are the columns "Sample" and "Date.x" first, then the column named "C", so "C" is what we include in the function. 
 * **last_element**: This is the name of the last column in your data frame that is an element. In our example, this was the column "As". 
@@ -104,9 +104,9 @@ Here is a possible input:
 
 ```{r convertxrf, eval = FALSE}
 
-setup.df <- read_excel("xrf_setup.xlsx")
+baseinfo.df <- read_excel("xrf_setup.xlsx")
 
-data.df <- convertxrf(project.data = imported.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+data.df <- convertxrf(project.data = imported.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 
 ```
 
