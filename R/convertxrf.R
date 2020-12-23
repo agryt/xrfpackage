@@ -20,14 +20,14 @@
 #'
 #' @examples
 #' \dontrun{
-#' df <- convertxrf(imported.data = projectfile.df, setup = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
-#' }
+#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+#' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
+#' setup.df <- readxl::read_excel("xrf_setup.xlsx")
 #'
-#' system.file("extdata", "xrf_rawdata.txt", package = "xrfr")
-#' system.file("extdata", "xrf_projectinfo.xlsx", package = "xrfr")
-#' system.file("extdata", "xrf_setup.xlsx", package = "xrfr")
-#' df0 <- importxrf(raw.data = "xrf_rawdata.txt", project.info = "xrf_projectinfo.xlsx")
-#' df <- convertxrf(imported.data = df0, setup = "xrf_setup.xlsx", year = "2019", first_element = "C", last_element = "As")
+#' projectfile.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+#'
+#' project.df <- convertxrf(imported.data = projectfile.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+#' }
 #'
 #' @export
 

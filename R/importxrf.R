@@ -15,13 +15,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' df <- importxrf(raw.data = "xrf_rawdata.txt", project.info = "xrf_projectinfo.xlsx")
+#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+#' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
+#'
+#' projectfile.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
 #' }
-#'
-#' system.file("extdata", "xrf_rawdata.txt", package = "xrfr")
-#' system.file("extdata", "xrf_projectinfo.xlsx", package = "xrfr")
-#' df <- importxrf(raw.data = "xrf_rawdata.txt", project.info = "xrf_projectinfo.xlsx")
-#'
 #'
 #' @export
 

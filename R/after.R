@@ -13,6 +13,16 @@
 #' @importFrom magrittr %>%
 #'
 #' @examples
+#' \dontrun{
+#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+#' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
+#' setup.df <- read_excel("xrf_setup.xlsx")
+#'
+#' projectfile.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+#' project.df <- convertxrf(imported.data = projectfile.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+#'
+#' wideproject.df <- widen(project.data = project.df)
+#' }
 #'
 #' @export
 
@@ -45,6 +55,16 @@ widen <- function(project.data) {
 #' @importFrom magrittr %>%
 #'
 #' @examples
+#' \dontrun{
+#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+#' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
+#' setup.df <- read_excel("xrf_setup.xlsx")
+#'
+#' projectfile.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+#' project.df <- convertxrf(imported.data = projectfile.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+#'
+#' abovedetlim.df <- widen_above(project.data = project.df)
+#' }
 #'
 #' @export
 
@@ -79,6 +99,16 @@ widen_above <- function(project.data) {
 #' @importFrom magrittr %>%
 #'
 #' @examples
+#' \dontrun{
+#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+#' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
+#' setup.df <- read_excel("xrf_setup.xlsx")
+#'
+#' projectfile.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+#' project.df <- convertxrf(imported.data = projectfile.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+#'
+#' means.df <- widen_means(project.data = project.df, first_factor = "Treatment", second_factor = "Day")
+#' }
 #'
 #' @export
 
@@ -121,7 +151,7 @@ widen_means <- function(project.data, first_factor, second_factor) {
 #'
 #' @return description The function returns a dataframe that shows the mean concentrations calculated from the concentrations above the detection limits for each element based on one or two factors.
 #'
-#' #' @param project.data
+#' @param project.data The name of the dataframe created with convertxrf().
 #' @param first_factor The name of the column that shows the first or only factor you want to calculate means based on, for example depth.
 #' @param second_factor The name of the column that shows a potential second factor you want to calculate means based on, for example location.
 #'
@@ -131,6 +161,16 @@ widen_means <- function(project.data, first_factor, second_factor) {
 #' @importFrom magrittr %>%
 #'
 #' @examples
+#' \dontrun{
+#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+#' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
+#' setup.df <- read_excel("xrf_setup.xlsx")
+#'
+#' projectfile.df <- importxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+#' project.df <- convertxrf(imported.data = projectfile.df, setup = setup.df, year = "2019", first_element = "C", last_element = "As")
+#'
+#' meansabovedetlim.df <- widen_means_above(project.data = project.df, first_factor = "Treatment", second_factor = "Day")
+#' }
 #'
 #' @export
 
