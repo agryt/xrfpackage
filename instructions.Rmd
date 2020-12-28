@@ -28,7 +28,7 @@ This file should contain all relevant information that you wish to include about
 * **Sample**: The name of your sample. Must be the same as in the raw data file. Any samples that do not have a matching name will not be included in the created file. 
 * **Filter_type**: The type of filter used when filtering. Can be PC, ANO, or GFF. This column must be filled out even if the same filter type was used on all samples because R needs to know which detection limits and calibrated constants to use. 
 * **Filter_size**: The pore size of the filter used. This column can be left empty if the size was the same in all filters, but the column must exist. 
-* **Filter_box_nr**: Lets R know which box the filter came from so it knows which blank samples to apply when finding the net count in this sample. 
+* **Filter_box_nr**: A way to differentiate between different filter boxes, for example by labelling the boxes "1", "2", "3", etc. Lets R know which box the filter came from so it knows which blank samples to apply when finding the net count in this sample. 
 * **Filter_blank**: In this column you will need to write "blank" for all your blank samples. The rest of the column can be empty. 
 * **Volume**: The volume of water that was filtered for each sample. 
 
@@ -38,11 +38,11 @@ You may include as many more columns as you want, for example dates, depth, loca
 
 This file must contain all the relevant information related to the XRF machine, filters, and elements. This is a file that will not change between experiments except when a new measurement of the crystal drift is added. The base info file must contain these columns:
 
-* **Element**: All the elements measured by the machine. 
+* **Element**: All the elements measured by the machine. Should be written as "C", "O", "Mg", etc. 
 * **MolarW**: The molar weight of each element. 
 * **PC**, **ANO**, and **GFF**: The calibrated constant for each element for each of the three filter types. Must be in this order. 
 * **DL_PC**, **DL_ANO**, and **DL_GFF**: The detection limit of each element for each of the three filter types. Must be in this order. 
-* **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, so this is used during the calculations. 
+* **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, so this is used during the calculations and must be included. 
 
 ## New to R/RStudio?
 
@@ -62,7 +62,7 @@ R packages are extensions to R that can be installed. There are many packages av
 
 ### Some tips
 
-- To run a line of code from your R Script you press ctrl + enter (on Windows or Linux) or cmd + enter (on Mac). You can also press run at the top right in the toolbar. 
+- To run a line of code from your R Script you press ctrl + enter (on Windows or Linux) or cmd + enter (on Mac). You can also press run at the top right in the toolbar of the R Script window. 
 - Using pipe operators makes your code more readable and tidier. They are written as `%>%`. The pipe operator is a part of the **magrittr** package, but are also used in the **dplyr** package that you will likely be using (by running `library(dplyr)` or `library(tidyverse)`). On Windows or Linux you can use ctrl + shift + M as a shortcut for the pipe, and on Mac this is cmd + shift + M. `y %>% x` = `x(y)`. 
 - Use # at the beginning of a line to create a comment. Comments are ignored by R when running the code. This way you can write comments explaining what a function does etc. 
 
@@ -150,7 +150,7 @@ To calculate means you will need to specify the factor(s) you wish to calculate 
 
 ```{r widen_means, eval = FALSE}
 
-means.project.df <- widen_means(project.data = data.df, first_factor = "Location")
+means.project1.df <- widen_means(project.data = data.df, first_factor = "Location")
 
 means.project2.df <- widen_means(project.data = data.df, first_factor = "Location", second_factor = "Depth")
 
@@ -164,7 +164,7 @@ above.project.df <- widen_above(project.data = data.df)
 
 ```
 
-You can also use the function `widen_means_above()` to both calculate means and exclude those concentrations that are under the detection limits. Note that this function calculates means first, *then* excludes concentrations below the detection limits. 
+You can also use the function `widen_means_above()` to both calculate means and exclude those concentrations that are under the detection limits. Note that this function calculates means first, *then* excludes mean concentrations below the detection limits. 
 
 ```{r widen_means_above, eval = FALSE}
 
@@ -174,19 +174,20 @@ means.above.project.df <- widen_means_above(project.data = data.df, first_factor
 
 ## Further work with your files
 
-These "after" functions were made to avoid writing several lines of code for functions that you will likely use regularly, but there are many more ways to transform your data, or even further analyse it or create graphics. If you wish to further handle or manipulate your data, I suggest looking into the packages of the **tidyverse**, particularly **dplyr** and **tidyr** and their functions. For making graphics, **ggplot2** (also a part of **tidyverse**) is extremely useful. If you wish to perform statistical analyses and are wondering how to move forward, UiB's key to univariate statistics (https://folk.uib.no/nzlkj/statkey/) has some examples of R code for simple statistical analyses, though this is quite old. As long as you know which type of analysis you want to perform, you should be able to find relevant packages and/or examples easily by searching for it. 
+These "after" functions were made to avoid writing several lines of code for functions that you will likely use regularly, but there are many more ways to transform your data, or even further analyse it or create graphics. If you wish to further handle or manipulate your data, I suggest looking into the packages of the **tidyverse**, particularly **dplyr** and **tidyr** and their functions. For making graphics, **ggplot2** (also a part of **tidyverse**) is extremely useful. If you wish to perform statistical analyses and are wondering how to move forward, UiB's key to univariate statistics (https://folk.uib.no/nzlkj/statkey/) has some examples of R code for simple statistical analyses, though this is quite old. However, the internet is very helpful, and you should be able to figure out which analysis you should perform and find relevant packages and/or examples easily by searching for it. 
 
 Good luck with your data analyses!
 
 ## Raw code
 
-In case your **xrfr** functions do not work, you can try using the raw code, inserting your own file names, data frame names, and column names where needed. Where you need to enter your own names are indicated with names in uppercase letters. 
+If your **xrfr** functions do not work, you can try using the raw code shown here, inserting your own file names, data frame names, and column names where needed. Where you need to enter your own names are indicated with names in uppercase letters. 
 
 ```{r source code, eval = FALSE}
 
 library(tidyverse)
 library(readxl)
 
+# these functions will vary based on which format your files are saved in, but an example:
 YOURDATAFILE.df <- read_delim("RAW_DATA_FILE.txt", delim = "\t", locale = locale(decimal_mark = ","))
 YOURPROJECTINFOFILE.df <- read_excel("PROJECT_INFO_FILE.xlsx")
 YOURBASEINFOFILE.df <- read_excel("BASE_INFO_FILE.xlsx")

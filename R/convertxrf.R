@@ -44,6 +44,10 @@ convertxrf <- function(imported.data, base.info, year, first_element, last_eleme
                  names_to = "Element",
                  values_to = "Count")
 
+  if(sum(grepl("blank", pivotproject.df$Filter_blank)) < 1) {
+    stop("ERROR! There are no samples marked blank in your dataset. You must have a column named 'Filter_blank' with 'blank' written in the cell for the blank samples.")
+  }
+
   # making a dataframe with the means of the blank samples
   mean.blanks.df <- pivotproject.df %>%
     dplyr::filter(.data$Filter_blank == "blank") %>%
@@ -54,8 +58,29 @@ convertxrf <- function(imported.data, base.info, year, first_element, last_eleme
   adjusted.for.blanks.df <- dplyr::left_join(pivotproject.df, mean.blanks.df, by = c("Filter_type", "Filter_size", "Filter_box_nr", "Element")) %>%
     dplyr::mutate(Net_count = .data$Count - .data$mean_blank)
 
-  # joining base info file with the project file
   basefile.df <- as.data.frame(base.info)
+
+  # NEED TO GATHER ALL THESE INTO ONE LINE
+  if(!"PC" %in% names(basefile.df)) {
+    stop("ERROR! Your base information file is missing one or more of the following columns: PC, ANO, GFF, DL_PC, DL_ANO, and DL_GFF.")
+  }
+  if(!"ANO" %in% names(basefile.df)) {
+    stop("ERROR! Your base information file is missing one or more of the following columns: PC, ANO, GFF, DL_PC, DL_ANO, and DL_GFF.")
+  }
+  if(!"GFF" %in% names(basefile.df)) {
+    stop("ERROR! Your base information file is missing one or more of the following columns: PC, ANO, GFF, DL_PC, DL_ANO, and DL_GFF.")
+  }
+  if(!"DL_PC" %in% names(basefile.df)) {
+    stop("ERROR! Your base information file is missing one or more of the following columns: PC, ANO, GFF, DL_PC, DL_ANO, and DL_GFF.")
+  }
+  if(!"DL_ANO" %in% names(basefile.df)) {
+    stop("ERROR! Your base information file is missing one or more of the following columns: PC, ANO, GFF, DL_PC, DL_ANO, and DL_GFF.")
+  }
+  if(!"DL_GFF" %in% names(basefile.df)) {
+    stop("ERROR! Your base information file is missing one or more of the following columns: PC, ANO, GFF, DL_PC, DL_ANO, and DL_GFF.")
+  }
+
+  # joining base info file with the project file
   basefile.df <- basefile.df %>%
     tidyr::pivot_longer(.data$PC : .data$GFF,
                         names_to = "Filter_type",

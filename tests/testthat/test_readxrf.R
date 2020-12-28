@@ -23,7 +23,7 @@ test_that("output is correct", {
                   Filter_blank = c(NA, NA, NA, "blank"),
                   Volume = 1000)
 
-  ab <- importxrf(raw.data = a, project.info = b)
+  ab <- readxrf(raw.data = a, project.info = b)
 
   expect_s3_class(ab, "data.frame")
   expect_equal(nrow(ab), 4)
@@ -51,6 +51,6 @@ test_that("warnings and errors work", {
                   Filter_blank = c(NA, NA, NA, "blank"),
                   Volume = 1000)
 
-  expect_warning(importxrf(raw.data = a, project.info = b))
-  expect_error(importxrf(raw.data = a, project.info = c))
+  expect_warning(readxrf(raw.data = a, project.info = b))
+  expect_error(readxrf(raw.data = a, project.info = c))
 })

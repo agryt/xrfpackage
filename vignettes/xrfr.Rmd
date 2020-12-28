@@ -9,15 +9,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This package was created for use at the University of Bergen to convert data from an X-ray fluorescence machine from kilo-counts per second to micromolar. It requires that your files are constructed in a very specific way, as explained in this vignette, so is meant to be used with instructions. 
+This package was created for use at the University of Bergen to convert data from an X-ray fluorescence machine from kilo-counts per second to micromolar. It requires that your files are constructed in a very specific way, as explained in this vignette, so is meant to be used with instructions. In case you wish to use the package but do not have access to the instructions, the instructions document is available [here](https://github.com/agryt/xrfr). 
 
 The functions included in this package are:
 
 * `readxrf()`: This function joins the data frame containing raw data with the data frame containing project information like where each sample was taken and how much water was filtered. The output of this function is a new data frame. 
 * `convertxrf()`: This function takes the data frame created by `readxrf()` and the file containing information like crystal drift and detection limits for each element. The output of this function is a long data frame where the counts from the machine have been converted from kcps to µM. 
 * `widen()`: This function takes the the data frame created with `readxrf()` and makes it wider, so each element has its own column. 
-* `widen_above()`: This function both widens your data like `widen()` does, but also excludes any concentrations that are below the detection limits. 
-* `widen_means()`: This function both widens your data like `widen()` does, but also calculates mean concentration based on one or two factors. 
+* `widen_above()`: This function both widens your data like `widen()` does, and excludes any concentrations that are below the detection limits. 
+* `widen_means()`: This function both widens your data like `widen()` does, and calculates mean concentration based on one or two factors. 
 * `widen_means_above()`: This function first calculates mean concentrations based on one or two factors, then excludes those values that are below the detection limits. 
 
 ## The files
@@ -135,7 +135,7 @@ df <- widen(project.data = data.df)
 
 ```
 
-Running this code will give you a data frame that looks something like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_wide.csv):
+Running this code will give you a data frame that looks something like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_wide.csv). The table below shows the first few rows of this file:
 
 |Sample|...|Day|Treatment|C|N|O|Na|Mg|...|
 |:----|:---|:--|:-------|:-|:-|:-|:-|:-|:-|
@@ -160,7 +160,7 @@ df <- widen_above(project.data = data.df)
 
 ```
 
-The output of this code will be a data frame that looks like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_wide_abovedetlim.csv):
+The output of this code will be a data frame that looks like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_wide_abovedetlim.csv). The table below shows the first few rows of this file:
 
 |Sample|O|Mg|Si|P|S|...|N|Na|...|
 |:----|:-|:-|:-|:-|:-|:-|:-|:-|:-|
@@ -176,18 +176,16 @@ You may also wish to calculate the mean concentrations based on different factor
 * **project.data**: This is the name of the data frame created using `convertxrf()`.
 * **first_factor**: This is the name of the column that shows the first or only factor you want to calculate means based on, for example depth. 
 * **second_factor**: *Defining this argument is optional.* This is the name of the column that shows the second factor you want to calculate means based on, for example location.
-* **first_element**: This is the name of the first column containing concentration values in the project data frame created using `convertxrf()`.
-* **last_element**: This is the name of the last column containing concentration values in the project data frame created using `convertxrf()`.
 
 A possible input:
 
 ```{r widen_means, eval = FALSE}
 
-df <- widen_means(project.data = data.df, first_factor = "Treatment", second_factor = "Day", first_element = "C", last_element = "As")
+df <- widen_means(project.data = data.df, first_factor = "Treatment", second_factor = "Day")
 
 ```
 
-The output of this code will be a data frame showing the factor(s) chosen and the mean concentration for each element, like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_wide_means.csv): 
+The output of this code will be a data frame showing the factor(s) chosen and the mean concentration for each element, like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_wide_means.csv). The table below shows the first few rows of this file:
 
 |Day|Treatment|C|N|O|Na|Mg|Al|...|
 |:-|:--------|:-|:-|:-|:-|:-|:-|:-|
@@ -195,3 +193,30 @@ The output of this code will be a data frame showing the factor(s) chosen and th
 |0|K2|-9.4292147|0.16635012|5.019141e-05|-0.01811514|0.19980153|-0.6574871|...|
 |0|K3|1.2544674|0.34920146|-2.354479e-01|-0.05398931|0.11028071|-1.9058621|...|
 |...|...|...|...|...|...|...|...|...|
+
+### widen_means_above()
+
+This function combines the `widen_above()` and `widen_means()` functions by calculating means and then excluding the mean concentrations not above the detection limits. Like with the `widen_means()` function, you define one or two factors to calculate the means based on. You must define these arguments to use this function:
+
+* **project.data**: This is the name of the data frame created using `convertxrf()`.
+* **first_factor**: This is the name of the column that shows the first or only factor you want to calculate means based on, for example depth. 
+* **second_factor**: *Defining this argument is optional.* This is the name of the column that shows the second factor you want to calculate means based on, for example location.
+
+A possible input:
+
+```{r widen_means_above, eval = FALSE}
+
+df <- widen_means_above(project.data = data.df, first_factor = "Treatment", second_factor = "Day")
+
+```
+
+This code will create a data frame that shows mean concentrations only if they are above the detection limit, like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_wide_means_abovedetlim.csv). The table below shows the first few rows of this file:
+
+|Day|Treatment|Volume|Ca|Fe|Mg|...|Cl|C|N|
+|:--|:--------|:-----|:-|:-|:-|:-|:-|:-|:-|
+|0|K1|1000|0.28964915|0.10624892|0.10809891|...|NA|NA|NA|
+|0|K2|1000|0.56820057|0.13436192|0.19980153|...|0.6633487|NA|NA|NA|
+|0|K3|1000|0.09041592|0.05313665|0.11028071|...|NA|1.254467|0.3492015|
+...|...|...|...|...|...|...|...|...|...|
+
+**Note that columns where no mean concentration is above the detection limit (empty columns) are removed, so pay attention to the number of columns and which columns they are!**
