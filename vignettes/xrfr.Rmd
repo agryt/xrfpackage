@@ -9,15 +9,15 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This package was created for use at the University of Bergen to convert data from an X-ray fluorescence machine from kilo-counts per second to micromolar. It requires that your files are constructed in a very specific way, as explained in this vignette, so is meant to be used with instructions. In case you wish to use the package but do not have access to the instructions, the instructions document is available [here](https://github.com/agryt/xrfr). 
+This package was created for use at the University of Bergen to convert data from an X-ray fluorescence machine from kilo-counts per second to micromolar. It requires that your files are constructed in a very specific way, as explained in this vignette, so is meant to be used with instructions. The instructions document is available [here](https://github.com/agryt/xrfr). 
 
 The functions included in this package are:
 
 * `readxrf()`: This function joins the data frame containing raw data with the data frame containing project information like where each sample was taken and how much water was filtered. The output of this function is a new data frame. 
-* `convertxrf()`: This function takes the data frame created by `readxrf()` and the file containing information like crystal drift and detection limits for each element. The output of this function is a long data frame where the counts from the machine have been converted from kcps to µM. 
+* `convertxrf()`: This function takes the data frame created by `readxrf()` and the data frame containing base information like crystal drift and detection limits for each element. The output of this function is a long data frame where the counts from the machine have been converted from kcps to µM. 
 * `widen()`: This function takes the the data frame created with `readxrf()` and makes it wider, so each element has its own column. 
-* `widen_above()`: This function both widens your data like `widen()` does, and excludes any concentrations that are below the detection limits. 
-* `widen_means()`: This function both widens your data like `widen()` does, and calculates mean concentration based on one or two factors. 
+* `widen_above()`: This function both widens your data and excludes any concentrations that are below the detection limits. 
+* `widen_means()`: This function both widens your data and calculates mean concentration based on one or two factors. 
 * `widen_means_above()`: This function first calculates mean concentrations based on one or two factors, then excludes those values that are below the detection limits. 
 
 ## The files
@@ -35,8 +35,8 @@ This file should contain all relevant information that you wish to include about
 * **"Sample"**: The name of your sample. Must be the same as in the raw data file. Any samples that do not match exactly will not be included in the created file. 
 * **"Filter_type"**: The type of filter used when filtering. Can be PC, ANO, or GFF. This column must be filled out even if the same filter type was used on all samples because R needs to know which detection limits and calibrated constants to use. 
 * **"Filter_size"**: The pore size of the filter used. This column can be left empty if the size was the same in all filters, but the column must exist. 
-* **"Filter_box_nr"**: Let's R know which box the filter came from so it knows which blank samples to apply when finding the net count in this sample. 
-* **Filter_blank**: In this column you will need to write "blank" for all your blank samples.
+* **"Filter_box_nr"**: Lets R know which box the filter came from so it knows which blank samples to apply when finding the net count in this sample. 
+* **Filter_blank**: In this column you will need to write "blank" for all your blank samples. The rest can be left empty. 
 * **Volume**: The volume of water that was filtered. 
 
 You may include as many more columns as you want, for example dates, depth, or location, but these columns all need to be present in your project information file. 

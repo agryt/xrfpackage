@@ -35,6 +35,23 @@ readxrf <- function(raw.data, project.info) {
   # import info file
   infofile.df <- as.data.frame(project.info)
 
+  # assigning error messages for if not all necessary columns are included
+  # THESE SHOULD BE GATHERED INTO ONE LINE
+  if(!"Filter_type" %in% names(infofile.df)) {
+    stop("ERROR! Your project information file is missing one or more of the following columns: Filter_type, Filter_size, Filter_box_nr, Filter_blank, and Volume.")
+  }
+  if(!"Filter_size" %in% names(infofile.df)) {
+    stop("ERROR! Your project information file is missing one or more of the following columns: Filter_type, Filter_size, Filter_box_nr, Filter_blank, and Volume.")
+  }
+  if(!"Filter_box_nr" %in% names(infofile.df)) {
+    stop("ERROR! Your project information file is missing one or more of the following columns: Filter_type, Filter_size, Filter_box_nr, Filter_blank, and Volume.")
+  }
+  if(!"Filter_blank" %in% names(infofile.df)) {
+    stop("ERROR! Your project information file is missing one or more of the following columns: Filter_type, Filter_size, Filter_box_nr, Filter_blank, and Volume.")
+  }
+  if(!"Volume" %in% names(infofile.df)) {
+    stop("ERROR! Your project information file is missing one or more of the following columns: Filter_type, Filter_size, Filter_box_nr, Filter_blank, and Volume.")
+  }
 
   # joining them into one dataframe
   projectfile.df <- dplyr::inner_join(datafile.df, infofile.df, by = "Sample")
@@ -42,7 +59,7 @@ readxrf <- function(raw.data, project.info) {
   # making a dataframe of samples that did not match, should be 0 rows here
   notinprojectfile.df <- dplyr::anti_join(datafile.df, infofile.df, by = "Sample")
 
-  # assigning warning messages
+  # assigning warning message for if not all samples match
   if(nrow(notinprojectfile.df) > 0) {
     warning("WARNING! There are samples that do not match between your raw data file and information file.")
   }

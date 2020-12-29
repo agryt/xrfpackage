@@ -45,7 +45,7 @@ convertxrf <- function(imported.data, base.info, year, first_element, last_eleme
                  values_to = "Count")
 
   if(sum(grepl("blank", pivotproject.df$Filter_blank)) < 1) {
-    stop("ERROR! There are no samples marked blank in your dataset. You must have a column named 'Filter_blank' with 'blank' written in the cell for the blank samples.")
+    stop("ERROR! There are no samples marked blank in your dataset. You must have a column named Filter_blank with 'blank' written in the cell for the blank samples.")
   }
 
   # making a dataframe with the means of the blank samples
@@ -79,10 +79,16 @@ convertxrf <- function(imported.data, base.info, year, first_element, last_eleme
   if(!"DL_GFF" %in% names(basefile.df)) {
     stop("ERROR! Your base information file is missing one or more of the following columns: PC, ANO, GFF, DL_PC, DL_ANO, and DL_GFF.")
   }
+  if(!"Drift_2008" %in% names(basefile.df)) {
+    stop("ERROR! Your base information file is missing the column Drift_2008, which is needed to perform the calculations.")
+  }
+  if(!"MolarW" %in% names(basefile.df)) {
+    stop("ERROR! Your base information file is missing the column MolarW, which is needed to perform the calculations.")
+  }
 
   # joining base info file with the project file
   basefile.df <- basefile.df %>%
-    tidyr::pivot_longer(.data$PC : .data$GFF,
+    tidyr::pivot_longer(cols = c(.data$PC, .data$ANO, .data$GFF),
                         names_to = "Filter_type",
                         values_to = "Cal_const") %>%
     dplyr::relocate(Filter_type)
@@ -95,8 +101,8 @@ convertxrf <- function(imported.data, base.info, year, first_element, last_eleme
 
   # making a dataframe showing the detection limits of each element
   detectionlimits.df <- basefile.df %>%
-    dplyr::select(.data$DL_PC : .data$DL_GFF, .data$Element) %>%
-    tidyr::pivot_longer(.data$DL_PC : .data$DL_GFF,
+    dplyr::select(.data$DL_PC, .data$DL_ANO, .data$DL_GFF, .data$Element) %>%
+    tidyr::pivot_longer(cols = c(.data$DL_PC, .data$DL_ANO, .data$DL_GFF),
                         names_to = "Filter_type",
                         values_to = "Detection_limit") %>%
     dplyr::mutate(Filter_type = stringr::str_remove(.data$Filter_type, "DL_"))
