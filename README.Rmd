@@ -1,0 +1,46 @@
+---
+output: html_document
+---
+
+# xrfr
+
+## Overview
+
+This package is currently under development. 
+
+This package contains functions to use when importing X-ray fluorescence (XRF) data and converting the measured values from kilo counts per second (kcps) to micromolar (µM). It is created with the intention of being used at the microbiology department at University of Bergen. 
+
+## Installation
+
+The package is installed from GitHub using the remotes package of the devtools group of packages. If you do not have remotes or devtools installed, install this first, then use: 
+
+``` {r installation, eval = FALSE}
+
+remotes::install_github("agryt/xrfr")
+
+# alternatively:
+devtools::install_github("agryt/xrfr")
+
+``` 
+
+## Usage
+
+The xrfr package is meant to be used with the [instructions document](https://github.com/agryt/xrfr/blob/master/INSTRUCTIONS.pdf), which explains what your data files must look like for the package to work. The functions within the package can be used to transform data from the XRF machine from kcps to micromolar, using your raw data, information about the samples, and some basic information about the machine and elements. 
+
+Se vignette for more information and examples of how to use the different functions: `vignette("xrfr")`. 
+
+```{r example, results = "hide"}
+
+# THIS CHUNK HAS MUCH THAT DOES NOT WORK YET
+
+library(tidyverse)
+library(readxl)
+library(xrfr)
+
+rawdata.df <- read_delim(file = system.file("inst/extdata/xrf_rawdata.txt", package = "xrfr"), delim = "\t", locale = readr::locale(decimal_mark = ","))
+projectinfo.df <- read_excel(path = system.file("inst/extdata/xrf_projectinfo.xlsx", package = "xrfr"))
+baseinfo.df <- read_excel(path = system.file("inst/extdata/xrf_setup.xlsx", package = "xrfr"))
+
+```
+
+**REMEMBER TO MAKE OUTPUT GITHUB_DOCUMENT BEFORE UPLOADING**
