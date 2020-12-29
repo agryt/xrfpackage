@@ -40,9 +40,9 @@ This file must contain all the relevant information related to the XRF machine, 
 
 * **Element**: All the elements measured by the machine. Should be written as "C", "O", "Mg", etc. 
 * **MolarW**: The molar weight of each element. 
-* **PC**, **ANO**, and **GFF**: The calibrated constant for each element for each of the three filter types. Must be in this order. 
-* **DL_PC**, **DL_ANO**, and **DL_GFF**: The detection limit of each element for each of the three filter types. Must be in this order. 
-* **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, so this is used during the calculations and must be included. 
+* **PC**, **ANO**, and **GFF**: The calibrated constant for each element for each of the three filter types. 
+* **DL_PC**, **DL_ANO**, and **DL_GFF**: The detection limit of each element for each of the three filter types. 
+* **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, and this value is used during the calculations, so Drift_2008 must be included. 
 
 ## New to R/RStudio?
 
@@ -50,17 +50,17 @@ Both R and Rstudio can be downloaded to your computer for free from the internet
 
 ### Getting started
 
-Once you have both R and RStudio installed, open RStudio. At this point you need to tell R where to look for files and save new files to (this is your work directory). This can be done by manually setting the work directory using `setwd()` or *Session* &rarr; *Set Working Directory* &rarr; *Choose Directory...*, or by creating a project (recommended). To create a project you can click *File* &rarr; *New Project...* or the "R within a box"-icon with a plus in a green circle at the top left. You can use an existing folder (where your project files are saved) as a directory by clicking *Existing Directory*. If you choose to click *New Directory*, you will need to move the project files to this folder. You then choose the project name and where to put it, click *Create Project*, and you are ready to start coding. Next time you want to work on this code, open the .Rproj file in your directory, and it will open exactly as you left it. 
+Once you have both R and RStudio installed, open RStudio. At this point you need to tell R where to look for files and save new files to (this is your work directory). This can be done by manually setting the work directory using `setwd()` or *Session* &rarr; *Set Working Directory* &rarr; *Choose Directory...*, or by creating a project (recommended). To create a project you can click *File* &rarr; *New Project...* or the "R within a box"-icon with a plus in a green circle at the top left. You can use an existing folder (where your project files are saved) as a directory by clicking *Existing Directory*. If you choose to click *New Directory*, you will need to move the project files to this new folder. You then choose the project name and where to put it, click *Create Project*, and you are ready to start coding. Next time you want to work on this code, open the .Rproj file in your directory, and it will open exactly as you left it. 
 
 ### Need help?
 
-Before even starting, it is useful to know how to get help if you have problems in R/RStudio. In the bottom right window in RStudio, where you can see the files in your directory, you can go to the tab "**Help**" and search for specific functions to learn how they work. This can also be accessed by running the code `help("name_of_function")`, for example `help("summarise")`. Some functions have further information available in vignettes, which can be accessed via the code `vignette("name_of_function")`, for example `vignette("nest")`. Information about packages can be accessed by using the code `help(package = "name_of_package")`, for example `help(package = "ggplot2")`. This information and more is always available on the internet as well, and you can find it by searching for the function or package in your search engine. In addition, a lot of the popular packages have cheat sheets available at https://rstudio.com/resources/cheatsheets/. On https://stackoverflow.com/ you can browse through other people's questions or ask your own. There are also many guides available for free on how to use R/Rstudio, for example this one for people who are used to working in Excel: https://rstudio-conf-2020.github.io/r-for-excel/. 
+It is very useful to know how to get help if you have problems in R/RStudio or there is something you don't understand. In the bottom right window in RStudio, where you can see the files in your directory, you can go to the tab "**Help**" and search for specific functions to learn how they work. This can also be accessed by running the code `help("name_of_function")`, for example `help("summarise")`. Some functions have further information available in vignettes, which can be accessed via the code `vignette("name_of_function")`, for example `vignette("nest")`. Information about packages can be accessed by using the code `help(package = "name_of_package")`, for example `help(package = "ggplot2")`. This information and more is always available on the internet as well, and you can find it by searching for the function or package in your search engine. In addition, a lot of the popular packages have cheat sheets available at https://rstudio.com/resources/cheatsheets/. On https://stackoverflow.com/ you can browse through other people's questions or ask your own. There are also many guides available for free on how to use R/Rstudio, for example this one for people who are used to working in Excel that you may find useful: https://rstudio-conf-2020.github.io/r-for-excel/. 
 
 ### R packages
 
-R packages are extensions to R that can be installed. There are many packages available, and some of the most popular ones are very useful to have. The group of packages called **tidyverse** is particularly useful and one you will likely need if you plan on handling data or creating graphics with R. It includes packages such as **dplyr** (to manipulate data), **tidyr** (to help create tidy data), and **ggplot2** (to create graphics). The package **readxl** is useful if you want to import Excel files (.xlsx or .xls). Packages can be installed using the code `install.packages("name_of_package")`, for example `install.packages("tidyverse")`. Once you have installed a package, you need to let R know that you wish to use functions from it. This is done with the function `library()`, for example `library(dplyr)`. Loading the package needs to be done each time you have restarted R, including when you reopen a project. 
+R packages are extensions to R that can be installed. There are many packages available, and some of the most popular ones are very useful to have. The group of packages called **tidyverse** is particularly useful and one you will likely need if you plan on handling data or creating graphics with R. It includes packages such as **dplyr** (to manipulate data), **tidyr** (to help create tidy data), and **ggplot2** (to create graphics). The package **readxl** is useful if you want to import Excel files (.xlsx or .xls). Many packages can be installed using the code `install.packages("name_of_package")`, for example `install.packages("tidyverse")`. Once you have installed a package, you need to let R know that you wish to use functions from it. This is done with the function `library()`, for example `library(dplyr)`. Loading the package needs to be done each time you have restarted R, including when you reopen a project. 
 
-### Some tips
+### Some tips to make your experience with R/Rstudio better
 
 - To run a line of code from your R Script you press ctrl + enter (on Windows or Linux) or cmd + enter (on Mac). You can also press run at the top right in the toolbar of the R Script window. 
 - Using pipe operators makes your code more readable and tidier. They are written as `%>%`. The pipe operator is a part of the **magrittr** package, but are also used in the **dplyr** package that you will likely be using (by running `library(dplyr)` or `library(tidyverse)`). On Windows or Linux you can use ctrl + shift + M as a shortcut for the pipe, and on Mac this is cmd + shift + M. `y %>% x` = `x(y)`. 
@@ -72,11 +72,11 @@ R packages are extensions to R that can be installed. There are many packages av
 
 ### Installing the package
 
-If it is your first time using it, you need to install the package before you can use it. To do this, you must use the function `install_github()` from the **remotes** package. This package is a part of the **devtools** group of packages. If you do not already have this installed, you need to install either **devtools** or only the **remotes** package first, by using the `install.packages()` function (`install.packages("remotes")` or `install.packages("devtools")`). To install the xrfr package you then load the package (`library(remotes)` or `library(devtools)`) and run the code `install_github("agryt/xrfr")`.
+If it is your first time using it, you need to install the package before you can use it. To do this, you must use the function `install_github()` from the **remotes** package. This package is a part of the **devtools** group of packages. If you do not already have this installed, you need to install either **devtools** or the **remotes** package first, by using the `install.packages()` function (`install.packages("remotes")` or `install.packages("devtools")`). To install the xrfr package you then load the package (`library(remotes)` or `library(devtools)`) and run the code `install_github("agryt/xrfr")`.
 
 ### Preparing your data
 
-Before starting the analysis, make sure that your files are properly formatted with the right column names and matching sample names. Your code will not work and you may get warning or error messages if they are not. 
+Before starting the analysis, make sure that your files are properly formatted with the right column names and matching sample names. Your code will not work and you will get warning or error messages if they are not. 
 
 Before you can use the **xrfr** functions, you must import your data to RStudio. How this is done depends on which format your files are saved in. Your raw data file is created as a .txt file by the XRF computer, so this is likely how yours will be saved. If so, using the code `read_delim("your_raw_data.txt", delim = "\t", locale = locale(decimal_mark = ","))` should work, as long as the **readr** package (or the whole **tidyverse** package) is loaded. Excel files can be imported using the `read_excel()` function from the **readxl** package, and CSV files can be imported using the `read_csv()` or `read_csv2()` functions from the **readr** package depending on which type of CSV file it is. If you are using other file formats, you can use your search engine to find out how to import them, as it is likely possible to do so. 
 
@@ -134,7 +134,7 @@ Note that `write_csv()` is a function from the package **readr**, so you must ha
 
 ### Using the "after" functions
 
-After you have your data file with your newly calculated concentrations, you may wish to not only continue working on your data, but also look at your data yourself. This is hard to do when the data is in this format, so you will likely want to widen the data so each element has its own column. 
+After you have your data file with your newly calculated concentrations, you may wish to not only continue working on your data, but also look at your data yourself. This is hard to do when the data is in the long format, so you will likely want to widen the data so each element has its own column. 
 
 You can widen your data using the `widen()` function, which also excludes blank samples and unnecessary columns:
 
@@ -212,7 +212,7 @@ mean.blanks.df <- pivotproject.df %>%
 adjusted.for.blanks.df <- left_join(pivotproject.df, mean.blanks.df, by = c("Filter_type", "Filter_size", "Filter_box_nr", "Element")) %>%
     mutate(Net_count = Count - mean_blank)
 basefile.df <- YOURBASEINFOFILE.df %>%
-    pivot_longer(PC : GFF,
+    pivot_longer(c(PC, ANO, GFF),
                  names_to = "Filter_type",
                  values_to = "Cal_const") %>%
     relocate(Filter_type)
@@ -220,8 +220,8 @@ joined.df <- left_join(adjusted.for.blanks.df, basefile.df, by = c("Filter_type"
 calculations.df <- joined.df %>%
     mutate(Concentration = ((Net_count * Cal_const) * filter_area * (1000 / Volume) * 1000 * (Drift_2008 / Drift_YOURYEAR)) / MolarW)
 detectionlimits.df <- basefile.df %>%
-    select(DL_PC : DL_GFF, Element) %>%
-    pivot_longer(DL_PC : DL_GFF,
+    select(DL_PC, DL_ANO, DL_GFF, Element) %>%
+    pivot_longer(c(DL_PC, DL_ANO, DL_GFF),
                  names_to = "Filter_type",
                  values_to = "Detection_limit") %>%
     mutate(Filter_type = str_remove(Filter_type, "DL_"))

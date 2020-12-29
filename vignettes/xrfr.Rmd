@@ -45,15 +45,15 @@ You may include as many more columns as you want, for example dates, depth, or l
 
 This file must contain all the relevant information related to the XRF machine, filters, and elements. This is a file that will not change between experiments unless the crystal drift has been measured again. The base info file must contain these columns:
 
-* **Element**: All the elements measured by the machine. 
+* **Element**: All the elements measured by the machine. Should be written as "C", "O", "Mg", etc. 
 * **MolarW**: The molar weight of each element. 
-* **PC**, **ANO**, and **GFF**: The calibrated constant for each element for each of the three filter types. Must be in this order. 
-* **DL_PC**, **DL_ANO**, and **DL_GFF**: The detection limit of each element for each of the three filter types. Must be in this order. 
-* **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, so this is used during the calculations. 
+* **PC**, **ANO**, and **GFF**: The calibrated constant for each element for each of the three filter types. 
+* **DL_PC**, **DL_ANO**, and **DL_GFF**: The detection limit of each element for each of the three filter types. 
+* **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, and this value is used during the calculations, so Drift_2008 must be included. 
 
 ### Importing your files
 
-All these files must be imported to RStudio as data frames before you can use the xrfr package. Your raw data file will be a .txt file, which can be imported using the `read_delim()` function. This code should work: `read_delim("name_of_your_file.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))`. How you import your other files depends on which format they are saved as. For Excel files, use the readxl package and the function `read_excel()`. For CSV files use either `read_csv()` (comma as separator and . as decimal point) or `read_csv2()` (tab as separator and , as decimal point) from the readr package. 
+All these files must be imported to RStudio as data frames before you can use the xrfr package. Your raw data file will be a .txt file, which can be imported using the `read_delim()` function from the readr package. This code should work: `read_delim("name_of_your_file.txt", delim = "\t", locale = locale(decimal_mark = ","))`. How you import your other files depends on which format they are saved as. For Excel files, use the readxl package and the function `read_excel()`. For CSV files use either `read_csv()` (comma as separator and . as decimal point) or `read_csv2()` (tab as separator and , as decimal point) from the readr package. 
 
 ## The functions in the xrfr package
 
@@ -77,7 +77,7 @@ imported.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
 
 ```
 
-This code will give a data frame that looks something like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_midway.csv) (link to a whole data file showing some real samples - the "extdata" directory there also contains the raw files used in this explanation). The table shows the first rows and columns of the linked data file:
+This code will give a data frame that looks something like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/project_midway.csv). The table shows the first rows and columns of the linked data file:
 
 |Sample|Date.x|C|N|O|Na|Mg|Al|Si|P|S|Cl|...|
 |:----|:------|:-|:-|:-|:-|:-|:-|:-|:-|:-|:-|:-|
@@ -88,17 +88,17 @@ This code will give a data frame that looks something like [this](https://github
 
 Specifically, this function extracts the necessary columns from the raw data file ("Sample", "Date", and those with "(Int)" in the column name), then joins this file and the project information file in a single data frame by their shared column "Sample". 
 
-This data frame will further be used in the function `convertxrf()`, where the values are converted from kcps to µM. 
+This data frame will further be used in the function `convertxrf()`, where these values are converted from kcps to µM. 
 
 ### convertxrf()
 
 Once you have your data frame created with `readxrf()`, you go on to perform the actual calculations to convert your values from kcps to µM, ending up with another data frame. For this function to work you will need to define several arguments:
 
-* **imported.data**: The name of the data frame created after using `readxrf()`. 
-* **base.info**: This is the name of your data frame with the base information from the machine etc. 
-* **year**: This is the year in which the crystal drift was measured closest to when your samples were measured. 
-* **first_element**: This is the name of the first column in your data frame that was created with the function `readxrf()` that is an element. For example, in the example above, there are the columns "Sample" and "Date.x" first, then the column named "C", so "C" is what we include in the function. 
-* **last_element**: This is the name of the last column in your data frame that is an element. In our example, this was the column "As". 
+* **imported.data**: The name of the data frame created using `readxrf()`. 
+* **base.info**: The name of the data frame with the base information from the machine etc. 
+* **year**: The year in which the crystal drift was measured closest to when your samples were measured. 
+* **first_element**: The name of the first column in your data frame that was created with the function `readxrf()` that is an element. For example, in the example above, there are the columns "Sample" and "Date.x" first, then the column named "C", so "C" is what we include in the function. 
+* **last_element**: The name of the last column in your data frame that is an element. In our example, this was the column "As". 
 
 Here is a possible input:
 
@@ -125,7 +125,7 @@ The data frame created here is a good idea to save, as this is the file you will
 
 The file created using `convertxrf()` is good for further work in R/Rstudio, but if you want to look at your data it is not ideal. The `widen()` function will show your data as is, only excluding the blanks and detection limits, and turning the data frame from a long to a wide format. For this function to work you will need to define this argument:
 
-* **project.data**: This is the name of the data frame created using `convertxrf()`. 
+* **project.data**: The name of the data frame created using `convertxrf()`. 
 
 A possible input could be this:
 
@@ -150,7 +150,7 @@ This data frame is a lot easier to read with human eyes than the long format.
 
 In addition to widening your data, you may wish to exclude the values that are below the detection limits. This can be done with the `widen_above()` function. It will give you the same data frame as the `widen()` function, only with "NA" or "NULL" written in the cells where the concentration was lower than the detection limit. You will need to define this argument:
 
-* **project.data**: This is the name of the data frame created using `convertxrf()`. 
+* **project.data**: The name of the data frame created using `convertxrf()`. 
 
 Here is a possible input for this function:
 
@@ -173,9 +173,9 @@ The output of this code will be a data frame that looks like [this](https://gith
 
 You may also wish to calculate the mean concentrations based on different factors such as depth, location, treatment, etc. The `widen_means()` function does this, based on one or two factors that you must define. To use this function you must define these arguments:
 
-* **project.data**: This is the name of the data frame created using `convertxrf()`.
-* **first_factor**: This is the name of the column that shows the first or only factor you want to calculate means based on, for example depth. 
-* **second_factor**: *Defining this argument is optional.* This is the name of the column that shows the second factor you want to calculate means based on, for example location.
+* **project.data**: The name of the data frame created using `convertxrf()`.
+* **first_factor**: The name of the column that shows the first or only factor you want to calculate means based on, for example depth. 
+* **second_factor**: *Defining this argument is optional.* The name of the column that shows the second factor you want to calculate means based on, for example location.
 
 A possible input:
 
@@ -198,9 +198,9 @@ The output of this code will be a data frame showing the factor(s) chosen and th
 
 This function combines the `widen_above()` and `widen_means()` functions by calculating means and then excluding the mean concentrations not above the detection limits. Like with the `widen_means()` function, you define one or two factors to calculate the means based on. You must define these arguments to use this function:
 
-* **project.data**: This is the name of the data frame created using `convertxrf()`.
-* **first_factor**: This is the name of the column that shows the first or only factor you want to calculate means based on, for example depth. 
-* **second_factor**: *Defining this argument is optional.* This is the name of the column that shows the second factor you want to calculate means based on, for example location.
+* **project.data**: The name of the data frame created using `convertxrf()`.
+* **first_factor**: The name of the column that shows the first or only factor you want to calculate means based on, for example depth. 
+* **second_factor**: *Defining this argument is optional.* The name of the column that shows the second factor you want to calculate means based on, for example location.
 
 A possible input:
 
