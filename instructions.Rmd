@@ -1,6 +1,6 @@
 ---
 title: "How to Use the xrfr Package"
-output: html_document
+output: pdf_document
 author: Anna Grytaas
 date: "`r Sys.Date()`"
 ---
@@ -87,7 +87,8 @@ Here is an example of how to import the files:
 library(tidyverse) # tidyverse includes readr, which is needed here
 library(readxl)
 
-rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
+rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = 
+                                                                          ","))
 projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 baseinfo.df <- read_excel("xrf_setup.xlsx")
 
@@ -112,7 +113,8 @@ Here is an example of how to use these functions:
 ```{r main functions, eval = FALSE}
 
 imported.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
-data.df <- convertxrf(imported.data = imported.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
+data.df <- convertxrf(imported.data = imported.df, base.info = baseinfo.df, year = "2019", 
+                      first_element = "C", last_element = "As")
 
 ```
 
@@ -152,7 +154,8 @@ To calculate means you will need to specify the factor(s) you wish to calculate 
 
 means.project1.df <- widen_means(project.data = data.df, first_factor = "Location")
 
-means.project2.df <- widen_means(project.data = data.df, first_factor = "Location", second_factor = "Depth")
+means.project2.df <- widen_means(project.data = data.df, first_factor = "Location", 
+                                 second_factor = "Depth")
 
 ```
 
@@ -168,7 +171,8 @@ You can also use the function `widen_means_above()` to both calculate means and 
 
 ```{r widen_means_above, eval = FALSE}
 
-means.above.project.df <- widen_means_above(project.data = data.df, first_factor = "Location", second_factor = "Depth")
+means.above.project.df <- widen_means_above(project.data = data.df, first_factor = 
+                                            "Location", second_factor = "Depth")
 
 ```
 
@@ -188,7 +192,8 @@ library(tidyverse)
 library(readxl)
 
 # these functions will vary based on which format your files are saved in, but an example:
-YOURDATAFILE.df <- read_delim("RAW_DATA_FILE.txt", delim = "\t", locale = locale(decimal_mark = ","))
+YOURDATAFILE.df <- read_delim("RAW_DATA_FILE.txt", delim = "\t", 
+                              locale = locale(decimal_mark = ","))
 YOURPROJECTINFOFILE.df <- read_excel("PROJECT_INFO_FILE.xlsx")
 YOURBASEINFOFILE.df <- read_excel("BASE_INFO_FILE.xlsx")
 
@@ -197,7 +202,8 @@ datafile.df <- YOURDATAFILE.df %>%
     select(c(Sample, Date, contains("Int"))) %>%
     rename_all(str_remove, pattern = " .*")
 projectfile.df <- inner_join(datafile.df, YOURINFOFILE.df, by = "Sample")
-notinprojectfile.df <- anti_join(datafile.df, YOURINFOFILE.df, by = "Sample") # should have 0 rows if all samples match between your files
+notinprojectfile.df <- anti_join(datafile.df, YOURINFOFILE.df, by = "Sample") 
+# notinprojectfile.df should have 0 rows if all samples match between your files
 
 # convertxrf
 filter_area <- 9.078935
@@ -209,23 +215,27 @@ mean.blanks.df <- pivotproject.df %>%
     filter(Filter_blank == "blank") %>%
     group_by(Filter_type, Filter_size, Filter_box_nr, Element) %>%
     summarise(mean_blank = mean(Count))
-adjusted.for.blanks.df <- left_join(pivotproject.df, mean.blanks.df, by = c("Filter_type", "Filter_size", "Filter_box_nr", "Element")) %>%
+adjusted.for.blanks.df <- left_join(pivotproject.df, mean.blanks.df, by = c("Filter_type", 
+                                    "Filter_size", "Filter_box_nr", "Element")) %>%
     mutate(Net_count = Count - mean_blank)
 basefile.df <- YOURBASEINFOFILE.df %>%
     pivot_longer(c(PC, ANO, GFF),
                  names_to = "Filter_type",
                  values_to = "Cal_const") %>%
     relocate(Filter_type)
-joined.df <- left_join(adjusted.for.blanks.df, basefile.df, by = c("Filter_type", "Element"))
+joined.df <- left_join(adjusted.for.blanks.df, basefile.df, by = c("Filter_type", 
+                       "Element"))
 calculations.df <- joined.df %>%
-    mutate(Concentration = ((Net_count * Cal_const) * filter_area * (1000 / Volume) * 1000 * (Drift_2008 / Drift_YOURYEAR)) / MolarW)
+    mutate(Concentration = ((Net_count * Cal_const) * filter_area * (1000 / Volume) * 
+                              1000 * (Drift_2008 / Drift_YOURYEAR)) / MolarW)
 detectionlimits.df <- basefile.df %>%
     select(DL_PC, DL_ANO, DL_GFF, Element) %>%
     pivot_longer(c(DL_PC, DL_ANO, DL_GFF),
                  names_to = "Filter_type",
                  values_to = "Detection_limit") %>%
     mutate(Filter_type = str_remove(Filter_type, "DL_"))
-project.detectionlim.df <- left_join(calculations.df, detectionlimits.df, by = c("Filter_type", "Element"))
+project.detectionlim.df <- left_join(calculations.df, detectionlimits.df, by = 
+                                     c("Filter_type", "Element"))
 project.df <- project.detectionlim.df %>%
     distinct() %>%
     select(Sample : Element, Concentration, Detection_limit)
