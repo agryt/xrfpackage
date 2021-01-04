@@ -1,2 +1,7 @@
 ^xrfpackage\.Rproj$
 ^\.Rproj\.user$
+^LICENSE\.md$
+^INSTRUCTIONS\.pdf$
+^INSTRUCTIONS\.Rmd$
+^README\.Rmd$
+^xrfr\.Rproj$
