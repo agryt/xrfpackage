@@ -5,7 +5,7 @@ author: Anna Grytaas
 date: "`r Sys.Date()`"
 ---
 
-This R package was created to convert elemental composition x-ray fluorescence (XRF) data of filtrated water samples from kcps to µM. For source code, vignette, and more information, please visit https://github.com/agryt/xrfr.
+This R package was created to convert elemental composition x-ray fluorescence (XRF) data of filtrated water samples from kcps to µM. It was created with R version 4.0.3. For source code, vignette, and more information, please visit https://github.com/agryt/xrfr.
 
 **Problems?** Issues can be reported at https://github.com/agryt/xrfr/issues and questions can be sent to grytaasanna@gmail.com. 
 

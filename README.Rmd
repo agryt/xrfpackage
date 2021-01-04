@@ -8,7 +8,7 @@ output: html_document
 
 *This package is currently under development.* 
 
-This package contains functions to use when importing X-ray fluorescence (XRF) data and converting the measured values from kilo counts per second (kcps) to micromolar (µM). It is created with the intention of being used at the microbiology department at University of Bergen. 
+This package contains functions to use when importing X-ray fluorescence (XRF) data and converting the measured values from kilo counts per second (kcps) to micromolar (µM). It is created with the intention of being used at the microbiology department at University of Bergen. It was created with R version 4.0.3. 
 
 ## Installation
 
@@ -37,7 +37,7 @@ library(tidyverse)
 library(readxl)
 library(xrfr)
 
-rawdata.df <- read_delim(file = system.file("inst/extdata/xrf_rawdata.txt", package = "xrfr"), delim = "\t", locale = readr::locale(decimal_mark = ","))
+rawdata.df <- read_delim(file = system.file("inst/extdata/xrf_rawdata.txt", package = "xrfr"), delim = "\t", locale = locale(decimal_mark = ","))
 projectinfo.df <- read_excel(path = system.file("inst/extdata/xrf_projectinfo.xlsx", package = "xrfr"))
 baseinfo.df <- read_excel(path = system.file("inst/extdata/xrf_setup.xlsx", package = "xrfr"))
 
