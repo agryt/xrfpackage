@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-This package was created for use at the University of Bergen to convert data from an X-ray fluorescence machine from kilo-counts per second to micromolar. It requires that your files are constructed in a very specific way, as explained in this vignette, so is meant to be used with instructions. The instructions document is available [here](https://github.com/agryt/xrfr). The package was created with R version 4.0.3.
+This package was created for use at the University of Bergen to convert data from an X-ray fluorescence machine from kilo-counts per second to micromolar. It requires that your files are constructed in a very specific way, as explained in this vignette, so is meant to be used with instructions. The instructions document is available [here](https://github.com/agryt/xrfr/blob/master/INSTRUCTIONS.pdf). The package was created with R version 4.0.3.
 
 The functions included in this package are:
 
