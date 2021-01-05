@@ -45,7 +45,8 @@ library(tidyverse)
 library(readxl)
 library(xrfr)
 
-rawdata.df <- read_delim(file = system.file("inst/extdata/xrf_rawdata.txt", package = "xrfr"), delim = "\t", locale = locale(decimal_mark = ","))
+rawdata.df <- read_delim(file = system.file("inst/extdata/xrf_rawdata.txt", package = "xrfr"), delim = "\t",
+                         locale = locale(decimal_mark = ","))
 
 projectinfo.df <- read_excel(path = system.file("inst/extdata/xrf_projectinfo.xlsx", package = "xrfr"))
 
@@ -58,7 +59,8 @@ and `convertxrf()`.
 ``` r
 halfway.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
 
-calculated.df <- convertxrf(imported.data = halfway.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
+calculated.df <- convertxrf(imported.data = halfway.df, base.info = baseinfo.df, year = "2019",
+                            first_element = "C", last_element = "As")
 ```
 
 If you wish to transform your data, you can use the “after” functions.
@@ -73,10 +75,12 @@ wide.df <- widen(project.data = calculated.df)
 wide.above.df <- widen_above(project.data = calculated.df)
 
 # same as widen() + calculates means based on one or two factors:
-wide.means.df <- widen_means(project.data = calculated.df, first_factor = "Day", second_factor = "Treatment")
+wide.means.df <- widen_means(project.data = calculated.df, first_factor = "Day",
+                             second_factor = "Treatment")
 
 # combination of widen_means() and widen_above():
-wide.means.above.df <- widen_means_above(project.data = calculated.df, first_factor = "Day", second_factor = "Treatment")
+wide.means.above.df <- widen_means_above(project.data = calculated.df, first_factor = "Day",
+                                         second_factor = "Treatment")
 ```
 
 You can find examples of what the created data frame of each function
