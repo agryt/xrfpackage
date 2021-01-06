@@ -8,17 +8,19 @@ output: html_document
 
 *This package is currently under development.* 
 
-This package contains functions to use when importing X-ray fluorescence (XRF) data and converting the measured values from kilo counts per second (kcps) to micromolar (µM). It is created with the intention of being used at the microbiology department at University of Bergen. It was created with R version 4.0.3. 
+This package contains functions to use when importing X-ray fluorescence (XRF) data and converting the measured values from kilo counts per second (kcps) to micromolar (µM). It is created with the intention of being used at the microbiology department at University of Bergen. It was created with R version 4.0.3, and is a further development of Hedda Østgaard's [XRF package](https://github.com/heddaost/XRF). 
 
 ## Installation
 
-The package is installed from GitHub using the remotes package of the devtools group of packages. If you do not have remotes or devtools installed, install this first, then use: 
+The package is installed from GitHub using the remotes package of the devtools group of packages. If you do not have remotes or devtools installed, install this first, then use the function `install_github()`: 
 
 ``` {r installation, eval = FALSE, error = FALSE, warning = FALSE, message = FALSE}
 
+install.packages("remotes")
 remotes::install_github("agryt/xrfr")
 
 # alternatively:
+install.packages("devtools")
 devtools::install_github("agryt/xrfr")
 
 ``` 
