@@ -4,7 +4,7 @@
 \alias{widen_means_above}
 \title{Widening the dataframe, filtering out concentrations below detection limit, and calculating the means based on two factors}
 \usage{
-widen_means_above(project.data, first_factor, second_factor)
+widen_means_above(project.data, first_factor, second_factor = NULL)
 }
 \arguments{
 \item{project.data}{The name of the dataframe created with convertxrf().}

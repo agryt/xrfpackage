@@ -4,7 +4,7 @@
 \alias{widen_means}
 \title{Widening the dataframe and calculating the means based on two factors}
 \usage{
-widen_means(project.data, first_factor, second_factor)
+widen_means(project.data, first_factor, second_factor = NULL)
 }
 \arguments{
 \item{project.data}{The name of the dataframe created with convertxrf().}

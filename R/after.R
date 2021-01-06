@@ -95,7 +95,6 @@ widen_above <- function(project.data) {
 #'
 #' @importFrom dplyr filter select group_by summarise_if
 #' @importFrom tidyr pivot_wider
-#' @importFrom rlang is_missing
 #' @importFrom magrittr %>%
 #'
 #' @examples
@@ -112,11 +111,11 @@ widen_above <- function(project.data) {
 #'
 #' @export
 
-widen_means <- function(project.data, first_factor, second_factor) {
+widen_means <- function(project.data, first_factor, second_factor = NULL) {
 
   project.df <- as.data.frame(project.data)
 
-  if(rlang::is_missing(.data[[second_facor]])) {
+  if(is.null(second_factor)) {
 
     projectaverage.df <- project.df %>%
       dplyr::filter(!.data$Filter_blank %in% "blank") %>%
@@ -157,7 +156,6 @@ widen_means <- function(project.data, first_factor, second_factor) {
 #'
 #' @importFrom dplyr filter select group_by summarise_if
 #' @importFrom tidyr pivot_wider
-#' @importFrom rlang is_missing
 #' @importFrom magrittr %>%
 #'
 #' @examples
@@ -174,11 +172,11 @@ widen_means <- function(project.data, first_factor, second_factor) {
 #'
 #' @export
 
-widen_means_above <- function(project.data, first_factor, second_factor) {
+widen_means_above <- function(project.data, first_factor, second_factor = NULL) {
 
   project.df <- as.data.frame(project.data)
 
-  if(rlang::is_missing(.data[[second_factor]])) {
+  if(is.null(second_factor)) {
 
     projectaverageabove.df <- project.df %>%
       dplyr::filter(!.data$Filter_blank %in% "blank") %>%
