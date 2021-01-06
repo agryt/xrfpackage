@@ -14,7 +14,7 @@ This package was created for use at the University of Bergen to convert data fro
 The functions included in this package are:
 
 * `readxrf()`: This function joins the data frame containing raw data with the data frame containing project information like where each sample was taken and how much water was filtered. The output of this function is a new data frame. 
-* `convertxrf()`: This function takes the data frame created by `readxrf()` and the data frame containing base information like crystal drift and detection limits for each element. The output of this function is a long data frame where the counts from the machine have been converted from kcps to µM. 
+* `convertxrf()`: This function uses the data frame created by `readxrf()` and the data frame containing base information like crystal drift and detection limits for each element. The output of this function is a long data frame where the counts from the machine have been converted from kcps to µM. 
 * `widen()`: This function takes the the data frame created with `readxrf()` and makes it wider, so each element has its own column. 
 * `widen_above()`: This function both widens your data and excludes any concentrations that are below the detection limits. 
 * `widen_means()`: This function both widens your data and calculates mean concentration based on one or two factors. 
@@ -22,7 +22,7 @@ The functions included in this package are:
 
 ## The files
 
-There are three files you need for your analysis: a file with **raw data** from the XRF machine. You also need a file with **information about the samples and project**, like which location the samples are from, whether they are blank samples, and the volume of the filtrated water. Lastly, you need a file containing **information about the machine, filters and elements**, like crystal drift and calibrated constants. 
+There are three files you need for your analysis, the first of which is a file with **raw data** from the XRF machine. You also need a file with **information about the samples and project**, like which location the samples are from, whether they are blank samples, and the volume of the filtrated water. Lastly, you need a file containing **information about the machine, filters and elements**, like crystal drift and calibrated constants. 
 
 ### The raw data file
 
@@ -99,6 +99,8 @@ Once you have your data frame created with `readxrf()`, you go on to perform the
 * **year**: The year in which the crystal drift was measured closest to when your samples were measured. 
 * **first_element**: The name of the first column in your data frame that was created with the function `readxrf()` that is an element. For example, in the example above, there are the columns "Sample" and "Date.x" first, then the column named "C", so "C" is what we include in the function. 
 * **last_element**: The name of the last column in your data frame that is an element. In our example, this was the column "As". 
+
+The formula that is used to calculate the concentration in µM from kcps is this: `Concentration = ((Net_count * Cal_const) * filter_area * (1000 / Volume) * 1000 * (\Drift_2008 / Drift_YEAR) / MolarW)`. 
 
 Here is a possible input:
 
