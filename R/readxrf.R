@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 #'
 #' projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)

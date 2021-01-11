@@ -22,7 +22,7 @@
 #' \dontrun{
 #' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
-#' baseinfo.df <- readxl::read_excel("xrf_setup.xlsx")
+#' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
 #' projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
 #'

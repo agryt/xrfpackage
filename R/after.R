@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 #' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
@@ -56,7 +56,7 @@ widen <- function(project.data) {
 #'
 #' @examples
 #' \dontrun{
-#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 #' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
@@ -99,7 +99,7 @@ widen_above <- function(project.data) {
 #'
 #' @examples
 #' \dontrun{
-#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 #' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
@@ -160,7 +160,7 @@ widen_means <- function(project.data, first_factor, second_factor = NULL) {
 #'
 #' @examples
 #' \dontrun{
-#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+#' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 #' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
