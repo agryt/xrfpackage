@@ -6,8 +6,8 @@
 #'
 #' @return description The function creates a dataframe where your raw data and project information has been merged.
 #'
-#' @param raw.data The name of your dataframe with raw data from the XRF machine.
-#' @param project.info The name of your dataframe with necessary information about the samples.
+#' @param raw_data The name of your dataframe with raw data from the XRF machine.
+#' @param project_info The name of your dataframe with necessary information about the samples.
 #'
 #' @importFrom dplyr inner_join anti_join select contains rename_all
 #' @importFrom stringr str_remove
@@ -18,22 +18,22 @@
 #' rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 #'
-#' projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+#' projectfile.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
 #' }
 #'
 #' @export
 
 
-readxrf <- function(raw.data, project.info) {
+readxrf <- function(raw_data, project_info) {
 
   # import data file
-  datafile.df <- as.data.frame(raw.data)
+  datafile.df <- as.data.frame(raw_data)
   datafile.df <- datafile.df %>%
     dplyr::select(c(Sample, Date, dplyr::contains("Int"))) %>%
     dplyr::rename_all(stringr::str_remove, pattern = " .*")
 
   # import info file
-  infofile.df <- as.data.frame(project.info)
+  infofile.df <- as.data.frame(project_info)
 
   # assigning error messages for if not all necessary columns are included
   # THESE SHOULD BE GATHERED INTO ONE LINE

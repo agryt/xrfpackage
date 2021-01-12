@@ -6,7 +6,7 @@
 #'
 #' @return description The function creates a dataframe that is a wider version of the one created with convertxrf().
 #'
-#' @param project.data The name of the dataframe created with convertxrf().
+#' @param project_data The name of the dataframe created with convertxrf().
 #'
 #' @importFrom dplyr select filter
 #' @importFrom tidyr pivot_wider
@@ -18,17 +18,17 @@
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 #' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
-#' projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
-#' project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
+#' projectfile.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
+#' project.df <- convertxrf(imported_data = projectfile.df, base_info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 #'
-#' wideproject.df <- widen(project.data = project.df)
+#' wideproject.df <- widen(project_data = project.df)
 #' }
 #'
 #' @export
 
-widen <- function(project.data) {
+widen <- function(project_data) {
 
-  project.df <- as.data.frame(project.data)
+  project.df <- as.data.frame(project_data)
 
   projectwide.df <- project.df %>%
     dplyr::filter(!.data$Filter_blank %in% "blank") %>%
@@ -48,7 +48,7 @@ widen <- function(project.data) {
 #'
 #' @return description The function creates a dataframe that is a wider version of the one created with convertxrf(), and where values below the detection limits are removed.
 #'
-#' @param project.data The name of the dataframe created with convertxrf().
+#' @param project_data The name of the dataframe created with convertxrf().
 #'
 #' @importFrom dplyr filter select
 #' @importFrom tidyr pivot_wider
@@ -60,17 +60,17 @@ widen <- function(project.data) {
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 #' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
-#' projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
-#' project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
+#' projectfile.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
+#' project.df <- convertxrf(imported_data = projectfile.df, base_info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 #'
-#' abovedetlim.df <- widen_above(project.data = project.df)
+#' abovedetlim.df <- widen_above(project_data = project.df)
 #' }
 #'
 #' @export
 
-widen_above <- function(project.data) {
+widen_above <- function(project_data) {
 
-  project.df <- as.data.frame(project.data)
+  project.df <- as.data.frame(project_data)
 
   projectabove.df <- project.df %>%
     dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
@@ -89,7 +89,7 @@ widen_above <- function(project.data) {
 #'
 #' @return description The function creates a dataframe where the columns available are your two factors (for example location and depth) and each element.
 #'
-#' @param project.data The name of the dataframe created with convertxrf().
+#' @param project_data The name of the dataframe created with convertxrf().
 #' @param first_factor The name of the column that shows the first or only factor you want to calculate means based on, for example depth.
 #' @param second_factor The name of the column that shows a potential second factor you want to calculate means based on, for example location.
 #'
@@ -103,17 +103,17 @@ widen_above <- function(project.data) {
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 #' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
-#' projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
-#' project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
+#' projectfile.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
+#' project.df <- convertxrf(imported_data = projectfile.df, base_info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 #'
-#' means.df <- widen_means(project.data = project.df, first_factor = "Treatment", second_factor = "Day")
+#' means.df <- widen_means(project_data = project.df, first_factor = "Treatment", second_factor = "Day")
 #' }
 #'
 #' @export
 
-widen_means <- function(project.data, first_factor, second_factor = NULL) {
+widen_means <- function(project_data, first_factor, second_factor = NULL) {
 
-  project.df <- as.data.frame(project.data)
+  project.df <- as.data.frame(project_data)
 
   if(is.null(second_factor)) {
 
@@ -150,7 +150,7 @@ widen_means <- function(project.data, first_factor, second_factor = NULL) {
 #'
 #' @return description The function returns a dataframe that shows the mean concentrations calculated from the concentrations above the detection limits for each element based on one or two factors.
 #'
-#' @param project.data The name of the dataframe created with convertxrf().
+#' @param project_data The name of the dataframe created with convertxrf().
 #' @param first_factor The name of the column that shows the first or only factor you want to calculate means based on, for example depth.
 #' @param second_factor The name of the column that shows a potential second factor you want to calculate means based on, for example location.
 #'
@@ -164,17 +164,17 @@ widen_means <- function(project.data, first_factor, second_factor = NULL) {
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 #' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
-#' projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
-#' project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
+#' projectfile.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
+#' project.df <- convertxrf(imported_data = projectfile.df, base_info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 #'
-#' meansabovedetlim.df <- widen_means_above(project.data = project.df, first_factor = "Treatment", second_factor = "Day")
+#' meansabovedetlim.df <- widen_means_above(project_data = project.df, first_factor = "Treatment", second_factor = "Day")
 #' }
 #'
 #' @export
 
-widen_means_above <- function(project.data, first_factor, second_factor = NULL) {
+widen_means_above <- function(project_data, first_factor, second_factor = NULL) {
 
-  project.df <- as.data.frame(project.data)
+  project.df <- as.data.frame(project_data)
 
   if(is.null(second_factor)) {
 

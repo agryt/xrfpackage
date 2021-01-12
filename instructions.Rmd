@@ -72,7 +72,7 @@ R packages are extensions to R that can be installed. There are many packages av
 
 ### Installing the package
 
-If it is your first time using it, you need to install the package before you can use it. To do this, you must use the function `install_github()` from the **remotes** package. This package is a part of the **devtools** group of packages. If you do not already have this installed, you need to install either **devtools** or the **remotes** package first, by using the `install.packages()` function (`install.packages("remotes")` or `install.packages("devtools")`). To install the xrfr package you then load the package (`library(remotes)` or `library(devtools)`) and run the code `install_github("agryt/xrfr")`.
+If it is your first time using it, you need to install the package before you can use it. To do this, you must use the function `install_github()` from the **remotes** package. This package is a part of the **devtools** group of packages. If you do not already have this installed, you need to install either **devtools** or the **remotes** package first, by using the `install.packages()` function (`install.packages("remotes")` or `install.packages("devtools")`). To install the xrfr package you then load the package with the `library()` function and run the code `install_github("agryt/xrfr")`.
 
 ### Preparing your data
 
@@ -112,17 +112,17 @@ Here is an example of how to use these functions:
 
 ```{r main functions, eval = FALSE}
 
-imported.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
-data.df <- convertxrf(imported.data = imported.df, base.info = baseinfo.df, year = "2019", 
+imported.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
+data.df <- convertxrf(imported_data = imported.df, base_info = baseinfo.df, year = "2019", 
                       first_element = "C", last_element = "As")
 
 ```
 
 You will need to run these functions one at a time, as there is information in the data frame created with `readxrf()` that is needed to run `convertxrf()` properly. The result of each function will be a new data frame. 
 
-To run `readxrf()` you only need to define the arguments "raw.data", which is the name of the data frame containing your raw data from the XRF-machine, and "project.info", the name of the data frame containing information about all your samples. 
+To run `readxrf()` you only need to define the arguments "raw_data", which is the name of the data frame containing your raw data from the XRF-machine, and "project_info", the name of the data frame containing information about all your samples. 
 
-To run `convertxrf()` you will need to let R know the name of the data frame created with `readxrf()` ("imported.data"), the name of the data frame containing the base information data ("base.info"), and the year in which the crystal drift was measured closest to when your samples were taken ("year"). You will also need to define the arguments "first_element" and "last_element". These are the names of the first and last columns in the data frame created with `readxrf()` that contain data in kcps. This can change, but will likely be "C" for "first_element" and "As" for "last_element". 
+To run `convertxrf()` you will need to let R know the name of the data frame created with `readxrf()` ("imported_data"), the name of the data frame containing the base information data ("base_info"), and the year in which the crystal drift was measured closest to when your samples were taken ("year"). You will also need to define the arguments "first_element" and "last_element". These are the names of the first and last columns in the data frame created with `readxrf()` that contain data in kcps. This can change, but will likely be "C" for "first_element" and "As" for "last_element". 
 
 The output of these two functions is a long data frame containing new columns showing the concentration and detection limit of each element for each sample. You will likely want to save this data frame as a file, as this is the file you will use when for example doing statistical analysis or creating graphics. Saving a data frame can be done like this:
 
@@ -142,7 +142,7 @@ You can widen your data using the `widen()` function, which also excludes blank 
 
 ```{r widen, eval = FALSE}
 
-wide.project.df <- widen(project.data = data.df)
+wide.project.df <- widen(project_data = data.df)
 
 ```
 
@@ -152,9 +152,9 @@ To calculate means you will need to specify the factor(s) you wish to calculate 
 
 ```{r widen_means, eval = FALSE}
 
-means.project1.df <- widen_means(project.data = data.df, first_factor = "Location")
+means.project1.df <- widen_means(project_data = data.df, first_factor = "Location")
 
-means.project2.df <- widen_means(project.data = data.df, first_factor = "Location", 
+means.project2.df <- widen_means(project_data = data.df, first_factor = "Location", 
                                  second_factor = "Depth")
 
 ```
@@ -163,7 +163,7 @@ When excluding the concentrations below the detection limits, the blank samples 
 
 ```{r widen_above, eval = FALSE}
 
-above.project.df <- widen_above(project.data = data.df)
+above.project.df <- widen_above(project_data = data.df)
 
 ```
 
@@ -171,8 +171,10 @@ You can also use the function `widen_means_above()` to both calculate means and 
 
 ```{r widen_means_above, eval = FALSE}
 
-means.above.project.df <- widen_means_above(project.data = data.df, first_factor = 
-                                            "Location", second_factor = "Depth")
+means.above.project1.df <- widen_means_above(project_data = data.df, first_factor = 
+                                               "Location")
+means.above.project2.df <- widen_means_above(project_data = data.df, first_factor = 
+                                               "Location", second_factor = "Depth")
 
 ```
 

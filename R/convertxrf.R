@@ -6,8 +6,8 @@
 #'
 #' @return description The function creates a dataframe in the long format with the new columns "Concentration" and "Detection_limit" showing the calculated concentration and the respective detection limit.
 #'
-#' @param imported.data The name of the dataframe created with readxrf()
-#' @param base.info The name of the dataframe containing detection limits, crystal drift, molar weights, and calibration constants.
+#' @param imported_data The name of the dataframe created with readxrf()
+#' @param base_info The name of the dataframe containing detection limits, crystal drift, molar weights, and calibration constants.
 #' @param year The year the drift was measured closest to when your samples were analysed.
 #' @param first_element The name of the first column containing kcps values in the generated project dataframe.
 #' @param last_element The name of the last column containing kcps values in the generated project  dataframe.
@@ -24,19 +24,19 @@
 #' projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 #' baseinfo.df <- read_excel("xrf_setup.xlsx")
 #'
-#' projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+#' projectfile.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
 #'
-#' project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
+#' project.df <- convertxrf(imported_data = projectfile.df, base_info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 #' }
 #'
 #' @export
 
 
-convertxrf <- function(imported.data, base.info, year, first_element, last_element) {
+convertxrf <- function(imported_data, base_info, year, first_element, last_element) {
 
   filter_area <- 9.078935
 
-  projectfile.df <- as.data.frame(imported.data)
+  projectfile.df <- as.data.frame(imported_data)
 
   # making the dataframe longer
   pivotproject.df <- projectfile.df %>%
@@ -58,7 +58,7 @@ convertxrf <- function(imported.data, base.info, year, first_element, last_eleme
   adjusted.for.blanks.df <- dplyr::left_join(pivotproject.df, mean.blanks.df, by = c("Filter_type", "Filter_size", "Filter_box_nr", "Element")) %>%
     dplyr::mutate(Net_count = .data$Count - .data$mean_blank)
 
-  basefile.df <- as.data.frame(base.info)
+  basefile.df <- as.data.frame(base_info)
 
   # NEED TO GATHER ALL THESE INTO ONE LINE
   if(!"PC" %in% names(basefile.df)) {

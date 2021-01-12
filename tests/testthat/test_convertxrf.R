@@ -21,7 +21,7 @@ test_that("output is correct", {
                   DL_GFF = c(0.13, 0.2, 0.15),
                   Drift_2008 = c(36, 13, 5),
                   Drift_2019 = c(36, 12, 4))
-  ab <- convertxrf(imported.data = a, base.info = b, year = "2019", first_element = "C", last_element = "O")
+  ab <- convertxrf(imported_data = a, base_info = b, year = "2019", first_element = "C", last_element = "O")
   c <- data.frame(Sample = c("A1", "A1", "A1", "A2", "A2", "A2", "A3", "A3", "A3", "A4", "A4", "A4"),
                   Date = "01.01.2020",
                   Filter_type = "PC",
@@ -63,7 +63,7 @@ test_that("blank error works", {
                   Drift_2008 = c(36, 13, 5),
                   Drift_2019 = c(36, 12, 4))
 
-  expect_error(convertxrf(imported.data = a, base.info = b, year = "2019", first_element = "C", last_element = "O"))
+  expect_error(convertxrf(imported_data = a, base_info = b, year = "2019", first_element = "C", last_element = "O"))
 })
 
 test_that("column names error works", {
@@ -104,7 +104,7 @@ test_that("column names error works", {
                   DL_GFF = c(0.13, 0.2, 0.15),
                   Drift_2019 = c(36, 12, 4))
 
-  expect_error(convertxrf(imported.data = a, base.info = b, year = "2019", first_element = "C", last_element = "O"))
-  expect_error(convertxrf(imported.data = a, base.info = c, year = "2019", first_element = "C", last_element = "O"))
-  expect_error(convertxrf(imported.data = a, base.info = d, year = "2019", first_element = "C", last_element = "O"))
+  expect_error(convertxrf(imported_data = a, base_info = b, year = "2019", first_element = "C", last_element = "O"))
+  expect_error(convertxrf(imported_data = a, base_info = c, year = "2019", first_element = "C", last_element = "O"))
+  expect_error(convertxrf(imported_data = a, base_info = d, year = "2019", first_element = "C", last_element = "O"))
 })

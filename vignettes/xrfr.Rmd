@@ -63,8 +63,8 @@ This section explains what each function does, and which arguments you need to d
 
 This function will import and rearrange your files with raw data and project information and then join them into one data frame. To use this function there are two arguments you must define:
 
-* **raw.data**: This is the name of your data frame with raw data from the XRF machine. 
-* **project.info**: This is the name of your data frame with the project information. 
+* **raw_data**: This is the name of your data frame with raw data from the XRF machine. 
+* **project_info**: This is the name of your data frame with the project information. 
 
 Here is a possible input:
 
@@ -73,7 +73,7 @@ Here is a possible input:
 rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
 projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 
-imported.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+imported.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
 
 ```
 
@@ -94,8 +94,8 @@ This data frame will further be used in the function `convertxrf()`, where these
 
 Once you have your data frame created with `readxrf()`, you go on to perform the actual calculations to convert your values from kcps to µM, ending up with another data frame. For this function to work you will need to define several arguments:
 
-* **imported.data**: The name of the data frame created using `readxrf()`. 
-* **base.info**: The name of the data frame with the base information from the machine etc. 
+* **imported_data**: The name of the data frame created using `readxrf()`. 
+* **base_info**: The name of the data frame with the base information from the machine etc. 
 * **year**: The year in which the crystal drift was measured closest to when your samples were measured. 
 * **first_element**: The name of the first column in your data frame that was created with the function `readxrf()` that is an element. For example, in the example above, there are the columns "Sample" and "Date.x" first, then the column named "C", so "C" is what we include in the function. 
 * **last_element**: The name of the last column in your data frame that is an element. In our example, this was the column "As". 
@@ -108,7 +108,7 @@ Here is a possible input:
 
 baseinfo.df <- read_excel("xrf_setup.xlsx")
 
-data.df <- convertxrf(project.data = imported.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
+data.df <- convertxrf(project_data = imported.df, base_info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 
 ```
 
@@ -127,13 +127,13 @@ The data frame created here is a good idea to save, as this is the file you will
 
 The file created using `convertxrf()` is good for further work in R/Rstudio, but if you want to look at your data it is not ideal. The `widen()` function will show your data as is, only excluding the blanks and detection limits, and turning the data frame from a long to a wide format. For this function to work you will need to define this argument:
 
-* **project.data**: The name of the data frame created using `convertxrf()`. 
+* **project_data**: The name of the data frame created using `convertxrf()`. 
 
 A possible input could be this:
 
 ```{r widen, eval = FALSE}
 
-df <- widen(project.data = data.df)
+df <- widen(project_data = data.df)
 
 ```
 
@@ -152,13 +152,13 @@ This data frame is a lot easier to read with human eyes than the long format.
 
 In addition to widening your data, you may wish to exclude the values that are below the detection limits. This can be done with the `widen_above()` function. It will give you the same data frame as the `widen()` function, only with "NA" or "NULL" written in the cells where the concentration was lower than the detection limit. You will need to define this argument:
 
-* **project.data**: The name of the data frame created using `convertxrf()`. 
+* **project_data**: The name of the data frame created using `convertxrf()`. 
 
 Here is a possible input for this function:
 
 ```{r widen_above, eval = FALSE}
 
-df <- widen_above(project.data = data.df)
+df <- widen_above(project_data = data.df)
 
 ```
 
@@ -175,7 +175,7 @@ The output of this code will be a data frame that looks like [this](https://gith
 
 You may also wish to calculate the mean concentrations based on different factors such as depth, location, treatment, etc. The `widen_means()` function does this, based on one or two factors that you must define. To use this function you must define these arguments:
 
-* **project.data**: The name of the data frame created using `convertxrf()`.
+* **project_data**: The name of the data frame created using `convertxrf()`.
 * **first_factor**: The name of the column that shows the first or only factor you want to calculate means based on, for example depth. 
 * **second_factor**: *Defining this argument is optional.* The name of the column that shows the second factor you want to calculate means based on, for example location.
 
@@ -183,7 +183,7 @@ A possible input:
 
 ```{r widen_means, eval = FALSE}
 
-df <- widen_means(project.data = data.df, first_factor = "Treatment", second_factor = "Day")
+df <- widen_means(project_data = data.df, first_factor = "Treatment", second_factor = "Day")
 
 ```
 
@@ -200,7 +200,7 @@ The output of this code will be a data frame showing the factor(s) chosen and th
 
 This function combines the `widen_above()` and `widen_means()` functions by calculating means and then excluding the mean concentrations not above the detection limits. Like with the `widen_means()` function, you define one or two factors to calculate the means based on. You must define these arguments to use this function:
 
-* **project.data**: The name of the data frame created using `convertxrf()`.
+* **project_data**: The name of the data frame created using `convertxrf()`.
 * **first_factor**: The name of the column that shows the first or only factor you want to calculate means based on, for example depth. 
 * **second_factor**: *Defining this argument is optional.* The name of the column that shows the second factor you want to calculate means based on, for example location.
 
@@ -208,7 +208,7 @@ A possible input:
 
 ```{r widen_means_above, eval = FALSE}
 
-df <- widen_means_above(project.data = data.df, first_factor = "Treatment", second_factor = "Day")
+df <- widen_means_above(project_data = data.df, first_factor = "Treatment", second_factor = "Day")
 
 ```
 
