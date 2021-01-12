@@ -1,10 +1,10 @@
 xrfr
 ====
 
+*This package is currently under development.*
+
 Overview
 --------
-
-*This package is currently under development.*
 
 This package contains functions to use when importing X-ray fluorescence
 (XRF) data and converting the measured values from kilo counts per
@@ -48,12 +48,11 @@ library(tidyverse)
 library(readxl)
 library(xrfr)
 
-rawdata.df <- read_delim(file = system.file("inst/extdata/xrf_rawdata.txt", package = "xrfr"), delim = "\t",
-                         locale = locale(decimal_mark = ","))
+rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
 
-projectinfo.df <- read_excel(path = system.file("inst/extdata/xrf_projectinfo.xlsx", package = "xrfr"))
+projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 
-baseinfo.df <- read_excel(path = system.file("inst/extdata/xrf_setup.xlsx", package = "xrfr"))
+baseinfo.df <- read_excel("xrf_setup.xlsx")
 ```
 
 The two functions necessary to perform the calculations are `readxrf()`
