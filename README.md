@@ -43,18 +43,6 @@ elements.
 Se vignette for more information and examples of how to use the
 different functions: `vignette("xrfr")`.
 
-``` r
-library(tidyverse)
-library(readxl)
-library(xrfr)
-
-rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
-
-projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
-
-baseinfo.df <- read_excel("xrf_setup.xlsx")
-```
-
 The two functions necessary to perform the calculations are `readxrf()`
 and `convertxrf()`.
 
