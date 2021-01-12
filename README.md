@@ -59,9 +59,9 @@ The two functions necessary to perform the calculations are `readxrf()`
 and `convertxrf()`.
 
 ``` r
-halfway.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+halfway.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
 
-calculated.df <- convertxrf(imported.data = halfway.df, base.info = baseinfo.df, year = "2019",
+calculated.df <- convertxrf(imported_data = halfway.df, base_info = baseinfo.df, year = "2019",
                             first_element = "C", last_element = "As")
 ```
 
@@ -71,17 +71,17 @@ These are `widen()`, `widen_above()`, `widen_means()`, and
 
 ``` r
 # transforms your data from long to wide format:
-wide.df <- widen(project.data = calculated.df)
+wide.df <- widen(project_data = calculated.df)
 
 # same as widen() + excludes values not above the detection limit:
-wide.above.df <- widen_above(project.data = calculated.df)
+wide.above.df <- widen_above(project_data = calculated.df)
 
 # same as widen() + calculates means based on one or two factors:
-wide.means.df <- widen_means(project.data = calculated.df, first_factor = "Day",
+wide.means.df <- widen_means(project_data = calculated.df, first_factor = "Day",
                              second_factor = "Treatment")
 
 # combination of widen_means() and widen_above():
-wide.means.above.df <- widen_means_above(project.data = calculated.df, first_factor = "Day",
+wide.means.above.df <- widen_means_above(project_data = calculated.df, first_factor = "Day",
                                          second_factor = "Treatment")
 ```
 
