@@ -180,13 +180,15 @@ means.above.project2.df <- widen_means_above(project_data = data.df, first_facto
 
 ## Further work with your files
 
-These "after" functions were made to avoid writing several lines of code for functions that you will likely use regularly, but there are many more ways to transform your data, or even further analyse it or create graphics. If you wish to further handle or manipulate your data, I suggest looking into the packages of the **tidyverse**, particularly **dplyr** and **tidyr** and their functions. For making graphics, **ggplot2** (also a part of **tidyverse**) is extremely useful. If you wish to perform statistical analyses and are wondering how to move forward, UiB's key to univariate statistics (https://folk.uib.no/nzlkj/statkey/) has some examples of R code for simple statistical analyses, though this is quite old. However, the internet is very helpful, and you should be able to figure out which analysis you should perform and find relevant packages and/or examples easily by searching for it. 
+These "after" functions were made to avoid writing several lines of code for functions that you will likely use regularly, but there are many more ways to transform your data, or even further analyse it or create graphics. If you wish to further handle or manipulate your data, I suggest looking into the packages of the **tidyverse**, particularly **dplyr** and **tidyr** and their functions. For making graphics, **ggplot2** (also a part of **tidyverse**) is extremely useful. If you want to present your data as a table, there are many packages available to make nice tables. An overview of some of these are available at https://rfortherestofus.com/2019/11/how-to-make-beautiful-tables-in-r/. 
+
+If you wish to perform statistical analyses and are wondering how to move forward, UiB's key to univariate statistics (https://folk.uib.no/nzlkj/statkey/) has some examples of R code for simple statistical analyses, though this is quite old. However, the internet is very helpful, and you should be able to figure out which analysis you should perform and find relevant packages and/or examples easily by searching for it. 
 
 Good luck with your data analyses!
 
 ## Raw code
 
-If your **xrfr** functions do not work, you can try using the raw code shown here, inserting your own file names, data frame names, and column names where needed. Where you need to enter your own names are indicated with names in uppercase letters. 
+If your **xrfr** functions do not work, you can try using the raw code shown here, inserting your own file names, data frame names, and column names where needed. Where you need to enter your own names is indicated with uppercase letters. 
 
 ```{r source code, eval = FALSE}
 
