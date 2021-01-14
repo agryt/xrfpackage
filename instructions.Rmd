@@ -58,7 +58,7 @@ It is very useful to know how to get help if you have problems in R/RStudio or t
 
 ### R packages
 
-R packages are extensions to R that can be installed. There are many packages available, and some of the most popular ones are very useful to have. The group of packages called **tidyverse** is particularly useful and one you will likely need if you plan on handling data or creating graphics with R. It includes packages such as **dplyr** (to manipulate data), **tidyr** (to help create tidy data), and **ggplot2** (to create graphics). The package **readxl** is useful if you want to import Excel files (.xlsx or .xls). Many packages can be installed using the code `install.packages("name_of_package")`, for example `install.packages("tidyverse")`. Once you have installed a package, you need to let R know that you wish to use functions from it. This is done with the function `library()`, for example `library(dplyr)`. Loading the package needs to be done each time you have restarted R, including when you reopen a project. 
+R packages are extensions to R that can be installed. There are many packages available, and some of the most popular ones are very useful to have. The group of packages called **tidyverse** is particularly useful and one you will likely need if you plan on handling data or creating graphics with R. It includes packages such as **dplyr** (to manipulate data), **tidyr** (to help create tidy data), and **ggplot2** (to create graphics). The package **readxl** is useful if you want to import Excel files (.xlsx or .xls). Many packages can be installed from CRAN using the code `install.packages("name_of_package")`, for example `install.packages("tidyverse")`. Once you have installed a package, you need to let R know that you wish to use functions from it. This is done with the function `library()`, for example `library(dplyr)`. Loading the package needs to be done each time you have restarted R, including when you reopen a project. 
 
 ### Some tips to make your experience with R/Rstudio better
 
@@ -72,7 +72,7 @@ R packages are extensions to R that can be installed. There are many packages av
 
 ### Installing the package
 
-If it is your first time using it, you need to install the package before you can use it. To do this, you must use the function `install_github()` from the **remotes** package. This package is a part of the **devtools** group of packages. If you do not already have this installed, you need to install either **devtools** or the **remotes** package first, by using the `install.packages()` function (`install.packages("remotes")` or `install.packages("devtools")`). To install the xrfr package you then load the package with the `library()` function and run the code `install_github("agryt/xrfr")`.
+If it is your first time using it, you need to install the package before you can use it. To do this, you must use the function `install_github()` from the **remotes** package. This package is a part of the **devtools** group of packages. If you do not already have this installed, you need to install either **devtools** or the **remotes** package first, by using the `install.packages()` function (`install.packages("remotes")` or `install.packages("devtools")`). To install the xrfr package you then load the package with the `library()` function and run the code `install_github("agryt/xrfr", build_vignettes = TRUE)`.
 
 ### Preparing your data
 

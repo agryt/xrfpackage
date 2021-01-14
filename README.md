@@ -22,11 +22,11 @@ installed, install this first, then use the function `install_github()`:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("agryt/xrfr")
+remotes::install_github("agryt/xrfr", build_vignettes = TRUE)
 
 # alternatively:
 install.packages("devtools")
-devtools::install_github("agryt/xrfr")
+devtools::install_github("agryt/xrfr", build_vignettes = TRUE)
 ```
 
 Usage

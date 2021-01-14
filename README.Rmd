@@ -17,11 +17,11 @@ The package is installed from GitHub using the remotes package of the devtools g
 ``` {r installation, eval = FALSE, error = FALSE, warning = FALSE, message = FALSE}
 
 install.packages("remotes")
-remotes::install_github("agryt/xrfr")
+remotes::install_github("agryt/xrfr", build_vignettes = TRUE)
 
 # alternatively:
 install.packages("devtools")
-devtools::install_github("agryt/xrfr")
+devtools::install_github("agryt/xrfr", build_vignettes = TRUE)
 
 ``` 
 
