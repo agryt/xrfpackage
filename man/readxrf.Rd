@@ -4,12 +4,12 @@
 \alias{readxrf}
 \title{Reading and joining data file and info file}
 \usage{
-readxrf(raw.data, project.info)
+readxrf(raw_data, project_info)
 }
 \arguments{
-\item{raw.data}{The name of your dataframe with raw data from the XRF machine.}
+\item{raw_data}{The name of your dataframe with raw data from the XRF machine.}
 
-\item{project.info}{The name of your dataframe with necessary information about the samples.}
+\item{project_info}{The name of your dataframe with necessary information about the samples.}
 }
 \value{
 description The function creates a dataframe where your raw data and project information has been merged.
@@ -21,10 +21,10 @@ See vignette("xrfr") for more information.
 }
 \examples{
 \dontrun{
-rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
 projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 
-projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+projectfile.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
 }
 
 }

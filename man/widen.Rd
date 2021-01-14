@@ -4,10 +4,10 @@
 \alias{widen}
 \title{Widening the dataframe}
 \usage{
-widen(project.data)
+widen(project_data)
 }
 \arguments{
-\item{project.data}{The name of the dataframe created with convertxrf().}
+\item{project_data}{The name of the dataframe created with convertxrf().}
 }
 \value{
 description The function creates a dataframe that is a wider version of the one created with convertxrf().
@@ -19,14 +19,14 @@ See vignette("xrfr") for more information.
 }
 \examples{
 \dontrun{
-rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
 projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 baseinfo.df <- read_excel("xrf_setup.xlsx")
 
-projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
-project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
+projectfile.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
+project.df <- convertxrf(imported_data = projectfile.df, base_info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 
-wideproject.df <- widen(project.data = project.df)
+wideproject.df <- widen(project_data = project.df)
 }
 
 }

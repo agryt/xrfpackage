@@ -4,10 +4,10 @@
 \alias{widen_means_above}
 \title{Widening the dataframe, filtering out concentrations below detection limit, and calculating the means based on two factors}
 \usage{
-widen_means_above(project.data, first_factor, second_factor = NULL)
+widen_means_above(project_data, first_factor, second_factor = NULL)
 }
 \arguments{
-\item{project.data}{The name of the dataframe created with convertxrf().}
+\item{project_data}{The name of the dataframe created with convertxrf().}
 
 \item{first_factor}{The name of the column that shows the first or only factor you want to calculate means based on, for example depth.}
 
@@ -23,14 +23,14 @@ See vignette("xrfr") for more information.
 }
 \examples{
 \dontrun{
-rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
+rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = ","))
 projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 baseinfo.df <- read_excel("xrf_setup.xlsx")
 
-projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
-project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
+projectfile.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
+project.df <- convertxrf(imported_data = projectfile.df, base_info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 
-meansabovedetlim.df <- widen_means_above(project.data = project.df, first_factor = "Treatment", second_factor = "Day")
+meansabovedetlim.df <- widen_means_above(project_data = project.df, first_factor = "Treatment", second_factor = "Day")
 }
 
 }

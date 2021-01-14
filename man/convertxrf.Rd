@@ -4,12 +4,12 @@
 \alias{convertxrf}
 \title{Converting XRF data from kcal to micromolar}
 \usage{
-convertxrf(imported.data, base.info, year, first_element, last_element)
+convertxrf(imported_data, base_info, year, first_element, last_element)
 }
 \arguments{
-\item{imported.data}{The name of the dataframe created with readxrf()}
+\item{imported_data}{The name of the dataframe created with readxrf()}
 
-\item{base.info}{The name of the dataframe containing detection limits, crystal drift, molar weights, and calibration constants.}
+\item{base_info}{The name of the dataframe containing detection limits, crystal drift, molar weights, and calibration constants.}
 
 \item{year}{The year the drift was measured closest to when your samples were analysed.}
 
@@ -29,11 +29,11 @@ See vignette("xrfr") for more information.
 \dontrun{
 rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = readr::locale(decimal_mark = ","))
 projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
-baseinfo.df <- readxl::read_excel("xrf_setup.xlsx")
+baseinfo.df <- read_excel("xrf_setup.xlsx")
 
-projectfile.df <- readxrf(raw.data = rawdata.df, project.info = projectinfo.df)
+projectfile.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
 
-project.df <- convertxrf(imported.data = projectfile.df, base.info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
+project.df <- convertxrf(imported_data = projectfile.df, base_info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")
 }
 
 }
