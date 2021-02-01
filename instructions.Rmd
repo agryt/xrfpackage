@@ -9,6 +9,23 @@ This R package was created to convert elemental composition x-ray fluorescence (
 
 **Problems?** Issues can be reported at https://github.com/agryt/xrfr/issues and questions can be sent to grytaasanna@gmail.com. 
 
+## Short instructions on using the xrfr package
+
+1. Make sure your files are structured as described in the next part ("The files"). 
+2. Install the package if you do not already have it: `install.packages("devtools")`, then `devtools::install_github("agryt/xrfr", build_vignettes = TRUE)`. 
+3. Import your data files to R using the appropriate functions, as described under "Preparing your data". 
+4. Load the package: `library(xrfr)`.
+5. Join your data frame containing raw data (here called "rawdata.df") and the data frame with your project information (here called "projectinfo.df") to a new data frame: `imported.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)`. 
+6. Convert the data from kcps to µM using the data frame with base information (here called "baseinfo.df"): `data.df <- convertxrf(imported_data = imported.df, base_info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")`. The year chooses which crystal drift measurement to use. The first and last element is which element comes first and last in the data frame created with `readxrf()`. 
+7. OPTIONAL: Use any of the "after" functions if you want a wide format data frame:
+   - Only widen data frame: `wide.project.df <- widen(project_data = data.df)`.
+   - Widen and calculate means based on one or two factors: `means.project.df <- widen_means(project_data = data.df, first_factor = "Location", second_factor = "Depth")`. Note that "first_factor" must be defined while "second_factor" is optional. 
+   - Widen and exclude values below detection limits: `above.project.df <- widen_above(project_data = data.df)`. 
+   - Widen, calculate means based on one or two factors, and exclude mean values below detection limits: `means.above.project.df <- widen_means_above(project_data = data.df, first_factor = "Location", second_factor = "Depth")`. Note that "first_factor" must be defined while "second_factor" is optional. 
+8. Save any of the data frames you wish to keep as for example a CSV file (here the new file is called "my_data.csv"): `write_csv(data.df, file = "my_data.csv")`.
+
+More detailed instructions can be found under "Detailed instructions on using the xrfr package". 
+
 ## The files
 
 First, you have to make sure to have the right files, and that these are all in the same folder on your computer. There are three files you need for your analysis: 
@@ -44,61 +61,54 @@ This file must contain all the relevant information related to the XRF machine, 
 * **DL_PC**, **DL_ANO**, and **DL_GFF**: The detection limit of each element for each of the three filter types. 
 * **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, and this value is used during the calculations, so Drift_2008 must be included. 
 
-## New to R/RStudio?
-
-Both R and Rstudio can be downloaded to your computer for free from the internet. R is available at https://cran.r-project.org/ and Rstudio at https://rstudio.com/products/rstudio/download/. R is a language and environment used for statistical computing and graphics, while RStudio is an integrated development environment for R. This means that RStudio uses the R language and environment, but also gives you the possibility to keep and come back to your code, easy access to for example data frames and plots, etc. 
-
-### Getting started
-
-Once you have both R and RStudio installed, open RStudio. At this point you need to tell R where to look for files and save new files to (this is your work directory). This can be done by manually setting the work directory using `setwd()` or *Session* &rarr; *Set Working Directory* &rarr; *Choose Directory...*, or by creating a project (recommended). To create a project you can click *File* &rarr; *New Project...* or the "R within a box"-icon with a plus in a green circle at the top left. You can use an existing folder (where your project files are saved) as a directory by clicking *Existing Directory*. If you choose to click *New Directory*, you will need to move the project files to this new folder. You then choose the project name and where to put it, click *Create Project*, and you are ready to start coding. Next time you want to work on this code, open the .Rproj file in your directory, and it will open exactly as you left it. 
-
-### Need help?
-
-It is very useful to know how to get help if you have problems in R/RStudio or there is something you don't understand. In the bottom right window in RStudio, where you can see the files in your directory, you can go to the tab "**Help**" and search for specific functions to learn how they work. This can also be accessed by running the code `help("name_of_function")`, for example `help("summarise")`. Some functions have further information available in vignettes, which can be accessed via the code `vignette("name_of_function")`, for example `vignette("nest")`. Information about packages can be accessed by using the code `help(package = "name_of_package")`, for example `help(package = "ggplot2")`. This information and more is always available on the internet as well, and you can find it by searching for the function or package in your search engine. In addition, a lot of the popular packages have cheat sheets available at https://rstudio.com/resources/cheatsheets/. On https://stackoverflow.com/ you can browse through other people's questions or ask your own. There are also many guides available for free on how to use R/Rstudio, for example this one for people who are used to working in Excel that you may find useful: https://rstudio-conf-2020.github.io/r-for-excel/. 
-
-### R packages
-
-R packages are extensions to R that can be installed. There are many packages available, and some of the most popular ones are very useful to have. The group of packages called **tidyverse** is particularly useful and one you will likely need if you plan on handling data or creating graphics with R. It includes packages such as **dplyr** (to manipulate data), **tidyr** (to help create tidy data), and **ggplot2** (to create graphics). The package **readxl** is useful if you want to import Excel files (.xlsx or .xls). Many packages can be installed from CRAN using the code `install.packages("name_of_package")`, for example `install.packages("tidyverse")`. Once you have installed a package, you need to let R know that you wish to use functions from it. This is done with the function `library()`, for example `library(dplyr)`. Loading the package needs to be done each time you have restarted R, including when you reopen a project. 
-
-### Some tips to make your experience with R/Rstudio better
-
-- To run a line of code from your R Script you press ctrl + enter (on Windows or Linux) or cmd + enter (on Mac). You can also press run at the top right in the toolbar of the R Script window. 
-- Using pipe operators makes your code more readable and tidier. They are written as `%>%`. The pipe operator is a part of the **magrittr** package, but are also used in the **dplyr** package that you will likely be using (by running `library(dplyr)` or `library(tidyverse)`). On Windows or Linux you can use ctrl + shift + M as a shortcut for the pipe, and on Mac this is cmd + shift + M. `y %>% x` = `x(y)`. 
-- Use # at the beginning of a line to create a comment. Comments are ignored by R when running the code. This way you can write comments explaining what a function does etc. 
-
-## Using the xrfr package
+## Detailed instructions on using the xrfr package
 
 **Please see the xrfr vignette for more information about each function and its arguments!** (`vignette("xrfr")`)
 
+If you are new to R/RStudio, see "New to R/RStudio?" at the end of the document.
+
 ### Installing the package
 
-If it is your first time using it, you need to install the package before you can use it. To do this, you must use the function `install_github()` from the **remotes** package. This package is a part of the **devtools** group of packages. If you do not already have this installed, you need to install either **devtools** or the **remotes** package first, by using the `install.packages()` function (`install.packages("remotes")` or `install.packages("devtools")`). To install the xrfr package you then load the package with the `library()` function and run the code `install_github("agryt/xrfr", build_vignettes = TRUE)`.
+If it is your first time using it, you need to install the package before you can use it. To do this, you must use the function `install_github()` from the **remotes** package. This is part of the **devtools** group of packages. If you do not already have one of these installed, you need to install either **devtools** or the **remotes** package first:
+
+```{r installing, eval = FALSE}
+
+install.packages("remotes")
+# or:
+install.packages("devtools")
+
+# then:
+remotes::install_github("agryt/xrfr", build_vignettes = TRUE)
+# or:
+devtools::install_github("agryt/xrfr", build_vignettes = TRUE)
+
+```
 
 ### Preparing your data
 
-Before starting the analysis, make sure that your files are properly formatted with the right column names and matching sample names. Your code will not work and you will get warning or error messages if they are not. 
+Before you can use the **xrfr** functions, you must import your data to RStudio. How this is done depends on which format your files are saved in. Your raw data file is created as a .txt file by the XRF computer, so this is likely how yours will be saved. If so, using the code `read_delim("your_raw_data.txt", delim = "\t", locale = locale(decimal_mark = ","))` should work. This function is part of the **readr** package from the **tidyverse**. 
 
-Before you can use the **xrfr** functions, you must import your data to RStudio. How this is done depends on which format your files are saved in. Your raw data file is created as a .txt file by the XRF computer, so this is likely how yours will be saved. If so, using the code `read_delim("your_raw_data.txt", delim = "\t", locale = locale(decimal_mark = ","))` should work, as long as the **readr** package (or the whole **tidyverse** package) is loaded. Excel files can be imported using the `read_excel()` function from the **readxl** package, and CSV files can be imported using the `read_csv()` or `read_csv2()` functions from the **readr** package depending on which type of CSV file it is. If you are using other file formats, you can use your search engine to find out how to import them, as it is likely possible to do so. 
+Excel files can be imported using the `read_excel()` function from the **readxl** package, and CSV files can be imported using the `read_csv()` or `read_csv2()` functions from the **readr** package depending on which type of CSV file it is. If you are using other file formats, you can use your search engine to find out how to import them, as it is likely possible to do so. 
 
-Here is an example of how to import the files:
+Here is an example of how to import a .txt file and two .xlsx files:
 
 ```{r data import, eval = FALSE}
 
-library(tidyverse) # tidyverse includes readr, which is needed here
+library(tidyverse)
 library(readxl)
 
-rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale = locale(decimal_mark = 
-                                                                          ","))
+rawdata.df <- read_delim("xrf_rawdata.txt", delim = "\t", locale =
+                         locale(decimal_mark = ","))
 projectinfo.df <- read_excel("xrf_projectinfo.xlsx")
 baseinfo.df <- read_excel("xrf_setup.xlsx")
 
 ```
 
-This will make three data frames appear in your environment, containing each of the three files. At this point it is a good idea to open them (by clicking on them in the environment or running the code `view(name_of_dataframe)`) and checking that they were imported correctly. If not, you will need to fix the code used to "read" your file. 
+This will make three data frames appear in your environment, containing each of the three files. At this point it is a good idea to open them (by clicking on them in the environment or running the code `view(name_of_dataframe)`) and checking that they were imported correctly. If not, you will need to fix the code used to read your file. 
 
 ### Using the main functions
 
-First, of course, you must load the package:
+First you must load the package:
 
 ```{r loading xrfr, eval = FALSE}
 
@@ -108,23 +118,24 @@ library(xrfr)
 
 There are two main functions in the xrfr package: `readxrf()` and `convertxrf()`. You will need to use both to perform the calculations from kcps to µM. `readxrf()` takes your data frames, changes them to the format needed, and combines them into one data frame. This data frame will then be used further in the `convertxrf()` function, where the actual calculations are performed, and the necessary data from the base info file is included. `convertxrf()` also makes your dataset longer, as this is a more readable format for R for further analysis. 
 
-Here is an example of how to use these functions:
+To run `readxrf()` you need to define the arguments "raw_data" (the name of the data frame containing your raw data from the XRF-machine and "project_info" (the name of the data frame containing information about all your samples). For example:
 
-```{r main functions, eval = FALSE}
+```{r readxrf, eval = FALSE}
 
 imported.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)
-data.df <- convertxrf(imported_data = imported.df, base_info = baseinfo.df, year = "2019", 
-                      first_element = "C", last_element = "As")
 
 ```
 
-You will need to run these functions one at a time, as there is information in the data frame created with `readxrf()` that is needed to run `convertxrf()` properly. The result of each function will be a new data frame. 
+To run `convertxrf()` you need to define "imported_data" (the name of the data frame created with `readxrf()`), "base_info" (the name of the data frame containing the base information data), and "year" (the year in which the crystal drift was measured closest to when your samples were taken). You will also need to define the arguments "first_element" and "last_element". These are the names of the first and last columns in the data frame created with `readxrf()` that contain data in kcps. This will likely be "C" for "first_element" and "As" for "last_element", but does sometimes change. 
 
-To run `readxrf()` you only need to define the arguments "raw_data", which is the name of the data frame containing your raw data from the XRF-machine, and "project_info", the name of the data frame containing information about all your samples. 
+```{r convertxrf, eval = FALSE}
 
-To run `convertxrf()` you will need to let R know the name of the data frame created with `readxrf()` ("imported_data"), the name of the data frame containing the base information data ("base_info"), and the year in which the crystal drift was measured closest to when your samples were taken ("year"). You will also need to define the arguments "first_element" and "last_element". These are the names of the first and last columns in the data frame created with `readxrf()` that contain data in kcps. This can change, but will likely be "C" for "first_element" and "As" for "last_element". 
+data.df <- convertxrf(imported_data = imported.df, base_info = baseinfo.df, year = "2019", 
+                            first_element = "C", last_element = "As")
 
-The output of these two functions is a long data frame containing new columns showing the concentration and detection limit of each element for each sample. You will likely want to save this data frame as a file, as this is the file you will use when for example doing statistical analysis or creating graphics. Saving a data frame can be done like this:
+```
+
+The output is a long data frame containing new columns showing the concentration and detection limit of each element for each sample. You will likely want to save this data frame, as this is the file you should use when doing statistical analysis, creating graphics, etc. Saving a data frame as a CSV file can be done like this:
 
 ```{r saving data frame, eval = FALSE}
 
@@ -132,7 +143,7 @@ write_csv(data.df, file = "my_data.csv")
 
 ```
 
-Note that `write_csv()` is a function from the package **readr**, so you must have that or the entire **tidyverse** installed and loaded to use it. The data frame will then be saved as a CSV file named "my_data.csv" in your directory. If you wish to save in a different format, that is entirely possible (use your search engine to figure out how!).
+Note that `write_csv()` is a function from the package **readr**. The data frame named "data.df" will then be saved in your directory as a CSV file named "my_data.csv". If you wish to save in a different format, that is entirely possible, just use your search engine!
 
 ### Using the "after" functions
 
@@ -185,6 +196,28 @@ These "after" functions were made to avoid writing several lines of code for fun
 If you wish to perform statistical analyses and are wondering how to move forward, UiB's key to univariate statistics (https://folk.uib.no/nzlkj/statkey/) has some examples of R code for simple statistical analyses, though this is quite old. However, the internet is very helpful, and you should be able to figure out which analysis you should perform and find relevant packages and/or examples easily by searching for it. 
 
 Good luck with your data analyses!
+
+## New to R/RStudio?
+
+Both R and Rstudio can be downloaded to your computer for free from the internet. R is available at https://cran.r-project.org/ and Rstudio at https://rstudio.com/products/rstudio/download/. R is a language and environment used for statistical computing and graphics, while RStudio is an integrated development environment for R. This means that RStudio uses the R language and environment, but also gives you the possibility to keep and come back to your code, easy access to for example data frames and plots, etc. 
+
+### Getting started
+
+Once you have both R and RStudio installed, open RStudio. At this point you need to tell R where to look for files and save new files to (this is your work directory). This can be done by manually setting the work directory using `setwd()` or *Session* &rarr; *Set Working Directory* &rarr; *Choose Directory...*, or by creating a project (recommended). To create a project you can click *File* &rarr; *New Project...* or the "R within a box"-icon with a plus in a green circle at the top left. You can use an existing folder (where your project files are saved) as a directory by clicking *Existing Directory*. If you choose to click *New Directory*, you will need to move the project files to this new folder. You then choose the project name and where to put it, click *Create Project*, and you are ready to start coding. Next time you want to work on this code, open the .Rproj file in your directory, and it will open exactly as you left it. 
+
+### Need help?
+
+It is very useful to know how to get help if you have problems in R/RStudio or there is something you don't understand. In the bottom right window in RStudio, where you can see the files in your directory, you can go to the tab "**Help**" and search for specific functions to learn how they work. This can also be accessed by running the code `help("name_of_function")`, for example `help("summarise")`. Some functions have further information available in vignettes, which can be accessed via the code `vignette("name_of_function")`, for example `vignette("nest")`. Information about packages can be accessed by using the code `help(package = "name_of_package")`, for example `help(package = "ggplot2")`. This information and more is always available on the internet as well, and you can find it by searching for the function or package in your search engine. In addition, a lot of the popular packages have cheat sheets available at https://rstudio.com/resources/cheatsheets/. On https://stackoverflow.com/ you can browse through other people's questions or ask your own. There are also many guides available for free on how to use R/Rstudio, for example this one for people who are used to working in Excel that you may find useful: https://rstudio-conf-2020.github.io/r-for-excel/. 
+
+### R packages
+
+R packages are extensions to R that can be installed. There are many packages available, and some of the most popular ones are very useful to have. The group of packages called **tidyverse** is particularly useful and one you will likely need if you plan on handling data or creating graphics with R. It includes packages such as **dplyr** (to manipulate data), **tidyr** (to help create tidy data), and **ggplot2** (to create graphics). The package **readxl** is useful if you want to import Excel files (.xlsx or .xls). Many packages can be installed from CRAN using the code `install.packages("name_of_package")`, for example `install.packages("tidyverse")`. Once you have installed a package, you need to let R know that you wish to use functions from it. This is done with the function `library()`, for example `library(dplyr)`. Loading the package needs to be done each time you have restarted R, including when you reopen a project. 
+
+### Some tips to make your experience with R/Rstudio better
+
+- To run a line of code from your R Script you press ctrl + enter (on Windows or Linux) or cmd + enter (on Mac). You can also press run at the top right in the toolbar of the R Script window. 
+- Using pipe operators makes your code more readable and tidier. They are written as `%>%`. The pipe operator is a part of the **magrittr** package, but are also used in the **dplyr** package that you will likely be using (by running `library(dplyr)` or `library(tidyverse)`). On Windows or Linux you can use ctrl + shift + M as a shortcut for the pipe, and on Mac this is cmd + shift + M. `y %>% x` = `x(y)`. 
+- Use # at the beginning of a line to create a comment. Comments are ignored by R when running the code. This way you can write comments explaining what a function does etc. 
 
 ## Raw code
 
