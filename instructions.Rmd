@@ -5,7 +5,7 @@ author: Anna Grytaas
 date: "`r Sys.Date()`"
 ---
 
-This R package was created to convert elemental composition x-ray fluorescence (XRF) data of filtrated water samples from kcps to µM. It was created with R version 4.0.3. For source code, vignette, and more information, please visit https://github.com/agryt/xrfr.
+This R package was created to convert elemental composition x-ray fluorescence (XRF) data of filtrated water samples from kcps to µM. It was created with R version 4.0.3. For source code and more information, please visit https://github.com/agryt/xrfr.
 
 **Problems?** Issues can be reported at https://github.com/agryt/xrfr/issues and questions can be sent to grytaasanna@gmail.com. 
 
@@ -16,7 +16,7 @@ This R package was created to convert elemental composition x-ray fluorescence (
 3. Import your data files to R using the appropriate functions, as described under "Preparing your data". 
 4. Load the package: `library(xrfr)`.
 5. Join your data frame containing raw data (here called "rawdata.df") and the data frame with your project information (here called "projectinfo.df") to a new data frame: `imported.df <- readxrf(raw_data = rawdata.df, project_info = projectinfo.df)`. 
-6. Convert the data from kcps to µM using the data frame with base information (here called "baseinfo.df"): `data.df <- convertxrf(imported_data = imported.df, base_info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")`. The year chooses which crystal drift measurement to use. The first and last element is which element comes first and last in the data frame created with `readxrf()`. 
+6. Convert the data from kcps to µM using the data frame with base information (here called "baseinfo.df"): `data.df <- convertxrf(imported_data = imported.df, base_info = baseinfo.df, year = "2019", first_element = "C", last_element = "As")`. The year chooses which crystal drift measurement to use. The first and last element tells R which element comes first and last in the data frame created with `readxrf()`. 
 7. OPTIONAL: Use any of the "after" functions if you want a wide format data frame:
    - Only widen data frame: `wide.project.df <- widen(project_data = data.df)`.
    - Widen and calculate means based on one or two factors: `means.project.df <- widen_means(project_data = data.df, first_factor = "Location", second_factor = "Depth")`. Note that "first_factor" must be defined while "second_factor" is optional. 
@@ -40,20 +40,20 @@ This file is created by the XRF machine when you export your data from it. You s
 
 ### The project information file
 
-This file should contain all relevant information that you wish to include about your data that is not from the XRF machine. There are several columns that must be included for the functions in this package to work:
+This file should contain all relevant information that you wish to include about your data that is not from the XRF machine. These are the columns you must include:
 
 * **Sample**: The name of your sample. Must be the same as in the raw data file. Any samples that do not have a matching name will not be included in the created file. 
-* **Filter_type**: The type of filter used when filtering. Can be PC, ANO, or GFF. This column must be filled out even if the same filter type was used on all samples because R needs to know which detection limits and calibrated constants to use. 
+* **Filter_type**: The type of filter used when filtering. Can be PC, ANO, or GFF. This column must be filled out, even if the same filter type was used on all samples, to apply the correct detection limits and calibrated constants. 
 * **Filter_size**: The pore size of the filter used. This column can be left empty if the size was the same in all filters, but the column must exist. 
-* **Filter_box_nr**: A way to differentiate between different filter boxes, for example by labelling the boxes "1", "2", "3", etc. Lets R know which box the filter came from so it knows which blank samples to apply when finding the net count in this sample. 
+* **Filter_box_nr**: A way to differentiate between different filter boxes, for example by labelling the boxes "1", "2", "3", etc. Lets R know which box the filter came from so it knows which blank samples to apply. 
 * **Filter_blank**: In this column you will need to write "blank" for all your blank samples. The rest of the column can be empty. 
-* **Volume**: The volume of water that was filtered for each sample. 
+* **Volume**: The volume of water in ml that was filtered for each sample. 
 
 You may include as many more columns as you want, for example dates, depth, location or treatment, but these columns all need to be present in your project information file. 
 
 ### The base information file
 
-This file must contain all the relevant information related to the XRF machine, filters, and elements. This is a file that will not change between experiments except when a new measurement of the crystal drift is added. The base info file must contain these columns:
+This file must contain all the relevant information related to the XRF machine, filters, and elements. This file is not specific for each experiment, and should only be changed when a new measurement of the crystal drift is added. The base info file must contain these columns:
 
 * **Element**: All the elements measured by the machine. Should be written as "C", "O", "Mg", etc. 
 * **MolarW**: The molar weight of each element. 
@@ -86,9 +86,11 @@ devtools::install_github("agryt/xrfr", build_vignettes = TRUE)
 
 ### Preparing your data
 
-Before you can use the **xrfr** functions, you must import your data to RStudio. How this is done depends on which format your files are saved in. Your raw data file is created as a .txt file by the XRF computer, so this is likely how yours will be saved. If so, using the code `read_delim("your_raw_data.txt", delim = "\t", locale = locale(decimal_mark = ","))` should work. This function is part of the **readr** package from the **tidyverse**. 
+Before you can use the **xrfr** functions, you must import your data to RStudio. How this is done depends on which format your files are saved in. Your raw data file is created as a .txt file by the XRF computer and unless this is changed, it can be imported using the code `read_delim("your_raw_data.txt", delim = "\t", locale = locale(decimal_mark = ","))`. This function is part of the **readr** package from the **tidyverse**. 
 
-Excel files can be imported using the `read_excel()` function from the **readxl** package, and CSV files can be imported using the `read_csv()` or `read_csv2()` functions from the **readr** package depending on which type of CSV file it is. If you are using other file formats, you can use your search engine to find out how to import them, as it is likely possible to do so. 
+Excel files can be imported using the `read_excel()` function from the **readxl** package, and CSV files can be imported using the `read_csv()` or `read_csv2()` functions from the **readr** package depending on which type of CSV file it is. 
+
+If you are using other file formats, you can use your search engine to find out how to import them, as it is likely possible to do so. 
 
 Here is an example of how to import a .txt file and two .xlsx files:
 
@@ -104,7 +106,7 @@ baseinfo.df <- read_excel("xrf_setup.xlsx")
 
 ```
 
-This will make three data frames appear in your environment, containing each of the three files. At this point it is a good idea to open them (by clicking on them in the environment or running the code `view(name_of_dataframe)`) and checking that they were imported correctly. If not, you will need to fix the code used to read your file. 
+This will make three data frames appear in your environment, containing each of the three files. At this point it is a good idea to open them (by clicking on them in the environment or running the code `view(name_of_dataframe)`) and checking that they were imported correctly. 
 
 ### Using the main functions
 
@@ -135,7 +137,7 @@ data.df <- convertxrf(imported_data = imported.df, base_info = baseinfo.df, year
 
 ```
 
-The output is a long data frame containing new columns showing the concentration and detection limit of each element for each sample. You will likely want to save this data frame, as this is the file you should use when doing statistical analysis, creating graphics, etc. Saving a data frame as a CSV file can be done like this:
+The output is a long data frame containing new columns showing the concentration and detection limit of each element for each sample. You should save this data frame as you should use this when doing statistical analysis, creating graphics, etc. Saving a data frame as a CSV file can be done like this:
 
 ```{r saving data frame, eval = FALSE}
 
@@ -143,7 +145,7 @@ write_csv(data.df, file = "my_data.csv")
 
 ```
 
-Note that `write_csv()` is a function from the package **readr**. The data frame named "data.df" will then be saved in your directory as a CSV file named "my_data.csv". If you wish to save in a different format, that is entirely possible, just use your search engine!
+`write_csv()` is a function from the package **readr**. The data frame named "data.df" will then be saved in your directory as a CSV file named "my_data.csv". If you wish to save in a different format, that is entirely possible, just use your search engine!
 
 ### Using the "after" functions
 
@@ -159,7 +161,7 @@ wide.project.df <- widen(project_data = data.df)
 
 You may also wish to not only widen your data, but also calculate means or only see the concentrations that are above the detection limits. This can be done through the `widen_means()` and `widen_above()` functions, respectively. 
 
-To calculate means you will need to specify the factor(s) you wish to calculate the means based on, for example you may use location or treatment as factors. You can have either one or two factors. The `widen_means()` function will also remove the blank samples and unnecessary columns. The code shows examples both with and without a second factor:
+To calculate means you will need to specify the factor(s) you wish to calculate the means based on, for example location or treatment. You can have either one or two factors. The `widen_means()` function will also remove the blank samples and unnecessary columns. The code shows examples both with and without a second factor:
 
 ```{r widen_means, eval = FALSE}
 
@@ -170,7 +172,7 @@ means.project2.df <- widen_means(project_data = data.df, first_factor = "Locatio
 
 ```
 
-When excluding the concentrations below the detection limits, the blank samples and unnecessary columns are also removed:
+When excluding the concentrations below the detection limits, the blank samples and unnecessary columns are also removed.
 
 ```{r widen_above, eval = FALSE}
 
@@ -178,7 +180,7 @@ above.project.df <- widen_above(project_data = data.df)
 
 ```
 
-You can also use the function `widen_means_above()` to both calculate means and exclude those concentrations that are under the detection limits. Note that this function calculates means first, *then* excludes mean concentrations below the detection limits. 
+You can also use the function `widen_means_above()` to calculate means and exclude those mean concentrations that are under the detection limits. 
 
 ```{r widen_means_above, eval = FALSE}
 
@@ -191,9 +193,9 @@ means.above.project2.df <- widen_means_above(project_data = data.df, first_facto
 
 ## Further work with your files
 
-These "after" functions were made to avoid writing several lines of code for functions that you will likely use regularly, but there are many more ways to transform your data, or even further analyse it or create graphics. If you wish to further handle or manipulate your data, I suggest looking into the packages of the **tidyverse**, particularly **dplyr** and **tidyr** and their functions. For making graphics, **ggplot2** (also a part of **tidyverse**) is extremely useful. If you want to present your data as a table, there are many packages available to make nice tables. An overview of some of these are available at https://rfortherestofus.com/2019/11/how-to-make-beautiful-tables-in-r/. 
+If you wish to further handle or manipulate your data, I suggest looking into the packages of the **tidyverse**, particularly **dplyr** and **tidyr** and their functions. For making graphics, **ggplot2** (also a part of **tidyverse**) is extremely useful. If you want to present your data as a table, there are many packages available to make nice tables. An overview of some of these are available at https://rfortherestofus.com/2019/11/how-to-make-beautiful-tables-in-r/. 
 
-If you wish to perform statistical analyses and are wondering how to move forward, UiB's key to univariate statistics (https://folk.uib.no/nzlkj/statkey/) has some examples of R code for simple statistical analyses, though this is quite old. However, the internet is very helpful, and you should be able to figure out which analysis you should perform and find relevant packages and/or examples easily by searching for it. 
+If you wish to perform statistical analyses and are wondering how to move forward, UiB's key to univariate statistics (https://folk.uib.no/nzlkj/statkey/) has some examples of R code for simple statistical analyses, though this is quite old. There is also a lot of information and many packages available on the internet regarding statistical analyses and R.
 
 Good luck with your data analyses!
 
@@ -203,15 +205,26 @@ Both R and Rstudio can be downloaded to your computer for free from the internet
 
 ### Getting started
 
-Once you have both R and RStudio installed, open RStudio. At this point you need to tell R where to look for files and save new files to (this is your work directory). This can be done by manually setting the work directory using `setwd()` or *Session* &rarr; *Set Working Directory* &rarr; *Choose Directory...*, or by creating a project (recommended). To create a project you can click *File* &rarr; *New Project...* or the "R within a box"-icon with a plus in a green circle at the top left. You can use an existing folder (where your project files are saved) as a directory by clicking *Existing Directory*. If you choose to click *New Directory*, you will need to move the project files to this new folder. You then choose the project name and where to put it, click *Create Project*, and you are ready to start coding. Next time you want to work on this code, open the .Rproj file in your directory, and it will open exactly as you left it. 
+Once you have both R and RStudio installed, open RStudio. At this point you need to tell R where to look for files and save new files to (this is your work directory). This can be done by manually setting the work directory using `setwd()` or *Session* &rarr; *Set Working Directory* &rarr; *Choose Directory...*, or by creating a project (**recommended**). To create a project you can click *File* &rarr; *New Project...* or the "R within a box"-icon with a plus in a green circle at the top left. You can use an existing folder (where your project files are saved) as a directory by clicking *Existing Directory*. If you click *New Directory*, you will need to move the project files to this new folder. You then choose the project name and where to put it, click *Create Project*, and you are ready to start coding. Next time you want to work on this code, open the .Rproj file in your directory. 
 
 ### Need help?
 
-It is very useful to know how to get help if you have problems in R/RStudio or there is something you don't understand. In the bottom right window in RStudio, where you can see the files in your directory, you can go to the tab "**Help**" and search for specific functions to learn how they work. This can also be accessed by running the code `help("name_of_function")`, for example `help("summarise")`. Some functions have further information available in vignettes, which can be accessed via the code `vignette("name_of_function")`, for example `vignette("nest")`. Information about packages can be accessed by using the code `help(package = "name_of_package")`, for example `help(package = "ggplot2")`. This information and more is always available on the internet as well, and you can find it by searching for the function or package in your search engine. In addition, a lot of the popular packages have cheat sheets available at https://rstudio.com/resources/cheatsheets/. On https://stackoverflow.com/ you can browse through other people's questions or ask your own. There are also many guides available for free on how to use R/Rstudio, for example this one for people who are used to working in Excel that you may find useful: https://rstudio-conf-2020.github.io/r-for-excel/. 
+There are many ways to access help when you have problems in R/RStudio: 
+
+- In the bottom right window in RStudio, where you can see the files in your directory, you can go to the tab "**Help**" and search for specific functions to learn how they work. This can also be accessed by running the code `help("name_of_function")`, for example `help("summarise")`. 
+- Some functions have further information available in vignettes, which can be accessed via the code `vignette("name_of_function")`, for example `vignette("nest")`. 
+- Information about packages can be accessed by using the code `help(package = "name_of_package")`, for example `help(package = "ggplot2")`. 
+- A lot of the popular packages have cheat sheets available at https://rstudio.com/resources/cheatsheets/. 
+- On https://stackoverflow.com/ you can browse through other people's questions or ask your own. 
+- There are many guides available for free on how to use R/Rstudio, for example this one for people who are used to working in Excel that you may find useful: https://rstudio-conf-2020.github.io/r-for-excel/. 
+
+Any information that can be accessed through functions in R will also be available on the internet and can be found by searching for the function or package in your search engine. 
 
 ### R packages
 
-R packages are extensions to R that can be installed. There are many packages available, and some of the most popular ones are very useful to have. The group of packages called **tidyverse** is particularly useful and one you will likely need if you plan on handling data or creating graphics with R. It includes packages such as **dplyr** (to manipulate data), **tidyr** (to help create tidy data), and **ggplot2** (to create graphics). The package **readxl** is useful if you want to import Excel files (.xlsx or .xls). Many packages can be installed from CRAN using the code `install.packages("name_of_package")`, for example `install.packages("tidyverse")`. Once you have installed a package, you need to let R know that you wish to use functions from it. This is done with the function `library()`, for example `library(dplyr)`. Loading the package needs to be done each time you have restarted R, including when you reopen a project. 
+R packages are extensions to R that can be installed. There are many packages available, and some of the most popular ones are very useful to have. The group of packages called **tidyverse** is particularly useful and one you will likely need if you plan on handling data or creating graphics with R. It includes packages such as **dplyr** (to manipulate data), **tidyr** (to help create tidy data), and **ggplot2** (to create graphics). The package **readxl** is useful if you want to import Excel files (.xlsx or .xls). 
+
+Many packages can be installed from CRAN using the code `install.packages("name_of_package")`, for example `install.packages("tidyverse")`. Once you have installed a package, you need to let R know that you wish to use functions from it. This is done with the function `library()`, for example `library(dplyr)`. Loading the package needs to be done each time you have restarted R, including when you reopen a project. 
 
 ### Some tips to make your experience with R/Rstudio better
 
