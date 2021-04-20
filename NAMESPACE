@@ -2,6 +2,7 @@
 
 export(convertxrf)
 export(readxrf)
+export(show_means)
 export(widen)
 export(widen_above)
 export(widen_means)

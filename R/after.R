@@ -204,3 +204,47 @@ widen_means_above <- function(project_data, first_factor, second_factor = NULL) 
 
 }
 
+
+#' Showing the mean blanks
+#'
+#' @description This function will extract only the mean blank kcps values calculated for each filter type, size, and box number, and present them as a dataframe.
+#'
+#' @return description The function creates a dataframe showing the mean blank values in kcps per filter type, size, and filter box number.
+#'
+#' @param imported_data The name of the dataframe created with readxrf()
+#' @param first_element The name of the first column containing kcps values in the project dataframe.
+#' @param last_element The name of the last column containing kcps values in the project dataframe.
+#'
+#' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom dplyr filter group_by summarise
+#' @importFrom rlang .data
+#' @importFrom magrittr %>%
+#'
+#' @examples
+#'
+#'
+#' @export
+
+show_means <- function(imported_data, first_element, last_element) {
+
+  projectfile.df <- as.data.frame(imported_data)
+
+  # transforming the data to long format
+  pivotproject.df <- projectfile.df %>%
+    tidyr::pivot_longer(first_element : last_element,
+                        names_to = "Element",
+                        values_to = "Count")
+
+  # making a dataframe with the means of the blank samples
+  mean.blanks.df <- pivotproject.df %>%
+    dplyr::filter(.data$Filter_blank == "blank") %>%
+    dplyr::group_by(.data$Filter_type, .data$Filter_size, .data$Filter_box_nr, .data$Element) %>%
+    dplyr::summarise(mean_blank = mean(.data$Count))
+
+  # transforming the data back to wide format
+  wide.mean.blanks.df <- mean.blanks.df %>%
+    tidyr::pivot_wider(names_from = .data$Element, values_from = .data$mean_blank)
+
+  return(wide.mean.blanks.df)
+
+}

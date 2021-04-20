@@ -10,7 +10,7 @@
 #' @param base_info The name of the dataframe containing detection limits, crystal drift, molar weights, and calibration constants.
 #' @param year The year the drift was measured closest to when your samples were analysed.
 #' @param first_element The name of the first column containing kcps values in the generated project dataframe.
-#' @param last_element The name of the last column containing kcps values in the generated project  dataframe.
+#' @param last_element The name of the last column containing kcps values in the generated project dataframe.
 #'
 #' @importFrom tidyr pivot_longer
 #' @importFrom dplyr filter group_by summarise left_join mutate select distinct relocate
@@ -60,7 +60,6 @@ convertxrf <- function(imported_data, base_info, year, first_element, last_eleme
 
   basefile.df <- as.data.frame(base_info)
 
-  # NEED TO GATHER ALL THESE INTO ONE LINE
   if(!"PC" %in% names(basefile.df)) {
     stop("ERROR! Your base information file is missing one or more of the following columns: PC, ANO, GFF, DL_PC, DL_ANO, and DL_GFF.")
   }

@@ -15,7 +15,7 @@ convertxrf(imported_data, base_info, year, first_element, last_element)
 
 \item{first_element}{The name of the first column containing kcps values in the generated project dataframe.}
 
-\item{last_element}{The name of the last column containing kcps values in the generated project  dataframe.}
+\item{last_element}{The name of the last column containing kcps values in the generated project dataframe.}
 }
 \value{
 description The function creates a dataframe in the long format with the new columns "Concentration" and "Detection_limit" showing the calculated concentration and the respective detection limit.

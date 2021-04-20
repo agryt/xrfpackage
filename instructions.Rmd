@@ -1,42 +1,67 @@
 ---
 title: "How to Use the xrfr Package"
-output: pdf_document
-author: Anna Grytaas
+author: "Anna Grytaas"
 date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
 ---
 
 This R package was created to convert elemental composition x-ray fluorescence (XRF) data of filtrated water samples from kcps to µM. It was created with R version 4.0.3. For source code and more information, please visit https://github.com/agryt/xrfr.
 
 **Problems?** Issues can be reported at https://github.com/agryt/xrfr/issues and questions can be sent to grytaasanna@gmail.com. 
 
-## Short instructions on using the xrfr package
+## Brief instructions on using the xrfr package
 
-1. Make sure your files are structured as described under "The files". 
+1. Make sure you have the right files and that they are structured as described under "The files". 
 2. Install the package if you do not already have it: `install.packages("devtools")` (if you do not have this installed already), then `devtools::install_github("agryt/xrfr", build_vignettes = TRUE)`. 
-3. Import your data files to R using the appropriate functions (described under "Preparing your data"). 
+3. Import your data files to R using the appropriate functions (described under "Preparing your data" if you are unsure how to do this). 
 4. Load the package: `library(xrfr)`.
-5. Join your data frame containing raw data and the data frame with your project information to a new data frame: `DATA0.df <- readxrf(raw_data = YOURRAWDATA.df, project_info = YOURPROJECTINFO.df)`. 
-6. Convert the data from kcps to µM using the data frame with base information: `DATA.df <- convertxrf(imported_data = DATA0.df, base_info = YOURBASEINFO.df, year = "2019", first_element = "C", last_element = "As")`. *year = year in which the crystal drift was measured closest to when your samples were measured, first_element = name of first column showing data in kcps in "DATA0.df", last_element = name of last column showing data in kcps in "DATA0.df".*
+5. Join your data frame containing raw data and the data frame with your project information to a new data frame: 
+```{r intro 1}
+DATA0.df <- readxrf(raw_data = YOURRAWDATA.df, project_info = YOURPROJECTINFO.df)
+```
+6. Convert the data from kcps to µM using the data frame with base information:
+```{r intro 2}
+DATA.df <- convertxrf(imported_data = DATA0.df, base_info = YOURBASEINFO.df, year = "2019", first_element = "C", last_element = "As")
+```
+*year = year in which the crystal drift was measured closest to when your samples were measured, first_element = name of first column showing data in kcps in "DATA0.df", last_element = name of last column showing data in kcps in "DATA0.df".*
 7. OPTIONAL: Use one or more of the "after" functions:
-   - Widen your data frame: `wide.project.df <- widen(project_data = data.df)`.
-   - Widen and calculate means based on one or two factors: `means.project.df <- widen_means(project_data = data.df, first_factor = "Location", second_factor = "Depth")`. Note that "first_factor" must be defined while "second_factor" is optional. 
-   - Widen and exclude values below detection limits: `above.project.df <- widen_above(project_data = data.df)`. 
-   - Widen, calculate means based on one or two factors, and exclude mean values below detection limits: `means.above.project.df <- widen_means_above(project_data = data.df, first_factor = "Location", second_factor = "Depth")`. Note that "first_factor" must be defined while "second_factor" is optional. 
+   - Widen your data frame: 
+```{r intro 3}
+wide.project.df <- widen(project_data = data.df)
+```
+   - Widen and calculate means based on one or two factors: 
+```{r intro 4}
+means.project.df <- widen_means(project_data = data.df, first_factor = "Location", second_factor = "Depth")
+```
+Note that "first_factor" must be defined while "second_factor" is optional. 
+   - Widen and exclude values below detection limits: 
+```{r intro 5}
+above.project.df <- widen_above(project_data = data.df)
+```
+   - Widen, calculate means based on one or two factors, and exclude mean values below detection limits: 
+```{r intro 6}
+means.above.project.df <- widen_means_above(project_data = data.df, first_factor = "Location", second_factor = "Depth")
+```
+Note that "first_factor" must be defined while "second_factor" is optional. 
 8. Save any of the data frames you wish to keep, for example as a CSV file: `write_csv(data.df, file = "my_data.csv")`.
 
 More detailed information can be found under "Detailed instructions on using the xrfr package" and in the vignette (`vignette("xrfr")`). 
 
 ## The files
 
-First, you have to make sure to have the right files, and that these are all in the same folder on your computer. There are three files you need for your analysis: 
+There are three files you need for your analysis: 
 
 * A file with **raw data** from the XRF machine.
 * A file with **information about the samples and project**, like when the samples were collected, whether they are blank samples, and the volume of water filtrated.
 * A file containing **information about the machine, filters and elements**, like crystal drift and calibrated constants.
 
+These files must all be in the same folder on your computer. 
+
 ### The raw data file
 
-This file is created by the computer by the XRF machine when you export your raw data. You should not edit this file unless there are errors in the sample names. The computer creates a .txt file using comma (,) as a decimal mark and tabs to separate columns. It will contain a column named "**Sample**", a column named "**Date**", and several columns with results from the machine's analysis. The ones we are interested in here are those containing "(Int)" in the column name.
+This file is created by the computer connected to the XRF machine when you export your raw data. The computer creates a .txt file using comma (,) as a decimal mark and tabs to separate columns. It will contain a column named "**Sample**", a column named "**Date**", and several columns with results from the machine's analysis. The ones we are interested in here are those containing "(Int)" in the column name. *You should not edit this file unless there are errors in the sample names.*
 
 ### The project information file
 
@@ -49,19 +74,19 @@ This file should contain all relevant information about your data that is not fr
 * **Filter_blank**: In this column you will need to write "blank" for all your blank samples. The rest of the column can be empty. 
 * **Volume**: The volume of water (in ml) that was filtered for each sample. 
 
-You may include as many more columns as you want, for example dates, depth, location or treatment, but these columns all need to be present in your project information file. 
+You may include as many additional columns as you want. Additional columns could for example show dates, depths, locations, or treatments. 
 
 ### The base information file
 
-This file must contain all the relevant information related to the XRF machine, filters, and elements. This file is not specific for each experiment, and should only be changed when a new measurement of the crystal drift is added. The base info file must contain these columns:
+This file must contain all the relevant information related to the XRF machine, filters, and elements. This file is not specific for each experiment, and only needs editing when adding a new measurement of the crystal drift. The base info file must contain these columns:
 
 * **Element**: All the elements measured by the machine. Should be written as "C", "O", "Mg", etc. 
 * **MolarW**: The molar weight of each element. 
 * **PC**, **ANO**, and **GFF**: The calibrated constant for each element for each of the three filter types. 
 * **DL_PC**, **DL_ANO**, and **DL_GFF**: The detection limit of each element for each of the three filter types. 
-* **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. 2008 was the first year this was measured on the XRF machine at UiB, and this value is used during the calculations, so Drift_2008 must be included. 
+* **Drift_2008**, **Drift_2010**, etc.: The crystal drift each year it was measured. Drift_2008 must be included, as this value is used during calculations (it was the first measurement on the XRF machine at UiB). 
 
-## Detailed instructions on using the xrfr package
+## Details and examples
 
 **Please see the xrfr vignette for more information about each function and its arguments!** (`vignette("xrfr")`)
 
@@ -86,7 +111,7 @@ devtools::install_github("agryt/xrfr", build_vignettes = TRUE)
 
 ### Preparing your data
 
-Before using the **xrfr** functions, your files must be imported as data frames to RStudio. How this is done depends on which format your files are saved in. Unless you have changed the format of the raw data file created by the computer by the XRF machine, you can import this using the code `read_delim("YOURRAWDATAFILE.txt", delim = "\t", locale = locale(decimal_mark = ","))`. This function is part of the **readr** package from the **tidyverse**. Excel files can be imported using the `read_excel()` function from the **readxl** package, and CSV files can be imported using the `read_csv()` or `read_csv2()` functions from the **readr** package depending on which type of CSV file it is. If you are using other file formats, use your search engine to find out how to import them. 
+Before using the **xrfr** functions, your files must be imported as data frames to RStudio. How this is done depends on which format your files are saved in. Unless you have changed the format of the raw data file created by the computer by the XRF machine, you can import that using the code `read_delim("YOURRAWDATAFILE.txt", delim = "\t", locale = locale(decimal_mark = ","))`. This function is part of the **readr** package from the **tidyverse**. Excel files can be imported using the `read_excel()` function from the **readxl** package, and CSV files can be imported using the `read_csv()` or `read_csv2()` functions from the **readr** package depending on which type of CSV file it is. If you are using other file formats, use your search engine to find out how to import them. 
 
 Here is an example of how to import a .txt file and two .xlsx files:
 
@@ -102,7 +127,7 @@ baseinfo.df <- read_excel("xrf_setup.xlsx")
 
 ```
 
-This will make three new data frames appear in your environment. At this point it is a good idea to open them (by clicking on them in the environment or running the code `view(NAMEOFDATAFRAME)`) and checking that they were imported correctly. 
+This will make three new data frames appear in your environment. At this point it is a good idea to open them (by clicking on them in the environment or running the code `view(NAMEOFDATAFRAME)`) and check that they were imported correctly. 
 
 ### Using the main functions
 
