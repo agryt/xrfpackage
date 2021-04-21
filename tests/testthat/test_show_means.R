@@ -25,3 +25,5 @@ test_that("output is correct", {
   expect_equal(dim(b), dim(c))
   expect_equal(names(b), names(c))
 })
+
+#test
