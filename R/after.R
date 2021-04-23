@@ -76,7 +76,7 @@ widen_above <- function(project_data) {
     dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
     dplyr::filter(!.data$Filter_blank %in% "blank") %>%
     dplyr::select(-.data$Detection_limit) %>%
-    tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration, id_cols = .data$Sample)
+    tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration)
 
 }
 
