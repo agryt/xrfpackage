@@ -3,6 +3,7 @@ title: "How to Use the xrfr Package"
 author: "Anna Grytaas"
 date: "`r Sys.Date()`"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 ---
@@ -18,31 +19,34 @@ This R package was created to convert elemental composition x-ray fluorescence (
 3. Import your data files to R using the appropriate functions (described under "Preparing your data" if you are unsure how to do this). 
 4. Load the package: `library(xrfr)`.
 5. Join your data frame containing raw data and the data frame with your project information to a new data frame: 
-```{r intro 1}
+```{r intro 1, eval = FALSE}
 DATA0.df <- readxrf(raw_data = YOURRAWDATA.df, project_info = YOURPROJECTINFO.df)
 ```
 6. Convert the data from kcps to µM using the data frame with base information:
-```{r intro 2}
-DATA.df <- convertxrf(imported_data = DATA0.df, base_info = YOURBASEINFO.df, year = "2019", first_element = "C", last_element = "As")
+```{r intro 2, eval = FALSE}
+DATA.df <- convertxrf(imported_data = DATA0.df, base_info = YOURBASEINFO.df, year = "2019", 
+                      first_element = "C", last_element = "As")
 ```
 *year = year in which the crystal drift was measured closest to when your samples were measured, first_element = name of first column showing data in kcps in "DATA0.df", last_element = name of last column showing data in kcps in "DATA0.df".*
 7. OPTIONAL: Use one or more of the "after" functions:
    - Widen your data frame: 
-```{r intro 3}
+```{r intro 3, eval = FALSE}
 wide.project.df <- widen(project_data = data.df)
 ```
    - Widen and calculate means based on one or two factors: 
-```{r intro 4}
-means.project.df <- widen_means(project_data = data.df, first_factor = "Location", second_factor = "Depth")
+```{r intro 4, eval = FALSE}
+means.project.df <- widen_means(project_data = data.df, first_factor = "Location", 
+                                second_factor = "Depth")
 ```
 Note that "first_factor" must be defined while "second_factor" is optional. 
    - Widen and exclude values below detection limits: 
-```{r intro 5}
+```{r intro 5, eval = FALSE}
 above.project.df <- widen_above(project_data = data.df)
 ```
    - Widen, calculate means based on one or two factors, and exclude mean values below detection limits: 
-```{r intro 6}
-means.above.project.df <- widen_means_above(project_data = data.df, first_factor = "Location", second_factor = "Depth")
+```{r intro 6, eval = FALSE}
+means.above.project.df <- widen_means_above(project_data = data.df, first_factor = 
+                                              "Location", second_factor = "Depth")
 ```
 Note that "first_factor" must be defined while "second_factor" is optional. 
 8. Save any of the data frames you wish to keep, for example as a CSV file: `write_csv(data.df, file = "my_data.csv")`.
