@@ -3,9 +3,9 @@ title: "How to Use the xrfr Package"
 author: "Anna Grytaas"
 date: "`r Sys.Date()`"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
 ---
 
 This R package was created to convert elemental composition x-ray fluorescence (XRF) data of filtrated water samples from kcps to µM. It was created with R version 4.0.3. For source code and more information, please visit https://github.com/agryt/xrfr.
@@ -374,6 +374,78 @@ projectaverageabove.df <- project.df %>%
       select(FIRSTFACTOR, SECONDFACTOR, Volume, Element, Concentration) %>%
       pivot_wider(names_from = Element,
                   values_from = Concentration)
+
+# transformssd
+library(tidyverse)
+library(magicfor)
+library(sjmisc)
+string <- readLines("YOURDATA.txt")
+string <- gsub(" ", "", string)
+splitstring <- as.list(str_split(string, "2F416C676572474646"))
+hex <- "2F416C676572474646"
+splitstring.added <- mapply(paste0, splitstring, hex)
+subsplit <- gsub(".*?(00)(.*?)(2F416C676572474646).*", "\\2", splitstring.added)
+subsubsplit <- substr(subsplit, 1, 4)
+substring <- paste(unlist(subsubsplit), collapse='')
+raw.substring <- sapply(seq(1, nchar(substring), by=2), function(x) substr(substring, x, 
+                                                                           x+1))
+text.substring <- rawToChar(as.raw(strtoi(raw.substring, 16L)))
+list.extracted <- str_extract_all(text.substring, "[A-Z][a-z]|[A-Z//s]")
+unlist.extracted <- unlist(list.extracted)
+extracted.df <- as.data.frame(unlist.extracted)
+colnames(extracted.df) <- "Element"
+subsplit1 <- gsub(".*?(204B41)(.*?)(2A0020).*", "\\2", splitstring.added)
+subsubsplit1 <- str_sub(subsplit1, start = -8)
+subsubsplit1 <- subsubsplit1[-1]
+magic_for(silent = TRUE)
+for (i in 1:length(subsubsplit1)) {
+  a <- readBin(as.raw(strtoi(apply(matrix(strsplit(subsubsplit1,"")[[i]],2),2,paste, 
+                                   collapse=""), 16)), "double", size=4)
+  put(a)
+}
+values.df <- magic_result_as_dataframe()
+values.df <- values.df %>%
+  select(a)
+colnames(values.df) <- "kcps"
+elements.values.df <- cbind(extracted.df, values.df)
+samplename <- substr(string, 17, 100) # assumes that the sample name has <41 characters
+raw.samplename <- sapply(seq(1, nchar(samplename), by=2), function(x) substr(samplename, 
+                                                                             x, x+1))
+text.samplename <- rawToChar(as.raw(strtoi(raw.samplename, 16L)))
+element.values.name.df <- cbind(elements.values.df, Sample = text.samplename)
+date <- substr(string, 337, 376)
+raw.date <- sapply(seq(1, nchar(date), by=2), function(x) substr(date, x, x+1))
+text.date <- rawToChar(as.raw(strtoi(raw.date, 16L)))
+text.date <- gsub("-", ".", text.date)
+if(str_contains(text.date, "Jan") == TRUE) {
+  text.date <- gsub("Jan", "01", text.date)
+} else if(str_contains(text.date, "Feb") == TRUE) {
+  text.date <- gsub("Feb", "02", text.date)
+} else if(str_contains(text.date, "Mar") == TRUE) {
+  text.date <- gsub("Mar", "03", text.date)
+} else if(str_contains(text.date, "Apr") == TRUE) {
+  text.date <- gsub("Apr", "04", text.date)
+} else if(str_contains(text.date, "Mai") == TRUE) {
+  text.date <- gsub("Mai", "05", text.date)
+} else if(str_contains(text.date, "Jun") == TRUE) {
+  text.date <- gsub("Jun", "06", text.date)
+} else if(str_contains(text.date, "Jul") == TRUE) {
+  text.date <- gsub("Jul", "07", text.date)
+} else if(str_contains(text.date, "Aug") == TRUE) {
+  text.date <- gsub("Aug", "08", text.date)
+} else if(str_contains(text.date, "Sep") == TRUE) {
+  text.date <- gsub("Sep", "09", text.date)
+} else if(str_contains(text.date, "Okt") == TRUE) {
+  text.date <- gsub("Okt", "10", text.date)
+} else if(str_contains(text.date, "Nov") == TRUE) {
+  text.date <- gsub("Nov", "11", text.date)
+} else {
+  text.date <- gsub("Des", "12", text.date)
+}
+element.values.name.date.df <- cbind(element.values.name.df, Date = text.date)
+element.values.name.date.df$Element <- paste0(element.values.name.date.df$Element, " (Int)")
+element.values.name.date.df <- element.values.name.date.df %>%
+  pivot_wider(names_from = Element, values_from = kcps)
 
 ```
 
