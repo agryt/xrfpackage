@@ -13,11 +13,17 @@ test_that("output is correct", {
                   Detection_limit = c(1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32))
   b <- widen_above(project_data = a)
   c <- data.frame(Sample = c("A1", "A2"),
+                  Date = "01.01.2020",
+                  Filter_type = "PC",
+                  Filter_size = 0.8,
+                  Filter_box_nr = 1,
+                  Filter_blank = NA,
+                  Volume = 1000,
                   C = c(2.86, 6.94),
                   O = c(NA, 0.869))
 
   expect_s3_class(b, "data.frame")
-  expect_equal(ncol(b), 3)
+  expect_equal(ncol(b), 9)
   expect_equal(nrow(b), 2)
   expect_equal(dim(b), dim(c))
   expect_equal(names(b), names(c))
