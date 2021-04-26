@@ -3,9 +3,9 @@ title: "How to Use the xrfr Package"
 author: "Anna Grytaas"
 date: "`r Sys.Date()`"
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 
 This R package was created to convert elemental composition x-ray fluorescence (XRF) data of filtrated water samples from kcps to µM. It was created with R version 4.0.3. For source code and more information, please visit https://github.com/agryt/xrfr.
@@ -30,26 +30,27 @@ DATA.df <- convertxrf(imported_data = DATA0.df, base_info = YOURBASEINFO.df, yea
 *year = year in which the crystal drift was measured closest to when your samples were measured, first_element = name of first column showing data in kcps in "DATA0.df", last_element = name of last column showing data in kcps in "DATA0.df".* 
 
 7. OPTIONAL: Use one or more of the "after" functions: 
-   - Widen your data frame: 
+ - Widen your data frame: 
 ```{r intro 3, eval = FALSE}
 wide.project.df <- widen(project_data = data.df)
 ```
-    - Widen and calculate means based on one or two factors: 
+   - Widen and calculate means based on one or two factors: 
 ```{r intro 4, eval = FALSE}
 means.project.df <- widen_means(project_data = data.df, first_factor = "Location", 
                                 second_factor = "Depth")
 ```
 *Note that "first_factor" must be defined while "second_factor" is optional.* 
-    - Widen and exclude values below detection limits: 
+   - Widen and exclude values below detection limits: 
 ```{r intro 5, eval = FALSE}
 above.project.df <- widen_above(project_data = data.df)
 ```
-    - Widen, calculate means based on one or two factors, and exclude mean values below detection limits: 
+   - Widen, calculate means based on one or two factors, and exclude mean values below detection limits: 
 ```{r intro 6, eval = FALSE}
 means.above.project.df <- widen_means_above(project_data = data.df, first_factor = 
                                               "Location", second_factor = "Depth")
 ```
 *Note that "first_factor" must be defined while "second_factor" is optional.* 
+
 8. Save any of the data frames you wish to keep, for example as a CSV file: `write_csv(data.df, file = "my_data.csv")`.
 
 More detailed information can be found under "Detailed instructions on using the xrfr package" and in the vignette (`vignette("xrfr")`). 
@@ -225,7 +226,27 @@ Good luck with your data analyses!
 
 ## Importing .ssd files
 
-To import .ssd files into R, you will first need to download HxD (https://mh-nexus.de/en/hxd/), a free hex editor. You can then **open your .ssd file in HxD**, and you will be able to see both the hex values and the text it translates to. **Select all of the hex values** (ctrl + a/cmd + a, or right click &rarr; Select all), **copy**, and **paste into a text editor**. You can use the computer's notebook, Word, etc. **Save this document as a .txt file** in your working directory. This .txt file should then only contain the hex values. 
+To import .ssd files into R, you will first need to download HxD (https://mh-nexus.de/en/hxd/), a free hex editor. You can then **open your .ssd file in HxD**, and you will be able to see both the hex values and the text it translates to. **Select all of the hex values** (ctrl + a/cmd + a, or right click &rarr; Select all), **copy**, and **paste into a text editor**. You can use the computer's notebook, Word, etc. **Save this document as a .txt file** in your working directory. This .txt file should then only contain the hex values, like this: "53 53 44 33 12 00 00 00 73 72 2D 63 61 6C 31 32 30 00 00 (...)"
+
+Once you have prepared your text file, you can use the `transformssd()` function:
+
+```{r transformssd, eval = FALSE}
+
+sample1.df <- transformssd(hex_data = "ssd_sample1.txt")
+
+```
+
+The output will be a dataframe showing the results from your sample in the same format as the .txt file created by the XRF computer, but only showing one sample. 
+
+Once you have done this to all your samples, you can combine all the dataframes into a larger dataframe containing the results from all samples. This can be done using the `rbind()` function:
+
+```{r combined, eval = FALSE}
+
+all.samples.df <- rbind(sample1.df, sample2.df, sample3.df, (...))
+
+```
+
+This new dataframe is then possible to use the `readxrf()` and `convertxrf()` functions on. 
 
 ## New to R/RStudio?
 
