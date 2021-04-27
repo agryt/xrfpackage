@@ -17,7 +17,7 @@ show_means(imported_data, first_element, last_element)
 description The function creates a dataframe showing the mean blank values in kcps per filter type, size, and filter box number.
 }
 \description{
-
+This function will extract only the mean blank kcps values calculated for each filter type, size, and box number, and present them as a dataframe.
 }
 \examples{
 
