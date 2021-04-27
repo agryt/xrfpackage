@@ -50,6 +50,11 @@ means.above.project.df <- widen_means_above(project_data = data.df, first_factor
                                               "Location", second_factor = "Depth")
 ```
 *Note that "first_factor" must be defined while "second_factor" is optional.* 
+   - View the mean values of blanks, calculated based on filter type, filter size, and filter box number:
+```{r intro 7, eval = FALSE}
+blanks.df <- show_blanks(imported_data = DATA0.df, first_element = "C", last_element = 
+                           "As")
+```
 
 8. Save any of the data frames you wish to keep, for example as a CSV file: `write_csv(data.df, file = "my_data.csv")`.
 
@@ -218,6 +223,15 @@ means.above.project2.df <- widen_means_above(project_data = data.df, first_facto
 
 ```
 
+Lastly, you can use `show_blanks()` to create a dataframe showing only the mean values for the blank samples, in case you wish to see which values are used when calculating the net count in the `convertxrf()` function. 
+
+```{r show_blanks, eval = FALSE}
+
+blanks.df <- show_blanks(imported_data = imported.df, first_element = "C", last_element = 
+                           "As")
+
+```
+
 ## Further work with your files
 
 If you wish to further handle or manipulate your data, I suggest looking into the packages of the **tidyverse**, particularly **dplyr** and **tidyr**. For making graphics, **ggplot2** (also a part of **tidyverse**) is extremely useful. If you want to present your data as a table, there are many packages available to make nice tables. An overview of some of these are available at https://rfortherestofus.com/2019/11/how-to-make-beautiful-tables-in-r/. If you wish to perform statistical analyses there is also a lot of information and many packages available on the internet regarding statistical analyses and R. A cheat sheet for the most common statistical analysis functions in base R can be found at  https://www.dummies.com/programming/r/statistical-analysis-with-r-for-dummies-cheat-sheet/. 
@@ -228,11 +242,12 @@ Good luck with your data analyses!
 
 To import .ssd files into R, you will first need to download HxD (https://mh-nexus.de/en/hxd/), a free hex editor. You can then **open your .ssd file in HxD**, and you will be able to see both the hex values and the text it translates to. **Select all of the hex values** (ctrl + a/cmd + a, or right click &rarr; Select all), **copy**, and **paste into a text editor**. You can use the computer's notebook, Word, etc. **Save this document as a .txt file** in your working directory. This .txt file should then only contain the hex values, like this: "53 53 44 33 12 00 00 00 73 72 2D 63 61 6C 31 32 30 00 00 (...)"
 
-Once you have prepared your text file, you can use the `transformssd()` function:
+Once you have prepared your text file, you can read it into R using `readLines()` and use the `transformssd()` function:
 
 ```{r transformssd, eval = FALSE}
 
-sample1.df <- transformssd(hex_data = "ssd_sample1.txt")
+sample1 <- readLines("ssd_sample1.txt")
+sample1.df <- transformssd(hex_data = sample1)
 
 ```
 
@@ -374,6 +389,18 @@ projectaverageabove.df <- project.df %>%
       select(FIRSTFACTOR, SECONDFACTOR, Volume, Element, Concentration) %>%
       pivot_wider(names_from = Element,
                   values_from = Concentration)
+
+# show_blanks
+pivotproject.df <- projectfile.df %>%
+    pivot_longer(first_element : last_element,
+                 names_to = "Element",
+                 values_to = "Count")
+mean.blanks.df <- pivotproject.df %>%
+    filter(Filter_blank == "blank") %>%
+    group_by(Filter_type, Filter_size, Filter_box_nr, Element) %>%
+    summarise(mean_blank = mean(Count))
+wide.mean.blanks.df <- mean.blanks.df %>%
+    pivot_wider(names_from = Element, values_from = mean_blank)
 
 # transformssd
 library(tidyverse)

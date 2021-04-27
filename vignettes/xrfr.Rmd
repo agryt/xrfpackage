@@ -241,21 +241,27 @@ blanks.df <- show_blanks(imported_data = imported.df, first_element = "C", last_
 
 ```
 
-The created dataframe will contain the mean blank values and look something like [this](LINK):
+The created dataframe will contain the mean blank values and look something like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/mean_blanks.csv):
 
-|||
+|Filter_type|Filter_size|Filter_box_nr|Al|As|...|Si|
+|:----------|:----------|:------------|:-|:-|:-|:-|
+|GFF|NA|1|78.6387|4.81653333333333|...|687.3644666666667|
+|GFF|NA|2|79.5244666666667|4.87406666666667|...|693.0419|
+|PC|0.8|1|38.194|1.038433333333333|...|0.53433333333333|
+|PC|0.8|1|38.95749999999996|1.046066666666667|...|0.56293333333333|
 
 ### transformssd()
 
 This function will convert the hexadecimal values from a .txt file (created from a .ssd file from the XRF computer) to a dataframe with results from one sample. This dataframe can then be used in the `readxrf()` function. There is one argument that must be defined for this function:
 
-* **hex_data**: The name of the .txt file containing the hexadecimal values. 
+* **hex_data**: The name of the character string containing the hexadecimal values, read into R with the `readLines()` function. 
 
 A possible input:
 
 ```{r transformssd, eval = FALSE}
 
-df <- transformssd(hex_data = "sample_hex.txt")
+string <- readLines("sample_hex.txt")
+df <- transformssd(hex_data = string)
 
 ```
 

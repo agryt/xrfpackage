@@ -4,7 +4,7 @@
 #'
 #' @return description The function creates a dataframe showing kcps values for each element for the sample.
 #'
-#' @param hex_data The .txt file with your hexadecimal data.
+#' @param hex_data The character string with your hexadecimal data, read into R with the readLines() function.
 #'
 #' @importFrom stringr str_split str_extract_all str_sub
 #' @importFrom magicfor magic_for put magic_result_as_dataframe
@@ -20,7 +20,7 @@
 transformssd <- function(hex_data) {
 
   # importing txt file as string and remove spaces
-  string <- readLines(hex_data)
+  string <- hex_data
   string <- gsub(" ", "", string)
 
   #### extracting the elements ####

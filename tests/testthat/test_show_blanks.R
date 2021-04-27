@@ -11,7 +11,7 @@ test_that("output is correct", {
                   Filter_box_nr = 1,
                   Filter_blank = c(NA, NA, "blank", "blank"),
                   Volume = 1000)
-  b <- show_means(imported_data = a, first_element = "C", last_element = "O")
+  b <- show_blanks(imported_data = a, first_element = "C", last_element = "O")
   c <- data.frame(Filter_type = c("PC", "GFF"),
                   Filter_size = 0.8,
                   Filter_box_nr = 1,
@@ -25,5 +25,3 @@ test_that("output is correct", {
   expect_equal(dim(b), dim(c))
   expect_equal(names(b), names(c))
 })
-
-#test
