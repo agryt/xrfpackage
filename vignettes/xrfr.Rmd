@@ -19,6 +19,7 @@ The functions included in this package are:
 * `widen_above()`: This function both widens your data and excludes any concentrations that are below the detection limits. 
 * `widen_means()`: This function both widens your data and calculates mean concentration based on one or two factors. 
 * `widen_means_above()`: This function first calculates mean concentrations based on one or two factors, then excludes those values that are below the detection limits. 
+* `transformssd()`: This function transforms hexadecimal values (obtained from a .ssd file created by the XRF computer) to a dataframe showing results from one sample. The dataframe will be in the same format as the .txt file created by the XRF computer, so it is possible to then use the `readxrf()` and `convertxrf()` functions on this dataframe. 
 
 ## The files
 
@@ -222,3 +223,17 @@ This code will create a data frame that shows mean concentrations only if they a
 ...|...|...|...|...|...|...|...|...|...|
 
 **Note that columns where no mean concentration is above the detection limit (empty columns) are removed, so pay attention to the number of columns and which columns they are!**
+
+### transformssd()
+
+This function will convert the hexadecimal values from a .txt file (created from a .ssd file from the XRF computer) to a dataframe with results from one sample. This dataframe can then be used in the `readxrf()` function. There is one argument that must be defined for this function:
+
+* **hex_data**: The name of the .txt file containing the hexadecimal values. 
+
+A possible input:
+
+```{r transformssd, eval = FALSE}
+
+df <- transformssd(hex_data = "sample_hex.txt")
+
+```

@@ -6,7 +6,7 @@
 #'
 #' @param hex_data The .txt file with your hexadecimal data.
 #'
-#' @importFrom stringr str_split str_extract_all
+#' @importFrom stringr str_split str_extract_all str_sub
 #' @importFrom magicfor magic_for put magic_result_as_dataframe
 #' @importFrom dplyr select
 #' @importFrom sjmisc str_contains
@@ -60,14 +60,14 @@ transformssd <- function(hex_data) {
 
   # creating a matrix with the values in hex
   subsplit1 <- gsub(".*?(204B41)(.*?)(2A0020).*", "\\2", splitstring.added)
-  subsubsplit1 <- str_sub(subsplit1, start = -8)
+  subsubsplit1 <- stringr::str_sub(subsplit1, start = -8)
   subsubsplit1 <- subsubsplit1[-1]
 
   # transforming hex to 32 bit float number
-  magicfor::magic_for(silent = TRUE)
+  magic_for(silent = TRUE)
   for (i in 1:length(subsubsplit1)) {
     a <- readBin(as.raw(strtoi(apply(matrix(strsplit(subsubsplit1,"")[[i]],2),2,paste, collapse=""), 16)), "double", size=4)
-    magicfor::put(a)
+    put(a)
   }
 
   # creating a dataframe with the values
