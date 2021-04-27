@@ -225,7 +225,7 @@ widen_means_above <- function(project_data, first_factor, second_factor = NULL) 
 #'
 #' @export
 
-show_means <- function(imported_data, first_element, last_element) {
+show_blanks <- function(imported_data, first_element, last_element) {
 
   projectfile.df <- as.data.frame(imported_data)
 
