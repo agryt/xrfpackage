@@ -104,6 +104,8 @@ Once you have your data frame created with `readxrf()`, you go on to perform the
 
 The formula that is used to calculate the concentration in µM from kcps is this: `Concentration = ((Net_count * Cal_const) * filter_area * (1000 / Volume) * 1000 * (\Drift_2008 / Drift_YEAR) / MolarW)`. 
 
+Note that the detection limit is adjusted based on the volume filtered for each element and sample like this: `(1000 / Volume) * Detection_limit`. 
+
 Here is a possible input:
 
 ```{r convertxrf, eval = FALSE}
