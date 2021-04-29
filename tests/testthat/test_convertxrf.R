@@ -31,7 +31,7 @@ test_that("output is correct", {
                   Volume = 1000,
                   Element = c("C", "N", "O", "C", "N", "O", "C", "N", "O", "C", "N", "O"),
                   Concentration = c(2.86, -3.82, -0.603, 6.94, -19.3, 0.869, 1.72, -10.3, 0.514, 0, 0, 0),
-                  Detection_limit = c(1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32))
+                  Adjusted_detection_limit = c(1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32))
 
   expect_s3_class(ab, "data.frame")
   expect_equal(nrow(ab), 12)

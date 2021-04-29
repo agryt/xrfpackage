@@ -36,7 +36,6 @@ readxrf <- function(raw_data, project_info) {
   infofile.df <- as.data.frame(project_info)
 
   # assigning error messages for if not all necessary columns are included
-  # THESE SHOULD BE GATHERED INTO ONE LINE
   if(!"Filter_type" %in% names(infofile.df)) {
     stop("ERROR! Your project information file is missing one or more of the following columns: Filter_type, Filter_size, Filter_box_nr, Filter_blank, and Volume.")
   }
@@ -51,6 +50,9 @@ readxrf <- function(raw_data, project_info) {
   }
   if(!"Volume" %in% names(infofile.df)) {
     stop("ERROR! Your project information file is missing one or more of the following columns: Filter_type, Filter_size, Filter_box_nr, Filter_blank, and Volume.")
+  }
+  if(is.numeric(infofile.df$Volume) == FALSE) {
+    stop("ERROR! The column Volume in your project information file is not numeric. Make sure this column only contains numerical digits.")
   }
 
   # joining them into one dataframe

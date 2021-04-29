@@ -14,6 +14,10 @@
 #' @importFrom magrittr %>%
 #'
 #' @examples
+#' \dontrun{
+#' string <- readLines("sample_hex.txt")
+#' sample.df <- transformssd(hex_data = string)
+#' }
 #'
 #' @export
 
@@ -22,6 +26,9 @@ transformssd <- function(hex_data) {
   # importing txt file as string and remove spaces
   string <- hex_data
   string <- gsub(" ", "", string)
+  if(sjmisc::str_contains(string, "(g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|\\W)") == TRUE) {
+    stop("ERROR! Your string contains non-hexadecimal characters/symbols. Hexadecimal values can only include 0-9 and A-F/a-f.")
+  }
 
   #### extracting the elements ####
 

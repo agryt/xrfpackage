@@ -169,7 +169,7 @@ data.df <- convertxrf(imported_data = imported.df, base_info = baseinfo.df, year
 
 ```
 
-The output is a long data frame containing new columns showing the concentration and detection limit of each element for each sample. You should save this data frame as you should use this when doing statistical analysis, creating graphics, etc. Saving a data frame as a CSV file can be done like this:
+The output is a long data frame containing new columns showing the concentration and detection limit (adjusted based on volume) of each element for each sample. You should save this data frame as you should use this when doing statistical analysis, creating graphics, etc. Saving a data frame as a CSV file can be done like this:
 
 ```{r saving data frame, eval = FALSE}
 
@@ -350,7 +350,10 @@ detectionlimits.df <- basefile.df %>%
     mutate(Filter_type = str_remove(Filter_type, "DL_"))
 project.detectionlim.df <- left_join(calculations.df, detectionlimits.df, by = 
                                      c("Filter_type", "Element"))
-project.df <- project.detectionlim.df %>%
+project.adj.detectionlim.df <- project.detectionlim.df %>%
+    mutate(Adjusted_detection_limit = (1000 / Volume) * Detection_limit) %>%
+    select(-Detection_limit)
+project.df <- project.adj.detectionlim.df %>%
     distinct() %>%
     select(Sample : Element, Concentration, Detection_limit)
 

@@ -109,10 +109,15 @@ convertxrf <- function(imported_data, base_info, year, first_element, last_eleme
   # joining detection limit dataframe with the project file
   project.detectionlim.df <- dplyr::left_join(calculations.df, detectionlimits.df, by = c("Filter_type", "Element"))
 
+  # adjusting the detection limit based on filtered volume
+  project.adj.detectionlim.df <- project.detectionlim.df %>%
+    dplyr::mutate(Adjusted_detection_limit = (1000 / .data$Volume) * .data$Detection_limit) %>%
+    dplyr::select(-.data$Detection_limit)
+
   # removing the columns we don't need anymore
-  project.df <- project.detectionlim.df %>%
+  project.df <- project.adj.detectionlim.df %>%
     dplyr::distinct() %>%
-    dplyr::select(.data$Sample : .data$Element, .data$Concentration, .data$Detection_limit)
+    dplyr::select(.data$Sample : .data$Element, .data$Concentration, .data$Adjusted_detection_limit)
 
   return(project.df)
 

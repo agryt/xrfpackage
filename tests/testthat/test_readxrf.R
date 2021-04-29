@@ -50,7 +50,14 @@ test_that("warnings and errors work", {
                   Filter_box_nr = 1,
                   Filter_blank = c(NA, NA, NA, "blank"),
                   Volume = 1000)
+  d <- data.frame(Smaple = c("A1", "A2", "A3", "A4"),
+                  Filter_type = "PC",
+                  Filter_size = 0.8,
+                  Filter_box_nr = 1,
+                  Filter_blank = c(NA, NA, NA, "blank"),
+                  Volume = "1000ml")
 
   expect_warning(readxrf(raw_data = a, project_info = b))
   expect_error(readxrf(raw_data = a, project_info = c))
+  expect_error(readxrf(raw_data = a, project_info = d))
 })

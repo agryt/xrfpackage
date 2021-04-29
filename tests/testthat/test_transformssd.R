@@ -13,3 +13,10 @@ test_that("output is correct", {
   expect_equal(ncol(b), 4)
   expect_equal(dim(b), dim(c))
 })
+
+
+test_that("Error message works", {
+  a <- "53 53 44 33 12 00 00 00 73 61 1R"
+
+  expect_error(transformssd(hex_data = a))
+})
