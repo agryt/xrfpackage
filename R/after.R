@@ -32,7 +32,7 @@ widen <- function(project_data) {
 
   projectwide.df <- project.df %>%
     dplyr::filter(!.data$Filter_blank %in% "blank") %>%
-    dplyr::select(-.data$Detection_limit) %>%
+    dplyr::select(-.data$Adjusted_detection_limit) %>%
     tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration)
 
   return(projectwide.df)
