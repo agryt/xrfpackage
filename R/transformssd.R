@@ -42,7 +42,7 @@ transformssd <- function(hex_data) {
   # extract what's between the space and "/AlgerGFF"
   subsplit <- gsub(".*?(00)(.*?)(2F416C676572474646).*", "\\2", splitstring.added)
 
-  # extract the first 4 characters of these substrings, which is the elements
+  # extract the first 4 characters of these substrings, which are the elements
   subsubsplit <- substr(subsplit, 1, 4)
 
   # transforming from hex to text
@@ -71,16 +71,12 @@ transformssd <- function(hex_data) {
   subsubsplit1 <- subsubsplit1[-1]
 
   # transforming hex to 32 bit float number
-  magic_for(silent = TRUE)
+  values.df <- data.frame()
   for (i in 1:length(subsubsplit1)) {
     a <- readBin(as.raw(strtoi(apply(matrix(strsplit(subsubsplit1,"")[[i]],2),2,paste, collapse=""), 16)), "double", size=4)
-    put(a)
+    values.df <- rbind(values.df, data.frame(t(a), row.names = NULL))
   }
 
-  # creating a dataframe with the values
-  values.df <- magicfor::magic_result_as_dataframe()
-  values.df <- values.df %>%
-    dplyr::select(a)
   colnames(values.df) <- "kcps"
 
   # combining this dataframe with the one showing the elements
