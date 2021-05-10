@@ -1,10 +1,8 @@
 ---
-output: html_document
+output: github_document
 ---
 
 # xrfr
-
-*This package is currently under development.* 
 
 ## Overview
 
@@ -42,7 +40,7 @@ calculated.df <- convertxrf(imported_data = halfway.df, base_info = baseinfo.df,
 
 ```
 
-If you wish to transform your data, you can use the "after" functions. These are `widen()`, `widen_above()`, `widen_means()`, and `widen_means_above()`.
+If you wish to transform your data, you can use the "after" functions. These are `widen()`, `widen_above()`, `widen_means()`, and `widen_means_above()`. There is also a function that lets you see your mean blanks. 
 
 ```{r example after, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
 
@@ -59,6 +57,17 @@ wide.means.df <- widen_means(project_data = calculated.df, first_factor = "Day",
 # combination of widen_means() and widen_above():
 wide.means.above.df <- widen_means_above(project_data = calculated.df, first_factor = "Day",
                                          second_factor = "Treatment")
+
+my.blanks.df <- show_blanks(imported_data = halfway.df, first_element = "C", last_element = "As")
+
+```
+
+If you are using the .ssd files created by the XRF machine rather than the .txt file, you will need to convert your data from hexadecimal to readable text first. To do this, follow the [instructions](https://github.com/agryt/xrfr/blob/master/INSTRUCTIONS.pdf) on how to use the `transformssd()` function. This requires some preparation of your data before importing to R and using the function. 
+
+``` {r example transformssd, eval = FALSE, message = FALSE, warning = FALSE, error = FALSE}
+
+sample1 <- readLines("sample1-hex.txt")
+sample1.df <- transformssd(hex_data = sample1)
 
 ```
 

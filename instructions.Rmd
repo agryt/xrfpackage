@@ -4,8 +4,6 @@ author: "Anna Grytaas"
 date: "`r Sys.Date()`"
 output:
   pdf_document: default
-  html_document:
-    df_print: paged
 ---
 
 This R package was created to convert elemental composition x-ray fluorescence (XRF) data of filtrated water samples from kcps to µM. It was created with R version 4.0.3. For source code and more information, please visit https://github.com/agryt/xrfr.
@@ -40,6 +38,7 @@ means.project.df <- widen_means(project_data = data.df, first_factor = "Location
                                 second_factor = "Depth")
 ```
 *Note that "first_factor" must be defined while "second_factor" is optional.* 
+
    - Widen and exclude values below detection limits: 
 ```{r intro 5, eval = FALSE}
 above.project.df <- widen_above(project_data = data.df)
@@ -50,6 +49,7 @@ means.above.project.df <- widen_means_above(project_data = data.df, first_factor
                                               "Location", second_factor = "Depth")
 ```
 *Note that "first_factor" must be defined while "second_factor" is optional.* 
+
    - View the mean values of blanks, calculated based on filter type, filter size, and filter box number:
 ```{r intro 7, eval = FALSE}
 blanks.df <- show_blanks(imported_data = DATA0.df, first_element = "C", last_element = 
@@ -83,7 +83,7 @@ This file should contain all relevant information about your data that is not fr
 * **Filter_size**: The pore size of the filter used. This column can be left empty if the size was the same in all filters, but it must exist. 
 * **Filter_box_nr**: A way to differentiate between different filter boxes, for example by labelling the boxes "1", "2", "3", etc. This information is necessary to apply the correct blank samples. 
 * **Filter_blank**: In this column you will need to write "blank" for all your blank samples. The rest of the column can be empty. 
-* **Volume**: The volume of water (in ml) that was filtered for each sample. 
+* **Volume**: The volume of water (in ml) that was filtered for each sample. Must be a number, do not include "ml" in the cells. 
 
 You may include as many additional columns as you want. Additional columns could for example show dates, depths, locations, or treatments. 
 
@@ -257,7 +257,8 @@ Once you have done this to all your samples, you can combine all the dataframes 
 
 ```{r combined, eval = FALSE}
 
-all.samples.df <- rbind(sample1.df, sample2.df, sample3.df, (...))
+all.samples.df <- rbind(sample1.df, sample2.df, sample3.df)
+# include all your samples inside rbind
 
 ```
 
@@ -294,7 +295,7 @@ Many packages can be installed from CRAN using the code `install.packages("name_
 
 - To run a line of code from your R Script you press ctrl + enter (on Windows or Linux) or cmd + enter (on Mac). You can also press run at the top right in the toolbar of the R Script window. 
 - Using pipe operators makes your code tidier and easier to read. They are written as `%>%`. The pipe operator is a part of the **magrittr** package, but are also used in the **dplyr** package that you will likely be using. On Windows or Linux you can use ctrl + shift + M as a shortcut for the pipe, and on Mac this is cmd + shift + M. `y %>% x` = `x(y)`. 
-- Use # at the beginning of a line to create a comment. Comments are ignored by R when running the code. This way you can write comments explaining what a function does etc. 
+- Use # at the beginning of a line to create a comment. Comments are ignored by R when running the code. This way you can write comments explaining what a function does etc. I recommend writing a lot of comments so you remember what the code does when coming back to it later.
 
 ## Raw code
 
@@ -302,8 +303,11 @@ If your **xrfr** functions are not working, you can try using the raw code shown
 
 ```{r source code, eval = FALSE}
 
-library(tidyverse)
-library(readxl)
+library(tidyverse) # needed for all functions
+library(readxl) # needed if you are importing excel files
+library(sjmisc) # needed for transformssd()
+
+# anything written in uppercase letters should be changed based on your own files
 
 # these functions will vary based on which format your files are saved in, but an example:
 YOURDATAFILE.df <- read_delim("RAW_DATA_FILE.txt", delim = "\t", 
@@ -406,9 +410,6 @@ wide.mean.blanks.df <- mean.blanks.df %>%
     pivot_wider(names_from = Element, values_from = mean_blank)
 
 # transformssd
-library(tidyverse)
-library(magicfor)
-library(sjmisc)
 string <- readLines("YOURDATA.txt")
 string <- gsub(" ", "", string)
 splitstring <- as.list(str_split(string, "2F416C676572474646"))
@@ -417,8 +418,7 @@ splitstring.added <- mapply(paste0, splitstring, hex)
 subsplit <- gsub(".*?(00)(.*?)(2F416C676572474646).*", "\\2", splitstring.added)
 subsubsplit <- substr(subsplit, 1, 4)
 substring <- paste(unlist(subsubsplit), collapse='')
-raw.substring <- sapply(seq(1, nchar(substring), by=2), function(x) substr(substring, x, 
-                                                                           x+1))
+raw.substring <- sapply(seq(1, nchar(substring), by=2), function(x) substr(substring, x,                                                             x+1))
 text.substring <- rawToChar(as.raw(strtoi(raw.substring, 16L)))
 list.extracted <- str_extract_all(text.substring, "[A-Z][a-z]|[A-Z//s]")
 unlist.extracted <- unlist(list.extracted)
@@ -427,15 +427,12 @@ colnames(extracted.df) <- "Element"
 subsplit1 <- gsub(".*?(204B41)(.*?)(2A0020).*", "\\2", splitstring.added)
 subsubsplit1 <- str_sub(subsplit1, start = -8)
 subsubsplit1 <- subsubsplit1[-1]
-magic_for(silent = TRUE)
+values.df <- data.frame()
 for (i in 1:length(subsubsplit1)) {
   a <- readBin(as.raw(strtoi(apply(matrix(strsplit(subsubsplit1,"")[[i]],2),2,paste, 
                                    collapse=""), 16)), "double", size=4)
-  put(a)
-}
-values.df <- magic_result_as_dataframe()
-values.df <- values.df %>%
-  select(a)
+  values.df <- rbind(values.df, data.frame(t(a), row.names = NULL))
+  }
 colnames(values.df) <- "kcps"
 elements.values.df <- cbind(extracted.df, values.df)
 samplename <- substr(string, 17, 100) # assumes that the sample name has <41 characters

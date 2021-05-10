@@ -7,7 +7,6 @@
 #' @param hex_data The character string with your hexadecimal data, read into R with the readLines() function.
 #'
 #' @importFrom stringr str_split str_extract_all str_sub
-#' @importFrom magicfor magic_for put magic_result_as_dataframe
 #' @importFrom dplyr select
 #' @importFrom sjmisc str_contains
 #' @importFrom tidyr pivot_wider

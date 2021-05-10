@@ -1,6 +1,6 @@
 Package: xrfr
 Title: Converting XRF Data from Kilo-counts per Second to Micromolar
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: 
     person(given = "Anna",
            family = "Grytaas",
@@ -23,7 +23,6 @@ Imports:
     rlang (>= 0.4.8), 
     readxl (>= 1.3.1), 
     magrittr (>= 1.5),
-    magicfor (>= 0.1.0),
     sjmisc (>= 2.8.6)
 Suggests: 
     knitr,
