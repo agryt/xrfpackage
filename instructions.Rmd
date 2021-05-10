@@ -359,19 +359,19 @@ project.adj.detectionlim.df <- project.detectionlim.df %>%
     select(-Detection_limit)
 project.df <- project.adj.detectionlim.df %>%
     distinct() %>%
-    select(Sample : Element, Concentration, Detection_limit)
+    select(Sample : Element, Concentration, Adjusted_detection_limit)
 
 # widen
 projectwide.df <- project.df %>%
     filter(!Filter_blank %in% "blank") %>%
-    select(-Detection_limit) %>%
+    select(-Adjusted_detection_limit) %>%
     pivot_wider(names_from = Element, values_from = Concentration)
 
 # widen_above
 projectabove.df <- project.df %>%
-    filter(Concentration > Detection_limit) %>%
+    filter(Concentration > Adjusted_detection_limit) %>%
     filter(!Filter_blank %in% "blank") %>%
-    select(-Detection_limit) %>%
+    select(-Adjusted_detection_limit) %>%
     pivot_wider(names_from = Element, values_from = Concentration, id_cols = Sample)
 
 # widen_means
@@ -380,7 +380,7 @@ projectaverageabove.df <- project.df %>%
       filter(!Filter_blank %in% "blank") %>%
       group_by(FIRSTFACTOR, SECONDFACTOR, Element) %>%
       summarise_if(is.numeric, mean) %>%
-      select(-Detection_limit) %>%
+      select(-Adjusted_detection_limit) %>%
       select(FIRSTFACTOR, SECONDFACTOR, Volume, Element, Concentration) %>%
       pivot_wider(names_from = Element,
                   values_from = Concentration)
@@ -391,8 +391,8 @@ projectaverageabove.df <- project.df %>%
       filter(!Filter_blank %in% "blank") %>%
       group_by(FIRSTFACTOR, SECONDFACTOR, Element) %>%
       summarise_if(is.numeric, mean) %>%
-      filter(Concentration > Detection_limit) %>%
-      select(-Detection_limit) %>%
+      filter(Concentration > Adjusted_detection_limit) %>%
+      select(-Adjusted_detection_limit) %>%
       select(FIRSTFACTOR, SECONDFACTOR, Volume, Element, Concentration) %>%
       pivot_wider(names_from = Element,
                   values_from = Concentration)

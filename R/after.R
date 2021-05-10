@@ -73,9 +73,9 @@ widen_above <- function(project_data) {
   project.df <- as.data.frame(project_data)
 
   projectabove.df <- project.df %>%
-    dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
+    dplyr::filter(.data$Concentration > .data$Adjusted_detection_limit) %>%
     dplyr::filter(!.data$Filter_blank %in% "blank") %>%
-    dplyr::select(-.data$Detection_limit) %>%
+    dplyr::select(-.data$Adjusted_detection_limit) %>%
     tidyr::pivot_wider(names_from = .data$Element, values_from = .data$Concentration)
 
 }
@@ -121,7 +121,7 @@ widen_means <- function(project_data, first_factor, second_factor = NULL) {
       dplyr::filter(!.data$Filter_blank %in% "blank") %>%
       dplyr::group_by(.data[[first_factor]], .data$Element) %>%
       dplyr::summarise_if(is.numeric, mean) %>%
-      dplyr::select(-.data$Detection_limit) %>%
+      dplyr::select(-.data$Adjusted_detection_limit) %>%
       dplyr::select(.data[[first_factor]], .data$Volume, .data$Element, .data$Concentration) %>%
       tidyr::pivot_wider(names_from = .data$Element,
                          values_from = .data$Concentration)
@@ -132,7 +132,7 @@ widen_means <- function(project_data, first_factor, second_factor = NULL) {
       dplyr::filter(!.data$Filter_blank %in% "blank") %>%
       dplyr::group_by(.data[[first_factor]], .data[[second_factor]], .data$Element) %>%
       dplyr::summarise_if(is.numeric, mean) %>%
-      dplyr::select(-.data$Detection_limit) %>%
+      dplyr::select(-.data$Adjusted_detection_limit) %>%
       dplyr::select(.data[[first_factor]], .data[[second_factor]], .data$Volume, .data$Element, .data$Concentration) %>%
       tidyr::pivot_wider(names_from = .data$Element,
                          values_from = .data$Concentration)
@@ -182,8 +182,8 @@ widen_means_above <- function(project_data, first_factor, second_factor = NULL) 
       dplyr::filter(!.data$Filter_blank %in% "blank") %>%
       dplyr::group_by(.data[[first_factor]], .data$Element) %>%
       dplyr::summarise_if(is.numeric, mean) %>%
-      dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
-      dplyr::select(-.data$Detection_limit) %>%
+      dplyr::filter(.data$Concentration > .data$Adjusted_detection_limit) %>%
+      dplyr::select(-.data$Adjusted_detection_limit) %>%
       dplyr::select(.data[[first_factor]], .data$Volume, .data$Element, .data$Concentration) %>%
       tidyr::pivot_wider(names_from = .data$Element,
                          values_from = .data$Concentration)
@@ -194,8 +194,8 @@ widen_means_above <- function(project_data, first_factor, second_factor = NULL) 
       dplyr::filter(!.data$Filter_blank %in% "blank") %>%
       dplyr::group_by(.data[[first_factor]], .data[[second_factor]], .data$Element) %>%
       dplyr::summarise_if(is.numeric, mean) %>%
-      dplyr::filter(.data$Concentration > .data$Detection_limit) %>%
-      dplyr::select(-.data$Detection_limit) %>%
+      dplyr::filter(.data$Concentration > .data$Adjusted_detection_limit) %>%
+      dplyr::select(-.data$Adjusted_detection_limit) %>%
       dplyr::select(.data[[first_factor]], .data[[second_factor]], .data$Volume, .data$Element, .data$Concentration) %>%
       tidyr::pivot_wider(names_from = .data$Element,
                          values_from = .data$Concentration)

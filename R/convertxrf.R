@@ -4,7 +4,7 @@
 #'
 #' See vignette("xrfr") for more information.
 #'
-#' @return description The function creates a dataframe in the long format with the new columns "Concentration" and "Detection_limit" showing the calculated concentration and the respective detection limit.
+#' @return description The function creates a dataframe in the long format with the new columns "Concentration" and "Adjusted_detection_limit" showing the calculated concentration and the respective detection limit (calculated based on volume filtered).
 #'
 #' @param imported_data The name of the dataframe created with readxrf()
 #' @param base_info The name of the dataframe containing detection limits, crystal drift, molar weights, and calibration constants.
