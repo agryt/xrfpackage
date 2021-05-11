@@ -1,16 +1,16 @@
 #' Converting XRF data from kcal to micromolar
 #'
-#' @description This function takes your generated project dataframe created with readxrf() and the file containing information from the XRF machine, and converts your raw data from kcal to micromolar.
+#' @description This function takes your generated project data frame created with readxrf() and the file containing information from the XRF machine, and converts your raw data from kcal to micromolar.
 #'
 #' See vignette("xrfr") for more information.
 #'
-#' @return description The function creates a dataframe in the long format with the new columns "Concentration" and "Adjusted_detection_limit" showing the calculated concentration and the respective detection limit (calculated based on volume filtered).
+#' @return description The function creates a data frame in the long format with the new columns "Concentration" and "Adjusted_detection_limit" showing the calculated concentration and the respective detection limit (calculated based on volume filtered).
 #'
-#' @param imported_data The name of the dataframe created with readxrf()
-#' @param base_info The name of the dataframe containing detection limits, crystal drift, molar weights, and calibration constants.
+#' @param imported_data The name of the data frame created with readxrf()
+#' @param base_info The name of the data frame containing detection limits, crystal drift, molar weights, and calibration constants.
 #' @param year The year the drift was measured closest to when your samples were analysed.
-#' @param first_element The name of the first column containing kcps values in the generated project dataframe.
-#' @param last_element The name of the last column containing kcps values in the generated project dataframe.
+#' @param first_element The name of the first column containing kcps values in the generated project data frame.
+#' @param last_element The name of the last column containing kcps values in the generated project data frame.
 #'
 #' @importFrom tidyr pivot_longer
 #' @importFrom dplyr filter group_by summarise left_join mutate select distinct relocate
@@ -38,7 +38,7 @@ convertxrf <- function(imported_data, base_info, year, first_element, last_eleme
 
   projectfile.df <- as.data.frame(imported_data)
 
-  # making the dataframe longer
+  # making the data frame longer
   pivotproject.df <- projectfile.df %>%
     tidyr::pivot_longer(first_element : last_element,
                  names_to = "Element",
@@ -48,13 +48,13 @@ convertxrf <- function(imported_data, base_info, year, first_element, last_eleme
     stop("ERROR! There are no samples marked blank in your dataset. You must have a column named Filter_blank with 'blank' written in the cell for the blank samples.")
   }
 
-  # making a dataframe with the means of the blank samples
+  # making a data frame with the means of the blank samples
   mean.blanks.df <- pivotproject.df %>%
     dplyr::filter(.data$Filter_blank == "blank") %>%
     dplyr::group_by(.data$Filter_type, .data$Filter_size, .data$Filter_box_nr, .data$Element) %>%
     dplyr::summarise(mean_blank = mean(.data$Count))
 
-  # joining the mean blanks dataframe with the project file
+  # joining the mean blanks data frame with the project file
   adjusted.for.blanks.df <- dplyr::left_join(pivotproject.df, mean.blanks.df, by = c("Filter_type", "Filter_size", "Filter_box_nr", "Element")) %>%
     dplyr::mutate(Net_count = .data$Count - .data$mean_blank)
 
@@ -98,7 +98,7 @@ convertxrf <- function(imported_data, base_info, year, first_element, last_eleme
   calculations.df <- joined.df %>%
     dplyr::mutate(Concentration = ((.data$Net_count * .data$Cal_const) * filter_area * (1000 / .data$Volume) * 1000 * (.data$Drift_2008 / .data[[paste0("Drift_", year)]])) / .data$MolarW)
 
-  # making a dataframe showing the detection limits of each element
+  # making a data frame showing the detection limits of each element
   detectionlimits.df <- basefile.df %>%
     dplyr::select(.data$DL_PC, .data$DL_ANO, .data$DL_GFF, .data$Element) %>%
     tidyr::pivot_longer(cols = c(.data$DL_PC, .data$DL_ANO, .data$DL_GFF),
@@ -106,7 +106,7 @@ convertxrf <- function(imported_data, base_info, year, first_element, last_eleme
                         values_to = "Detection_limit") %>%
     dplyr::mutate(Filter_type = stringr::str_remove(.data$Filter_type, "DL_"))
 
-  # joining detection limit dataframe with the project file
+  # joining detection limit data frame with the project file
   project.detectionlim.df <- dplyr::left_join(calculations.df, detectionlimits.df, by = c("Filter_type", "Element"))
 
   # adjusting the detection limit based on filtered volume

@@ -1,8 +1,8 @@
 #' Transforming hexadecimal data from .ssd file to a readable format
 #'
-#' @description This function will transform your .txt file created from the .ssd file into a dataframe. This dataframe will contain the sample date and kcps values for each element for one sample.
+#' @description This function will transform your .txt file created from the .ssd file into a data frame. This data frame will contain the sample date and kcps values for each element for one sample.
 #'
-#' @return description The function creates a dataframe showing kcps values for each element for the sample.
+#' @return description The function creates a data frame showing kcps values for each element for the sample.
 #'
 #' @param hex_data The character string with your hexadecimal data, read into R with the readLines() function.
 #'
@@ -57,7 +57,7 @@ transformssd <- function(hex_data) {
   # moving from string to list
   list.extracted <- stringr::str_extract_all(text.substring, "[A-Z][a-z]|[A-Z//s]")
 
-  # and then to dataframe
+  # and then to data frame
   unlist.extracted <- unlist(list.extracted)
   extracted.df <- as.data.frame(unlist.extracted)
   colnames(extracted.df) <- "Element"
@@ -78,7 +78,7 @@ transformssd <- function(hex_data) {
 
   colnames(values.df) <- "kcps"
 
-  # combining this dataframe with the one showing the elements
+  # combining this data frame with the one showing the elements
   elements.values.df <- cbind(extracted.df, values.df)
 
   #### extracting the sample name ####
@@ -92,7 +92,7 @@ transformssd <- function(hex_data) {
   # and from raw to text
   text.samplename <- rawToChar(as.raw(strtoi(raw.samplename, 16L)))
 
-  # adding the sample name to the dataframe
+  # adding the sample name to the data frame
   element.values.name.df <- cbind(elements.values.df, Sample = text.samplename)
 
   #### extracting the date ####
@@ -133,7 +133,7 @@ transformssd <- function(hex_data) {
     text.date <- gsub("Des", "12", text.date)
   }
 
-  # adding the date to the dataframe
+  # adding the date to the data frame
   element.values.name.date.df <- cbind(element.values.name.df, Date = text.date)
 
   #### formatting ####

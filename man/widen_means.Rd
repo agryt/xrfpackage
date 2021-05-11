@@ -2,19 +2,19 @@
 % Please edit documentation in R/after.R
 \name{widen_means}
 \alias{widen_means}
-\title{Widening the dataframe and calculating the means based on two factors}
+\title{Widening the data frame and calculating the means based on two factors}
 \usage{
 widen_means(project_data, first_factor, second_factor = NULL)
 }
 \arguments{
-\item{project_data}{The name of the dataframe created with convertxrf().}
+\item{project_data}{The name of the data frame created with convertxrf().}
 
 \item{first_factor}{The name of the column that shows the first or only factor you want to calculate means based on, for example depth.}
 
 \item{second_factor}{The name of the column that shows a potential second factor you want to calculate means based on, for example location.}
 }
 \value{
-description The function creates a dataframe where the columns available are your two factors (for example location and depth) and each element.
+description The function creates a data frame where the columns available are your two factors (for example location and depth) and each element.
 }
 \description{
 This function will widen your data like widen() but also calculate the mean concentrations based on two factors, for example location and depth.

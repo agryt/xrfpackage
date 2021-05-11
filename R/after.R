@@ -1,12 +1,12 @@
-#' Widening the dataframe
+#' Widening the data frame
 #'
-#' @description This function will widen the dataframe and thus return the data to where each element is in a column.
+#' @description This function will widen the data frame and thus return the data to where each element is in a column.
 #'
 #' See vignette("xrfr") for more information.
 #'
-#' @return description The function creates a dataframe that is a wider version of the one created with convertxrf().
+#' @return description The function creates a data frame that is a wider version of the one created with convertxrf().
 #'
-#' @param project_data The name of the dataframe created with convertxrf().
+#' @param project_data The name of the data frame created with convertxrf().
 #'
 #' @importFrom dplyr select filter
 #' @importFrom tidyr pivot_wider
@@ -40,15 +40,15 @@ widen <- function(project_data) {
 }
 
 
-#' Widening the dataframe and removing concentrations below the detection limits
+#' Widening the data frame and removing concentrations below the detection limits
 #'
-#' @description This function will both widen the dataframe so each element has its own column, and remove concentrations that are below the detection limits.
+#' @description This function will both widen the data frame so each element has its own column, and remove concentrations that are below the detection limits.
 #'
 #' See vignette("xrfr") for more information.
 #'
-#' @return description The function creates a dataframe that is a wider version of the one created with convertxrf(), and where values below the detection limits are removed.
+#' @return description The function creates a data frame that is a wider version of the one created with convertxrf(), and where values below the detection limits are removed.
 #'
-#' @param project_data The name of the dataframe created with convertxrf().
+#' @param project_data The name of the data frame created with convertxrf().
 #'
 #' @importFrom dplyr filter select
 #' @importFrom tidyr pivot_wider
@@ -81,15 +81,15 @@ widen_above <- function(project_data) {
 }
 
 
-#' Widening the dataframe and calculating the means based on two factors
+#' Widening the data frame and calculating the means based on two factors
 #'
 #' @description This function will widen your data like widen() but also calculate the mean concentrations based on two factors, for example location and depth.
 #'
 #' See vignette("xrfr") for more information.
 #'
-#' @return description The function creates a dataframe where the columns available are your two factors (for example location and depth) and each element.
+#' @return description The function creates a data frame where the columns available are your two factors (for example location and depth) and each element.
 #'
-#' @param project_data The name of the dataframe created with convertxrf().
+#' @param project_data The name of the data frame created with convertxrf().
 #' @param first_factor The name of the column that shows the first or only factor you want to calculate means based on, for example depth.
 #' @param second_factor The name of the column that shows a potential second factor you want to calculate means based on, for example location.
 #'
@@ -142,15 +142,15 @@ widen_means <- function(project_data, first_factor, second_factor = NULL) {
 }
 
 
-#' Widening the dataframe, filtering out concentrations below detection limit, and calculating the means based on two factors
+#' Widening the data frame, filtering out concentrations below detection limit, and calculating the means based on two factors
 #'
 #' @description This function will widen your data and exclude concentrations below the detection limits like widen_above(), and will also calculate the means based on your two factors like widen_means().
 #'
 #' See vignette("xrfr") for more information.
 #'
-#' @return description The function returns a dataframe that shows the mean concentrations calculated from the concentrations above the detection limits for each element based on one or two factors.
+#' @return description The function returns a data frame that shows the mean concentrations calculated from the concentrations above the detection limits for each element based on one or two factors.
 #'
-#' @param project_data The name of the dataframe created with convertxrf().
+#' @param project_data The name of the data frame created with convertxrf().
 #' @param first_factor The name of the column that shows the first or only factor you want to calculate means based on, for example depth.
 #' @param second_factor The name of the column that shows a potential second factor you want to calculate means based on, for example location.
 #'
@@ -207,13 +207,13 @@ widen_means_above <- function(project_data, first_factor, second_factor = NULL) 
 
 #' Showing the mean blanks
 #'
-#' @description This function will extract only the mean blank kcps values calculated for each filter type, size, and box number, and present them as a dataframe.
+#' @description This function will extract only the mean blank kcps values calculated for each filter type, size, and box number, and present them as a data frame.
 #'
-#' @return description The function creates a dataframe showing the mean blank values in kcps per filter type, size, and filter box number.
+#' @return description The function creates a data frame showing the mean blank values in kcps per filter type, size, and filter box number.
 #'
-#' @param imported_data The name of the dataframe created with readxrf()
-#' @param first_element The name of the first column containing kcps values in the project dataframe.
-#' @param last_element The name of the last column containing kcps values in the project dataframe.
+#' @param imported_data The name of the data frame created with readxrf()
+#' @param first_element The name of the first column containing kcps values in the project data frame.
+#' @param last_element The name of the last column containing kcps values in the project data frame.
 #'
 #' @importFrom tidyr pivot_longer pivot_wider
 #' @importFrom dplyr filter group_by summarise
@@ -235,7 +235,7 @@ show_blanks <- function(imported_data, first_element, last_element) {
                         names_to = "Element",
                         values_to = "Count")
 
-  # making a dataframe with the means of the blank samples
+  # making a data frame with the means of the blank samples
   mean.blanks.df <- pivotproject.df %>%
     dplyr::filter(.data$Filter_blank == "blank") %>%
     dplyr::group_by(.data$Filter_type, .data$Filter_size, .data$Filter_box_nr, .data$Element) %>%

@@ -7,15 +7,15 @@
 readxrf(raw_data, project_info)
 }
 \arguments{
-\item{raw_data}{The name of your dataframe with raw data from the XRF machine.}
+\item{raw_data}{The name of your data frame with raw data from the XRF machine.}
 
-\item{project_info}{The name of your dataframe with necessary information about the samples.}
+\item{project_info}{The name of your data frame with necessary information about the samples.}
 }
 \value{
-description The function creates a dataframe where your raw data and project information has been merged.
+description The function creates a data frame where your raw data and project information has been merged.
 }
 \description{
-This function reads your two dataframes and combines them into one. It will warn you if there are any samples that do not match between your datasets (the raw data and the information file).
+This function reads your two data frames and combines them into one. It will warn you if there are any samples that do not match between your datasets (the raw data and the information file).
 
 See vignette("xrfr") for more information.
 }

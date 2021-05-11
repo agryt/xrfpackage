@@ -58,6 +58,7 @@ wide.means.df <- widen_means(project_data = calculated.df, first_factor = "Day",
 wide.means.above.df <- widen_means_above(project_data = calculated.df, first_factor = "Day",
                                          second_factor = "Treatment")
 
+# show mean blank values:
 my.blanks.df <- show_blanks(imported_data = halfway.df, first_element = "C", last_element = "As")
 
 ```

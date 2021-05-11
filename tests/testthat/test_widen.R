@@ -10,7 +10,7 @@ test_that("output is correct", {
                   Volume = 1000,
                   Element = c("C", "N", "O", "C", "N", "O", "C", "N", "O"),
                   Concentration = c(2.86, -3.82, -0.603, 6.94, -19.3, 0.869, 0, 0, 0),
-                  Detection_limit = c(1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32))
+                  Adjusted_detection_limit = c(1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32))
   b <- widen(project_data = a)
   c <- data.frame(Sample = c("A1", "A2"),
                   Date = "01.01.2020",

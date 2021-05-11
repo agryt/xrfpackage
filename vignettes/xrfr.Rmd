@@ -19,8 +19,8 @@ The functions included in this package are:
 * `widen_above()`: This function both widens your data and excludes any concentrations that are below the detection limits. 
 * `widen_means()`: This function both widens your data and calculates mean concentration based on one or two factors. 
 * `widen_means_above()`: This function first calculates mean concentrations based on one or two factors, then excludes those values that are below the detection limits. 
-* `show_blanks()`: This function creates a dataframe showing only the mean blanks in your dataset. 
-* `transformssd()`: This function transforms hexadecimal values (obtained from a .ssd file created by the XRF computer) to a dataframe showing results from one sample. The dataframe will be in the same format as the .txt file created by the XRF computer, so it is possible to then use the `readxrf()` and `convertxrf()` functions on this dataframe. 
+* `show_blanks()`: This function creates a data frame showing only the mean blanks in your dataset. 
+* `transformssd()`: This function transforms hexadecimal values (obtained from a .ssd file created by the XRF computer) to a data frame showing results from one sample. The data frame will be in the same format as the .txt file created by the XRF computer, so it is possible to then use the `readxrf()` and `convertxrf()` functions on this data frame. 
 
 ## The files
 
@@ -229,11 +229,11 @@ This code will create a data frame that shows mean concentrations only if they a
 
 ### show_blanks()
 
-This function calculates the mean values for the blank values based on filter type, filter size, and filter box number, and presents these in a dataframe. There are 3 arguments that must be defined:
+This function calculates the mean values for the blank values based on filter type, filter size, and filter box number, and presents these in a data frame. There are 3 arguments that must be defined:
 
-* **imported_data**: The name of the dataframe created with `readxrf()`. 
-* **first_element**: The name of the first column that is an element in the project dataframe.
-* **last_element**: The name of the last column that is an element in the project dataframe.
+* **imported_data**: The name of the data frame created with `readxrf()`. 
+* **first_element**: The name of the first column that is an element in the project data frame.
+* **last_element**: The name of the last column that is an element in the project data frame.
 
 A possible input:
 
@@ -243,7 +243,7 @@ blanks.df <- show_blanks(imported_data = imported.df, first_element = "C", last_
 
 ```
 
-The created dataframe will contain the mean blank values and look something like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/mean_blanks.csv):
+The created data frame will contain the mean blank values and look something like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/mean_blanks.csv):
 
 |Filter_type|Filter_size|Filter_box_nr|Al|As|...|Si|
 |:----------|:----------|:------------|:-|:-|:-|:-|
@@ -254,7 +254,7 @@ The created dataframe will contain the mean blank values and look something like
 
 ### transformssd()
 
-This function will convert the hexadecimal values from a .txt file (created from a .ssd file from the XRF computer) to a dataframe with results from one sample. This dataframe can then be used in the `readxrf()` function. There is one argument that must be defined for this function:
+This function will convert the hexadecimal values from a .txt file (created from a .ssd file from the XRF computer) to a data frame with results from one sample. This data frame can then be used in the `readxrf()` function. There is one argument that must be defined for this function:
 
 * **hex_data**: The name of the character string containing the hexadecimal values, read into R with the `readLines()` function. 
 
@@ -267,10 +267,10 @@ df <- transformssd(hex_data = string)
 
 ```
 
-The created dataframe will look like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/sample_transformed.csv):
+The created data frame will look like [this](https://github.com/agryt/xrfr/blob/master/inst/extdata/sample_transformed.csv):
 
 |Sample|Date|As (Int)|C (Int)|...|Zn (Int)|
 |:-----|:---|:-------|:------|:--|:-------|
 |sr-cal120|27.11.2014 14:02:43|1.632752776145935|54.286903381347656|...|0.7868552803993225|
 
-There will always be only be results from one sample in this dataframe, as each sample is saved as its own .ssd file. The different dataframes from samples in the same dataset can be combined into one dataframe using `rbind()`. 
+There will always be only be results from one sample in this data frame, as each sample is saved as its own .ssd file. The different data frames from samples in the same dataset can be combined into one data frame using `rbind()`. 

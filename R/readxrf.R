@@ -1,13 +1,13 @@
 #' Reading and joining data file and info file
 #'
-#' @description This function reads your two dataframes and combines them into one. It will warn you if there are any samples that do not match between your datasets (the raw data and the information file).
+#' @description This function reads your two data frames and combines them into one. It will warn you if there are any samples that do not match between your datasets (the raw data and the information file).
 #'
 #' See vignette("xrfr") for more information.
 #'
-#' @return description The function creates a dataframe where your raw data and project information has been merged.
+#' @return description The function creates a data frame where your raw data and project information has been merged.
 #'
-#' @param raw_data The name of your dataframe with raw data from the XRF machine.
-#' @param project_info The name of your dataframe with necessary information about the samples.
+#' @param raw_data The name of your data frame with raw data from the XRF machine.
+#' @param project_info The name of your data frame with necessary information about the samples.
 #'
 #' @importFrom dplyr inner_join anti_join select contains rename_all
 #' @importFrom stringr str_remove
@@ -55,10 +55,10 @@ readxrf <- function(raw_data, project_info) {
     stop("ERROR! The column Volume in your project information file is not numeric. Make sure this column only contains numerical digits.")
   }
 
-  # joining them into one dataframe
+  # joining them into one data frame
   projectfile.df <- dplyr::inner_join(datafile.df, infofile.df, by = "Sample")
 
-  # making a dataframe of samples that did not match, should be 0 rows here
+  # making a data frame of samples that did not match, should be 0 rows here
   notinprojectfile.df <- dplyr::anti_join(datafile.df, infofile.df, by = "Sample")
 
   # assigning warning message for if not all samples match

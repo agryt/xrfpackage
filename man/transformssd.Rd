@@ -10,10 +10,10 @@ transformssd(hex_data)
 \item{hex_data}{The character string with your hexadecimal data, read into R with the readLines() function.}
 }
 \value{
-description The function creates a dataframe showing kcps values for each element for the sample.
+description The function creates a data frame showing kcps values for each element for the sample.
 }
 \description{
-This function will transform your .txt file created from the .ssd file into a dataframe. This dataframe will contain the sample date and kcps values for each element for one sample.
+This function will transform your .txt file created from the .ssd file into a data frame. This data frame will contain the sample date and kcps values for each element for one sample.
 }
 \examples{
 \dontrun{

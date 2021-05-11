@@ -2,18 +2,18 @@
 % Please edit documentation in R/after.R
 \name{widen_above}
 \alias{widen_above}
-\title{Widening the dataframe and removing concentrations below the detection limits}
+\title{Widening the data frame and removing concentrations below the detection limits}
 \usage{
 widen_above(project_data)
 }
 \arguments{
-\item{project_data}{The name of the dataframe created with convertxrf().}
+\item{project_data}{The name of the data frame created with convertxrf().}
 }
 \value{
-description The function creates a dataframe that is a wider version of the one created with convertxrf(), and where values below the detection limits are removed.
+description The function creates a data frame that is a wider version of the one created with convertxrf(), and where values below the detection limits are removed.
 }
 \description{
-This function will both widen the dataframe so each element has its own column, and remove concentrations that are below the detection limits.
+This function will both widen the data frame so each element has its own column, and remove concentrations that are below the detection limits.
 
 See vignette("xrfr") for more information.
 }

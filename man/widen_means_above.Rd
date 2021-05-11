@@ -2,19 +2,19 @@
 % Please edit documentation in R/after.R
 \name{widen_means_above}
 \alias{widen_means_above}
-\title{Widening the dataframe, filtering out concentrations below detection limit, and calculating the means based on two factors}
+\title{Widening the data frame, filtering out concentrations below detection limit, and calculating the means based on two factors}
 \usage{
 widen_means_above(project_data, first_factor, second_factor = NULL)
 }
 \arguments{
-\item{project_data}{The name of the dataframe created with convertxrf().}
+\item{project_data}{The name of the data frame created with convertxrf().}
 
 \item{first_factor}{The name of the column that shows the first or only factor you want to calculate means based on, for example depth.}
 
 \item{second_factor}{The name of the column that shows a potential second factor you want to calculate means based on, for example location.}
 }
 \value{
-description The function returns a dataframe that shows the mean concentrations calculated from the concentrations above the detection limits for each element based on one or two factors.
+description The function returns a data frame that shows the mean concentrations calculated from the concentrations above the detection limits for each element based on one or two factors.
 }
 \description{
 This function will widen your data and exclude concentrations below the detection limits like widen_above(), and will also calculate the means based on your two factors like widen_means().

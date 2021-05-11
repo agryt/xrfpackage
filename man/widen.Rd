@@ -2,18 +2,18 @@
 % Please edit documentation in R/after.R
 \name{widen}
 \alias{widen}
-\title{Widening the dataframe}
+\title{Widening the data frame}
 \usage{
 widen(project_data)
 }
 \arguments{
-\item{project_data}{The name of the dataframe created with convertxrf().}
+\item{project_data}{The name of the data frame created with convertxrf().}
 }
 \value{
-description The function creates a dataframe that is a wider version of the one created with convertxrf().
+description The function creates a data frame that is a wider version of the one created with convertxrf().
 }
 \description{
-This function will widen the dataframe and thus return the data to where each element is in a column.
+This function will widen the data frame and thus return the data to where each element is in a column.
 
 See vignette("xrfr") for more information.
 }

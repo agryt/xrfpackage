@@ -7,17 +7,17 @@
 show_blanks(imported_data, first_element, last_element)
 }
 \arguments{
-\item{imported_data}{The name of the dataframe created with readxrf()}
+\item{imported_data}{The name of the data frame created with readxrf()}
 
-\item{first_element}{The name of the first column containing kcps values in the project dataframe.}
+\item{first_element}{The name of the first column containing kcps values in the project data frame.}
 
-\item{last_element}{The name of the last column containing kcps values in the project dataframe.}
+\item{last_element}{The name of the last column containing kcps values in the project data frame.}
 }
 \value{
-description The function creates a dataframe showing the mean blank values in kcps per filter type, size, and filter box number.
+description The function creates a data frame showing the mean blank values in kcps per filter type, size, and filter box number.
 }
 \description{
-This function will extract only the mean blank kcps values calculated for each filter type, size, and box number, and present them as a dataframe.
+This function will extract only the mean blank kcps values calculated for each filter type, size, and box number, and present them as a data frame.
 }
 \examples{
 

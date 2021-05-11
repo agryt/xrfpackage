@@ -11,7 +11,7 @@ test_that("output is correct with one factor", {
                   Treatment = c("X", "X", "X", "X", "X", "X", "Z", "Z", "Z", "Z", "Z", "Z", NA, NA, NA),
                   Element = c("C", "N", "O", "C", "N", "O", "C", "N", "O", "C", "N", "O", "C", "N", "O"),
                   Concentration = c(2.86, -3.82, -0.603, 6.94, -19.3, 0.869, 3.86, -1.82, -0.873, 6.27, -12.8, 0.592, 0, 0, 0),
-                  Detection_limit = c(1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32))
+                  Adjusted_detection_limit = c(1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32))
   b <- widen_means_above(project_data = a, first_factor = "Treatment")
   c <- data.frame(Treatment = c("X", "Z"),
                   Volume = 1000,
@@ -36,7 +36,7 @@ test_that("output is correct with two factors", {
                   Time = c(0, 0, 0, 2, 2, 2, 0, 0, 0, 2, 2, 2, NA, NA, NA),
                   Element = c("C", "N", "O", "C", "N", "O", "C", "N", "O", "C", "N", "O", "C", "N", "O"),
                   Concentration = c(2.86, -3.82, -0.603, 6.94, -19.3, 0.869, 3.86, -1.82, -0.873, 6.27, -12.8, 0.592, 0, 0, 0),
-                  Detection_limit = c(1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32))
+                  Adjusted_detection_limit = c(1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32, 1.22, 0.31, 0.32))
   b <- widen_means_above(project_data = a, first_factor = "Treatment", second_factor = "Time")
   c <- data.frame(Treatment = c("X", "X", "Z", "Z"),
                   Time = c(0, 2, 0, 2),

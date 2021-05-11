@@ -7,21 +7,21 @@
 convertxrf(imported_data, base_info, year, first_element, last_element)
 }
 \arguments{
-\item{imported_data}{The name of the dataframe created with readxrf()}
+\item{imported_data}{The name of the data frame created with readxrf()}
 
-\item{base_info}{The name of the dataframe containing detection limits, crystal drift, molar weights, and calibration constants.}
+\item{base_info}{The name of the data frame containing detection limits, crystal drift, molar weights, and calibration constants.}
 
 \item{year}{The year the drift was measured closest to when your samples were analysed.}
 
-\item{first_element}{The name of the first column containing kcps values in the generated project dataframe.}
+\item{first_element}{The name of the first column containing kcps values in the generated project data frame.}
 
-\item{last_element}{The name of the last column containing kcps values in the generated project dataframe.}
+\item{last_element}{The name of the last column containing kcps values in the generated project data frame.}
 }
 \value{
-description The function creates a dataframe in the long format with the new columns "Concentration" and "Detection_limit" showing the calculated concentration and the respective detection limit.
+description The function creates a data frame in the long format with the new columns "Concentration" and "Adjusted_detection_limit" showing the calculated concentration and the respective detection limit (calculated based on volume filtered).
 }
 \description{
-This function takes your generated project dataframe created with readxrf() and the file containing information from the XRF machine, and converts your raw data from kcal to micromolar.
+This function takes your generated project data frame created with readxrf() and the file containing information from the XRF machine, and converts your raw data from kcal to micromolar.
 
 See vignette("xrfr") for more information.
 }
